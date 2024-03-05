@@ -10,7 +10,9 @@ import static org.springframework.boot.SpringApplication.run;
 public class EurekaServiceApplication {
 
 	public static void main(String[] args) {
+
 		run(EurekaServiceApplication.class, args);
+
 	}
 
 }
