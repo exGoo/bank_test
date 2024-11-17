@@ -7,7 +7,7 @@
 
 Доступы. Если ты читаешь это, значит доступ к проекту у тебя уже есть
 <ol>
-<li>в докере подними БД в командной строке запущенной от имени администратора надо ввести <code>docker run --name some-postgres -e POSTGRES_PASSWORD=password -d user</code>, где --name имя контейнера, -e POSTGRES_PASSWORD= пароль БД, -d логин БД</li>
+<li>в докере подними БД в командной строке запущенной от имени администратора надо ввести <code>docker run --name account -e POSTGRES_PASSWORD=password -d user</code>, где --name имя контейнера, -e POSTGRES_PASSWORD= пароль БД, -d логин БД</li>
 <li>так же в БД нужно создать схему: account</li>
 <li>добейся успешного запуска своего микросервиса</li>
 </ol>
