@@ -15,12 +15,19 @@ management:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
-    username: user
+    username: postgres
     password: password
   liquibase:
     default-schema: public_bank_information
     change-log: db/changelog/db.changelog-master.yaml
     enabled: true
     drop-first: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public_bank_information
   application:
     name: public-info-app
