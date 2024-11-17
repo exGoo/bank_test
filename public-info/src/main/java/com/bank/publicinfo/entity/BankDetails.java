@@ -1,6 +1,4 @@
 package com.bank.publicinfo.entity;
-
-import liquibase.pro.packaged.C;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

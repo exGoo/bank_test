@@ -1,13 +1,15 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.entity.Audit;
-import com.bank.publicinfo.utils.Auditable;
+import com.bank.publicinfo.repository.AuditRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface AuditService {
+@Service
+public class AuditService {
+    private AuditRepository auditRepository;
 
-    void saveNewAudit(Auditable<?> entity);
-
-    void refreshAudit(Auditable<?> newEntity);
-
-    Audit findLastAudit(String id, String entityType);
+    @Autowired
+    public void setAuditRepository(AuditRepository auditRepository) {
+        this.auditRepository = auditRepository;
+    }
 }

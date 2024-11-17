@@ -1,19 +1,21 @@
 package com.bank.publicinfo.service;
+import com.bank.publicinfo.repository.CertificateRepository;
+import com.bank.publicinfo.repository.LicenseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import com.bank.publicinfo.dto.BankDetailsDto;
-import java.util.List;
+@Service
+public class BankDetailsService {
+    private CertificateRepository certificateRepository;
+    private LicenseRepository licenseRepository;
 
-public interface BankDetailsService {
+    @Autowired
+    public void setLicenseRepository(LicenseRepository licenseRepository) {
+        this.licenseRepository = licenseRepository;
+    }
 
-    BankDetailsDto findById(Long id);
-
-    List<BankDetailsDto> findAllWithRelations();
-
-    List<BankDetailsDto> findByCity(String city);
-
-    BankDetailsDto addBankDetails(BankDetailsDto bankDetails);
-
-    void deleteBankDetailsById(Long id);
-
-    BankDetailsDto updateBankDetails(Long id, BankDetailsDto bankDetailsDto);
+    @Autowired
+    public void setCertificateRepository(CertificateRepository certificateRepository) {
+        this.certificateRepository = certificateRepository;
+    }
 }

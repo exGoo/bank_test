@@ -1,19 +1,22 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.BranchDto;
-import java.util.List;
+import com.bank.publicinfo.repository.ATMRepository;
+import com.bank.publicinfo.repository.BranchRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface BranchService {
+@Service
+public class BranchService {
+    private ATMRepository atmRepository;
+    private BranchRepository branchRepository;
 
-    BranchDto findById(Long id);
+    @Autowired
+    public void setAtmRepository(ATMRepository atmRepository) {
+        this.atmRepository = atmRepository;
+    }
 
-    List<BranchDto> findAllWithATMs();
-
-    List<BranchDto> findByCity(String city);
-
-    BranchDto addBranch(BranchDto branch);
-
-    void deleteBranchById(Long id);
-
-    BranchDto updateBranch(Long id, BranchDto branch);
+    @Autowired
+    public void setBranchRepository(BranchRepository branchRepository) {
+        this.branchRepository = branchRepository;
+    }
 }
