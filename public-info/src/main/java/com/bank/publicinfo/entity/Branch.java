@@ -2,33 +2,20 @@ package com.bank.publicinfo.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import org.hibernate.proxy.HibernateProxy;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.time.LocalTime;
-import java.util.Objects;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "branch")
+@Data
 @Builder
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Branch {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -49,25 +36,7 @@ public class Branch {
     private LocalTime endOfWork;
 
     @OneToMany(mappedBy = "branch", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
-    private Set<ATM> atms;
+    private List<ATM> atms;
 
-    @Override
-    public final boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null) return false;
-        Class<?> oEffectiveClass = o instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer()
-                .getPersistentClass() : o.getClass();
-        Class<?> thisEffectiveClass = this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer()
-                .getPersistentClass() : this.getClass();
-        if (thisEffectiveClass != oEffectiveClass) return false;
-        Branch branch = (Branch) o;
-        return getId() != null && Objects.equals(getId(), branch.getId());
-    }
 
-    @Override
-    public final int hashCode() {
-        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer()
-                .getPersistentClass().hashCode() : getClass().hashCode();
-    }
 }
