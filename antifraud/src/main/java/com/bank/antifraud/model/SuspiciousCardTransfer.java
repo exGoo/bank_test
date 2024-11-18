@@ -5,7 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 
 @AllArgsConstructor
@@ -21,8 +26,8 @@ public class SuspiciousCardTransfer {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "card_tranfser_id", nullable = false, unique = true)
-    private Long cardTranfserId;
+    @Column(name = "card_transfer_id", nullable = false, unique = true)
+    private Long cardTransferId;
 
     @Column(name = "is_blocked", nullable = false)
     private Boolean isBlocked;
@@ -30,9 +35,11 @@ public class SuspiciousCardTransfer {
     @Column(name = "is_suspicious", nullable = false)
     private Boolean isSuspicious;
 
-    @Column(name = "blocker_reason")
+    @Column(name = "blocked_reason")
     private String blockerReason;
 
     @Column(name = "suspicious_reason", nullable = false)
     private String suspiciousReason;
+
 }
+

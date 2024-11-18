@@ -1,24 +1,35 @@
 package com.bank.antifraud.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.OffsetDateTime;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "anti_fraud.audit")
+@Table(name = "audit")
 public class Audit {
+
+    public static final int MAX_LENGTH_FOR_ENTITY_TYPE = 40;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "entity_type", nullable = false, length = 40)
+    @Column(name = "entity_type", nullable = false, length = MAX_LENGTH_FOR_ENTITY_TYPE)
     private String entityType;
 
     @Column(name = "operation_type", nullable = false)
@@ -31,10 +42,10 @@ public class Audit {
     private String modifiedBy;
 
     @Column(name = "created_at", nullable = false)
-    private Timestamp createdAt;
+    private OffsetDateTime createdAt;
 
     @Column(name = "modified_at")
-    private Timestamp modifiedAt;
+    private OffsetDateTime modifiedAt;
 
     @Column(name = "new_entity_json")
     private String newEntityJson;
