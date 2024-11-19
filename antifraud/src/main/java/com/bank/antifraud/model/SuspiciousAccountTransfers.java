@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,8 +18,9 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Entity
-@Table(name = "suspicious_account_transfers")
+@Table(name = "suspicious_account_transfers", schema = "anti_fraud")
 public class SuspiciousAccountTransfers {
 
     @Id
