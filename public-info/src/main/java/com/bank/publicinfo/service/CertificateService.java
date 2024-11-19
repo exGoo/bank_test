@@ -1,17 +1,15 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.CertificateDto;
-import java.util.List;
+import com.bank.publicinfo.repository.CertificateRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface CertificateService {
+@Service
+public class CertificateService {
+    private CertificateRepository certificateRepository;
 
-    CertificateDto findById(Long id);
-
-    List<CertificateDto> findAll();
-
-    CertificateDto addCertificate(CertificateDto certificate);
-
-    CertificateDto updateCertificate(Long id, CertificateDto certificate);
-
-    void deleteCertificateById(Long id);
+    @Autowired
+    public void setCertificateRepository(CertificateRepository certificateRepository) {
+        this.certificateRepository = certificateRepository;
+    }
 }

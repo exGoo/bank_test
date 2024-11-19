@@ -1,17 +1,16 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.LicenseDto;
-import java.util.List;
+import com.bank.publicinfo.repository.LicenseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface LicenseService {
+@Service
+public class LicenseService {
+    private LicenseRepository licenseRepository;
 
-    LicenseDto findById(Long id);
-
-    List<LicenseDto> findAll();
-
-    LicenseDto addLicence(LicenseDto license);
-
-    LicenseDto updateLicense(Long id, LicenseDto license);
-
-    void deleteLicenceById(Long id);
+    @Autowired
+    public void setLicenseRepository(LicenseRepository licenseRepository) {
+        this.licenseRepository = licenseRepository;
+    }
 }
+

@@ -1,17 +1,15 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.dto.ATMDto;
-import java.util.List;
+import com.bank.publicinfo.repository.ATMRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface ATMService {
+@Service
+public class ATMService {
+    private ATMRepository atmRepository;
 
-    ATMDto findById(Long id);
-
-    List<ATMDto> findAll();
-
-    ATMDto addATM(ATMDto atm);
-
-    void deleteATMById(Long id);
-
-    ATMDto updateATM(Long id, ATMDto atm);
+    @Autowired
+    public void setAtmRepository(ATMRepository atmRepository) {
+        this.atmRepository = atmRepository;
+    }
 }
