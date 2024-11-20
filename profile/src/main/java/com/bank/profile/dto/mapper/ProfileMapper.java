@@ -3,7 +3,10 @@ package com.bank.profile.dto.mapper;
 import com.bank.profile.dto.ProfileDto;
 import com.bank.profile.entity.AccountDetails;
 import com.bank.profile.entity.Profile;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Collections;
 import java.util.List;
