@@ -1,14 +1,15 @@
 package com.bank.profile.service;
 
+import com.bank.profile.dto.AuditDto;
 import com.bank.profile.entity.Audit;
 
 import java.util.List;
 
 public interface AuditService {
-    void save(Audit audit);
-    List<Audit> findAll();
-    Audit findById(Long id);
-    void update(Long id,Audit audit);
+    void save(AuditDto audit);
+    List<AuditDto> findAll();
+    AuditDto findById(Long id);
+    void update(Long id,AuditDto audit);
     void deleteById(Long id);
 
 }

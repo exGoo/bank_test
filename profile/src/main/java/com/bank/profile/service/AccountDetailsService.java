@@ -1,15 +1,16 @@
 package com.bank.profile.service;
 
+import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.entity.AccountDetails;
 
 import java.util.List;
 
 public interface AccountDetailsService {
 
-    void save(AccountDetails accountDetails);
-    List<AccountDetails> findAll();
-    AccountDetails findById(Long id);
-    void update(Long id,AccountDetails accountDetails);
+    void save(AccountDetailsDto accountDetails);
+    List<AccountDetailsDto> findAll();
+    AccountDetailsDto findById(Long id);
+    void update(Long id,AccountDetailsDto accountDetails);
     void deleteById(Long id);
 
 }

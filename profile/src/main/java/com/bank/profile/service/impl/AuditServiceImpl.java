@@ -1,5 +1,7 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.dto.AuditDto;
+import com.bank.profile.dto.mapper.AuditMapper;
 import com.bank.profile.entity.Audit;
 import com.bank.profile.repository.AuditRepository;
 import com.bank.profile.service.AuditService;
@@ -15,38 +17,42 @@ import java.util.List;
 public class AuditServiceImpl implements AuditService {
 
     AuditRepository repository;
+    AuditMapper mapper;
 
     @Autowired
-    public AuditServiceImpl(AuditRepository repository) {
+    public AuditServiceImpl(AuditRepository repository, AuditMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public void save(Audit audit) {
-        repository.save(audit);
+    public void save(AuditDto audit) {
+        repository.save(mapper.toEntity(audit));
     }
 
     @Override
-    public List<Audit> findAll() {
-        return repository.findAll();
+    public List<AuditDto> findAll() {
+        return mapper.toListDto(repository.findAll());
     }
 
     @Override
-    public Audit findById(Long id) {
-        return repository.findById(id).get();
+    public AuditDto findById(Long id) {
+        return mapper.toDto(repository.findById(id).get());
     }
 
     @Override
-    public void update(Long id, Audit audit) {
-       Audit oldAudit = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("audit not found"));
-       oldAudit.setEntityType(audit.getEntityType());
-       oldAudit.setOperationType(audit.getOperationType());
-       oldAudit.setCreatedBy(audit.getCreatedBy());
-       oldAudit.setModifiedBy(audit.getModifiedBy());
-       oldAudit.setCreatedAt(audit.getCreatedAt());
-       oldAudit.setModifiedAt(audit.getModifiedAt());
-       oldAudit.setNewEntityJson(audit.getNewEntityJson());
-       oldAudit.setEntityJson(audit.getEntityJson());
+    public void update(Long id, AuditDto audit) {
+        Audit newAudit = mapper.toEntity(audit);
+        Audit oldAudit = repository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException("audit not found"));
+        oldAudit.setEntityType(newAudit.getEntityType());
+        oldAudit.setOperationType(newAudit.getOperationType());
+        oldAudit.setCreatedBy(newAudit.getCreatedBy());
+        oldAudit.setModifiedBy(newAudit.getModifiedBy());
+        oldAudit.setCreatedAt(newAudit.getCreatedAt());
+        oldAudit.setModifiedAt(newAudit.getModifiedAt());
+        oldAudit.setNewEntityJson(newAudit.getNewEntityJson());
+        oldAudit.setEntityJson(newAudit.getEntityJson());
 
     }
 

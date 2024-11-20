@@ -1,5 +1,6 @@
 package com.bank.profile.controller;
 
+import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.entity.AccountDetails;
 import com.bank.profile.entity.Passport;
 import com.bank.profile.service.AccountDetailsService;
@@ -20,17 +21,21 @@ public class AccountDetailsRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody AccountDetails accountDetails) {
+    public void save(@RequestBody AccountDetailsDto accountDetails) {
         System.out.println(accountDetails);
         accountDetailsService.save(accountDetails);
     }
     @GetMapping("/{id}")
-    public AccountDetails getById(@PathVariable Long id) {
+    public AccountDetailsDto getById(@PathVariable Long id) {
         return accountDetailsService.findById(id);
     }
     @GetMapping("")
-    public List<AccountDetails> getAll() {
+    public List<AccountDetailsDto> getAll() {
         return accountDetailsService.findAll();
+    }
+    @PutMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody AccountDetailsDto accountDetails) {
+        accountDetailsService.update(id, accountDetails);
     }
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {

@@ -1,5 +1,6 @@
 package com.bank.profile.controller;
 
+import com.bank.profile.dto.AuditDto;
 import com.bank.profile.entity.Audit;
 import com.bank.profile.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +19,20 @@ public class AuditRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody Audit audit) {
+    public void save(@RequestBody AuditDto audit) {
         System.out.println(audit);
         auditService.save(audit);
     }
     @GetMapping("/{id}")
-    public Audit getRegistrationById(@PathVariable Long id) {
+    public AuditDto getRegistrationById(@PathVariable Long id) {
         return auditService.findById(id);
     }
     @GetMapping("")
-    public List<Audit> getAllRegistrations() {
+    public List<AuditDto> getAllRegistrations() {
         return auditService.findAll();
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody Audit audit) {
+    public void update(@PathVariable Long id,@RequestBody AuditDto audit) {
         auditService.update(id,audit);
     }
 

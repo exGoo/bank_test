@@ -1,5 +1,6 @@
 package com.bank.profile.controller;
 
+import com.bank.profile.dto.ActualRegistrationDto;
 import com.bank.profile.entity.ActualRegistration;
 import com.bank.profile.service.ActualRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,15 @@ public class ActualRegistrationRestController {
         this.actualRegistrationService = actualRegistrationService;
     }
     @GetMapping("/{id}")
-    public ActualRegistration getActualRegistration(@PathVariable Long id) {
+    public ActualRegistrationDto getActualRegistration(@PathVariable Long id) {
        return actualRegistrationService.findById(id);
     }
     @GetMapping
-    public List<ActualRegistration> getActualRegistrations() {
+    public List<ActualRegistrationDto> getActualRegistrations() {
         return actualRegistrationService.findAll();
     }
     @PostMapping("")
-    public void saveActualRegistration(@RequestBody ActualRegistration actualRegistration) {
+    public void saveActualRegistration(@RequestBody ActualRegistrationDto actualRegistration) {
         actualRegistrationService.save(actualRegistration);
     }
     @DeleteMapping("/{id}")
@@ -33,7 +34,7 @@ public class ActualRegistrationRestController {
         actualRegistrationService.deleteById(id);
     }
     @PutMapping("/{id}")
-    public void updateActualRegistration(@PathVariable Long id, @RequestBody ActualRegistration actualRegistration) {
+    public void updateActualRegistration(@PathVariable Long id, @RequestBody ActualRegistrationDto actualRegistration) {
         actualRegistrationService.update(id, actualRegistration);
     }
 }

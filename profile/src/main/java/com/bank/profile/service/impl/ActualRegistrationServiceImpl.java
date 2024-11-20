@@ -1,5 +1,7 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.dto.ActualRegistrationDto;
+import com.bank.profile.dto.mapper.ActualRegistrationMapper;
 import com.bank.profile.entity.ActualRegistration;
 import com.bank.profile.repository.ActualRegistrationRepository;
 import com.bank.profile.service.ActualRegistrationService;
@@ -15,41 +17,45 @@ import java.util.List;
 public class ActualRegistrationServiceImpl implements ActualRegistrationService {
 
     ActualRegistrationRepository repository;
+    ActualRegistrationMapper mapper;
 
     @Autowired
-    public ActualRegistrationServiceImpl(ActualRegistrationRepository repository) {
+    public ActualRegistrationServiceImpl(ActualRegistrationRepository repository, ActualRegistrationMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public void save(ActualRegistration registration) {
-        repository.save(registration);
+    public void save(ActualRegistrationDto registration) {
+        repository.save(mapper.toEntity(registration));
     }
 
     @Override
-    public List<ActualRegistration> findAll() {
-        return repository.findAll();
+    public List<ActualRegistrationDto> findAll() {
+        return mapper.toDtoList(repository.findAll());
     }
 
     @Override
-    public ActualRegistration findById(Long id) {
-        return repository.findById(id).get();
+    public ActualRegistrationDto findById(Long id) {
+        return mapper.toDto(repository.findById(id).get());
     }
 
     @Override
-    public void update(Long id, ActualRegistration registration) {
-       ActualRegistration OldActualRegistration = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("Actual registration not found"));
+    public void update(Long id, ActualRegistrationDto registration) {
+        ActualRegistration newActualRegistration = mapper.toEntity(registration);
+        ActualRegistration OldActualRegistration = repository.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Actual registration not found"));
 
-        OldActualRegistration.setCountry(registration.getCountry());
-        OldActualRegistration.setRegion(registration.getRegion());
-        OldActualRegistration.setCity(registration.getCity());
-        OldActualRegistration.setDistrict(registration.getDistrict());
-        OldActualRegistration.setLocality(registration.getLocality());
-        OldActualRegistration.setStreet(registration.getStreet());
-        OldActualRegistration.setHouseNumber(registration.getHouseNumber());
-        OldActualRegistration.setHouseBlock(registration.getHouseBlock());
-        OldActualRegistration.setFlatNumber(registration.getFlatNumber());
-        OldActualRegistration.setIndex(registration.getIndex());
+        OldActualRegistration.setCountry(newActualRegistration.getCountry());
+        OldActualRegistration.setRegion(newActualRegistration.getRegion());
+        OldActualRegistration.setCity(newActualRegistration.getCity());
+        OldActualRegistration.setDistrict(newActualRegistration.getDistrict());
+        OldActualRegistration.setLocality(newActualRegistration.getLocality());
+        OldActualRegistration.setStreet(newActualRegistration.getStreet());
+        OldActualRegistration.setHouseNumber(newActualRegistration.getHouseNumber());
+        OldActualRegistration.setHouseBlock(newActualRegistration.getHouseBlock());
+        OldActualRegistration.setFlatNumber(newActualRegistration.getFlatNumber());
+        OldActualRegistration.setIndex(newActualRegistration.getIndex());
     }
 
     @Override

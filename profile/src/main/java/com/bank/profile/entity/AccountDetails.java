@@ -20,7 +20,7 @@ public class AccountDetails {
     @Column(name = "account_id", nullable = false)
     private Long accountId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 }

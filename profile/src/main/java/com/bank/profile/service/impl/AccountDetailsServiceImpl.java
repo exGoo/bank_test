@@ -1,5 +1,7 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.dto.AccountDetailsDto;
+import com.bank.profile.dto.mapper.AccountDetailsMapper;
 import com.bank.profile.entity.AccountDetails;
 import com.bank.profile.repository.AccountDetailsRepository;
 import com.bank.profile.service.AccountDetailsService;
@@ -15,33 +17,37 @@ import java.util.List;
 public class AccountDetailsServiceImpl implements AccountDetailsService {
 
     AccountDetailsRepository repository;
+    AccountDetailsMapper mapper;
 
     @Autowired
-    public AccountDetailsServiceImpl(AccountDetailsRepository repository) {
+    public AccountDetailsServiceImpl(AccountDetailsRepository repository, AccountDetailsMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public void save(AccountDetails accountDetails) {
-        repository.save(accountDetails);
+    public void save(AccountDetailsDto accountDetails) {
+        repository.save(mapper.toEntity(accountDetails));
     }
 
     @Override
-    public List<AccountDetails> findAll() {
-        return repository.findAll();
+    public List<AccountDetailsDto> findAll() {
+        return mapper.toDtoList( repository.findAll());
     }
 
     @Override
-    public AccountDetails findById(Long id) {
-        return repository.findById(id).get();
+    public AccountDetailsDto findById(Long id) {
+
+       return mapper.toDto( repository.findById(id).get());
     }
 
     @Override
-    public void update(Long id, AccountDetails accountDetails) {
+    public void update(Long id, AccountDetailsDto accountDetails) {
+      AccountDetails newDetail = mapper.toEntity(accountDetails);
       AccountDetails oldDetails =  repository.findById(id).orElseThrow(()->
               new EntityNotFoundException("Account details not found"));
-        oldDetails.setAccountId(accountDetails.getAccountId());
-        oldDetails.setProfile(accountDetails.getProfile());
+        oldDetails.setAccountId(newDetail.getAccountId());
+        oldDetails.setProfile(newDetail.getProfile());
     }
 
     @Override
