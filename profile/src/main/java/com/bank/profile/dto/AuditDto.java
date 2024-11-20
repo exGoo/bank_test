@@ -2,7 +2,6 @@ package com.bank.profile.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
 import java.time.ZonedDateTime;
 @Data
 public class AuditDto {

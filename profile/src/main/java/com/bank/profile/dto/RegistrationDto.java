@@ -1,8 +1,6 @@
 package com.bank.profile.dto;
 
 import lombok.Data;
-
-import javax.persistence.Column;
 @Data
 public class RegistrationDto {
     private Long id;

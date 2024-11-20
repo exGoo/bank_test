@@ -1,9 +1,7 @@
 package com.bank.profile.dto;
 
-import com.bank.profile.entity.Registration;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 @Data
 public class PassportDto {

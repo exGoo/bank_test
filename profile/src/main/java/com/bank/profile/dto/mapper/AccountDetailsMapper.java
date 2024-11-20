@@ -2,8 +2,8 @@ package com.bank.profile.dto.mapper;
 
 import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.entity.AccountDetails;
-import com.bank.profile.entity.Passport;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 

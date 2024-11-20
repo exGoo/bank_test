@@ -1,7 +1,6 @@
 package com.bank.profile.controller;
 
 import com.bank.profile.dto.ActualRegistrationDto;
-import com.bank.profile.entity.ActualRegistration;
 import com.bank.profile.service.ActualRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

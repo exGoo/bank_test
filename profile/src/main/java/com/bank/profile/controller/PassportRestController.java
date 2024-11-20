@@ -2,7 +2,6 @@ package com.bank.profile.controller;
 
 import com.bank.profile.dto.PassportDto;
 import com.bank.profile.dto.mapper.PassportMapper;
-import com.bank.profile.entity.Passport;
 import com.bank.profile.service.PassportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,11 +1,8 @@
 package com.bank.profile.controller;
 
 import com.bank.profile.dto.AccountDetailsDto;
-import com.bank.profile.entity.AccountDetails;
-import com.bank.profile.entity.Passport;
 import com.bank.profile.service.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

@@ -1,6 +1,5 @@
 package com.bank.profile.dto;
 
-import com.bank.profile.entity.Profile;
 import lombok.Data;
 
 @Data

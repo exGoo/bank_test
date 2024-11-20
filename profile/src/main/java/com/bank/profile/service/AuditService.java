@@ -1,7 +1,6 @@
 package com.bank.profile.service;
 
 import com.bank.profile.dto.AuditDto;
-import com.bank.profile.entity.Audit;
 
 import java.util.List;
 

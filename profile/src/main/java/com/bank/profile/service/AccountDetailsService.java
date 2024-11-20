@@ -1,7 +1,6 @@
 package com.bank.profile.service;
 
 import com.bank.profile.dto.AccountDetailsDto;
-import com.bank.profile.entity.AccountDetails;
 
 import java.util.List;
 
