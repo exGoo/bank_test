@@ -18,4 +18,7 @@
             <column name="authorization_audit_id" remarks="аудит авторизации" type="BIGINT"/>
         </createTable>
     </changeSet>
+    <changeSet id="1672956926837-2" author="Евгений">
+        <sql>CREATE SCHEMA IF NOT EXISTS history</sql>
+    </changeSet>
 </databaseChangeLog>
