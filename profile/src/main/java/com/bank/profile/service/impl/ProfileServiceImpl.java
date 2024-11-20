@@ -1,6 +1,14 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.dto.ProfileDto;
+import com.bank.profile.dto.mapper.ProfileMapper;
+import com.bank.profile.entity.AccountDetails;
+import com.bank.profile.entity.ActualRegistration;
+import com.bank.profile.entity.Passport;
 import com.bank.profile.entity.Profile;
+import com.bank.profile.repository.AccountDetailsRepository;
+import com.bank.profile.repository.ActualRegistrationRepository;
+import com.bank.profile.repository.PassportRepository;
 import com.bank.profile.repository.ProfileRepository;
 import com.bank.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,38 +24,70 @@ import java.util.List;
 public class ProfileServiceImpl implements ProfileService {
 
     ProfileRepository repository;
+    ProfileMapper mapper;
+    PassportRepository passportRepository;
+    AccountDetailsRepository accountDetailsRepository;
+    ActualRegistrationRepository actualRegistrationRepository;
 
     @Autowired
-    public ProfileServiceImpl(ProfileRepository repository) {
+    public ProfileServiceImpl(ProfileRepository repository, ProfileMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
     }
 
     @Override
-    public void save(Profile profile) {
-        repository.save(profile);
+    public void save(ProfileDto profile) {
+        Profile newprofile = mapper.toEntity(profile);
+        Passport passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
+                () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
+        ActualRegistration actualRegistration = actualRegistrationRepository
+                .findById(profile.getActualRegistrationId()).orElseThrow(
+                        () -> new EntityNotFoundException("ActualRegistration not found with ID: "
+                                + profile.getActualRegistrationId()));
+        List<AccountDetails> accountDetails = accountDetailsRepository.findAllById(profile.getAccountDetailsId());
+        newprofile.setAccountDetails(accountDetails);
+        newprofile.setPassport(passport);
+        newprofile.setActualRegistration(actualRegistration);
+        repository.save(newprofile);
     }
 
     @Override
-    public List<Profile> findAll() {
-        return repository.findAll();
+    public List<ProfileDto> findAll() {
+        return mapper.toListDto(repository.findAll());
     }
 
     @Override
-    public Profile findById(Long id) {
-        return repository.findById(id).get();
+    public ProfileDto findById(Long id) {
+        return mapper.toDto(repository.findById(id).get());
     }
 
     @Override
-    public void update(Long id, Profile profile) {
-        Profile oldProfile = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("profile not found"));
-        oldProfile.setPhoneNumber(profile.getPhoneNumber());
-        oldProfile.setEmail(profile.getEmail());
-        oldProfile.setNameOnCard(profile.getNameOnCard());
-        oldProfile.setInn(profile.getInn());
-        oldProfile.setSnils(profile.getSnils());
-        oldProfile.setPassport(profile.getPassport());
-        oldProfile.setActualRegistration(profile.getActualRegistration());
-        oldProfile.setAccountDetails(profile.getAccountDetails());
+    public void update(Long id, ProfileDto profile) {
+        Profile oldProfile = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("profile not found"));
+        Passport passport = oldProfile.getPassport();
+        if (profile.getPassportId() != null) {
+            passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
+                    () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
+        }
+        ActualRegistration actualRegistration = oldProfile.getActualRegistration();
+        if (profile.getActualRegistrationId() != null) {
+            actualRegistration = actualRegistrationRepository.findById(profile.getActualRegistrationId()).orElseThrow(
+                    () -> new EntityNotFoundException("ActualRegistration not found with ID: " + profile.getActualRegistrationId()));
+        }
+        List<AccountDetails> accountDetails = oldProfile.getAccountDetails();
+        if (profile.getAccountDetailsId() != null) {
+            accountDetails = accountDetails = profile.getAccountDetailsId().isEmpty()
+                    ? new ArrayList<>()
+                    : accountDetailsRepository.findAllById(profile.getAccountDetailsId());
+        }
+
+        mapper.updateEntityFromDto(oldProfile, profile);
+        oldProfile.setPassport(passport);
+        oldProfile.setActualRegistration(actualRegistration);
+        oldProfile.setAccountDetails(accountDetails);
+        repository.save(oldProfile);
+
     }
 
     @Override

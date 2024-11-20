@@ -1,5 +1,7 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.dto.RegistrationDto;
+import com.bank.profile.dto.mapper.RegistrationMapper;
 import com.bank.profile.entity.Registration;
 import com.bank.profile.repository.RegistrationRepository;
 import com.bank.profile.service.RegistrationService;
@@ -9,46 +11,43 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
+
 @Service
 @Transactional
 public class RegistrationServiceImpl implements RegistrationService {
     RegistrationRepository repository;
+    RegistrationMapper mapper;
+
     @Autowired
-    public RegistrationServiceImpl(RegistrationRepository repository) {
+    public RegistrationServiceImpl(RegistrationRepository repository, RegistrationMapper mapper) {
+        this.mapper = mapper;
         this.repository = repository;
     }
 
     @Override
-    public void save(Registration registration) {
-        repository.save(registration);
+    public void save(RegistrationDto registration) {
+
+        repository.save(mapper.toEntity(registration));
     }
 
     @Override
-    public List<Registration> findAll() {
+    public List<RegistrationDto> findAll() {
 
-        return repository.findAll();
+        return mapper.toListDto(repository.findAll());
     }
 
     @Override
-    public Registration findById(Long id) {
+    public RegistrationDto findById(Long id) {
 
-        return repository.findById(id).get();
+        return mapper.toDto(repository.findById(id).get());
     }
 
     @Override
-    public void update(Long id, Registration registration) {
-
-        Registration oldRegistration = repository.findById(id).orElseThrow(()-> new EntityNotFoundException("registration not found"));
-        oldRegistration.setCountry(registration.getCountry());
-        oldRegistration.setRegion(registration.getRegion());
-        oldRegistration.setCity(registration.getCity());
-        oldRegistration.setDistrict(registration.getDistrict());
-        oldRegistration.setLocality(registration.getLocality());
-        oldRegistration.setStreet(registration.getStreet());
-        oldRegistration.setHouseNumber(registration.getHouseNumber());
-        oldRegistration.setHouseBlock(registration.getHouseBlock());
-        oldRegistration.setFlatNumber(registration.getFlatNumber());
-        oldRegistration.setIndex(registration.getIndex());
+    public void update(Long id, RegistrationDto registration) {
+        Registration oldRegistration = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("registration not found"));
+        mapper.updateEntityFromDto(oldRegistration, registration);
+        repository.save(oldRegistration);
     }
 
     @Override

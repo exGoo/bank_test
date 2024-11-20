@@ -1,13 +1,14 @@
 package com.bank.profile.service;
 
+import com.bank.profile.dto.RegistrationDto;
 import com.bank.profile.entity.Registration;
 
 import java.util.List;
 
 public interface RegistrationService {
-    void save(Registration registration);
-    List<Registration> findAll();
-    Registration findById(Long id);
-    void update(Long id,Registration registration);
+    void save(RegistrationDto registration);
+    List<RegistrationDto> findAll();
+    RegistrationDto findById(Long id);
+    void update(Long id,RegistrationDto registration);
     void deleteById(Long id);
 }

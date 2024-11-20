@@ -12,7 +12,7 @@ public class ProfileDto {
     private String nameOnCard;
     private Long inn;
     private Long snils;
-    private PassportDto passport;
-    private ActualRegistrationDto actualRegistration;
-    private List<AccountDetailsDto> accountDetails;
+    private Long passportId;
+    private Long actualRegistrationId;
+    private List<Long> accountDetailsId;
 }

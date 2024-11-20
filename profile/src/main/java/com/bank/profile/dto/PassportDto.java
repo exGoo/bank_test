@@ -18,5 +18,5 @@ public class PassportDto {
     private LocalDate dateOfIssue;
     private Integer divisionCode;
     private LocalDate expirationDate;
-    private RegistrationDto registration;
+    private Long registrationId;
 }

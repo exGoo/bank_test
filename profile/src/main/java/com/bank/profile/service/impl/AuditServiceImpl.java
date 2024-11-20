@@ -42,17 +42,10 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public void update(Long id, AuditDto audit) {
-        Audit newAudit = mapper.toEntity(audit);
-        Audit oldAudit = repository.findById(id).orElseThrow(()
-                -> new EntityNotFoundException("audit not found"));
-        oldAudit.setEntityType(newAudit.getEntityType());
-        oldAudit.setOperationType(newAudit.getOperationType());
-        oldAudit.setCreatedBy(newAudit.getCreatedBy());
-        oldAudit.setModifiedBy(newAudit.getModifiedBy());
-        oldAudit.setCreatedAt(newAudit.getCreatedAt());
-        oldAudit.setModifiedAt(newAudit.getModifiedAt());
-        oldAudit.setNewEntityJson(newAudit.getNewEntityJson());
-        oldAudit.setEntityJson(newAudit.getEntityJson());
+        Audit oldAudit = repository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException("audit not found"));
+        mapper.updateEntityFromDto(oldAudit, audit);
+        repository.save(oldAudit);
 
     }
 

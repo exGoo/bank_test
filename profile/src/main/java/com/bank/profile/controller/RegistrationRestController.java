@@ -1,5 +1,6 @@
 package com.bank.profile.controller;
 
+import com.bank.profile.dto.RegistrationDto;
 import com.bank.profile.entity.Registration;
 import com.bank.profile.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +20,19 @@ public class RegistrationRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody Registration registration) {
-        System.out.println(registration);
+    public void save(@RequestBody RegistrationDto registration) {
         registrationService.save(registration);
     }
     @GetMapping("/{id}")
-    public Registration getRegistrationById(@PathVariable Long id) {
+    public RegistrationDto getRegistrationById(@PathVariable Long id) {
         return registrationService.findById(id);
     }
     @GetMapping("")
-    public List<Registration> getAllRegistrations() {
+    public List<RegistrationDto> getAllRegistrations() {
         return registrationService.findAll();
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody Registration registration) {
+    public void update(@PathVariable Long id,@RequestBody RegistrationDto registration) {
         registrationService.update(id,registration);
     }
 

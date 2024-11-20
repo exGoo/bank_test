@@ -42,20 +42,13 @@ public class ActualRegistrationServiceImpl implements ActualRegistrationService 
 
     @Override
     public void update(Long id, ActualRegistrationDto registration) {
-        ActualRegistration newActualRegistration = mapper.toEntity(registration);
         ActualRegistration OldActualRegistration = repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Actual registration not found"));
 
-        OldActualRegistration.setCountry(newActualRegistration.getCountry());
-        OldActualRegistration.setRegion(newActualRegistration.getRegion());
-        OldActualRegistration.setCity(newActualRegistration.getCity());
-        OldActualRegistration.setDistrict(newActualRegistration.getDistrict());
-        OldActualRegistration.setLocality(newActualRegistration.getLocality());
-        OldActualRegistration.setStreet(newActualRegistration.getStreet());
-        OldActualRegistration.setHouseNumber(newActualRegistration.getHouseNumber());
-        OldActualRegistration.setHouseBlock(newActualRegistration.getHouseBlock());
-        OldActualRegistration.setFlatNumber(newActualRegistration.getFlatNumber());
-        OldActualRegistration.setIndex(newActualRegistration.getIndex());
+        mapper.updateEntityFromDto(OldActualRegistration, registration);
+        repository.save(OldActualRegistration);
+
+
     }
 
     @Override
