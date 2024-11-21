@@ -4,14 +4,13 @@ import com.bank.publicinfo.dto.CertificateDto;
 import com.bank.publicinfo.entity.Certificate;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CertificateMapper {
+    CertificateDto toDTO(Certificate certificate);
+    Certificate toEntity(CertificateDto certificateDTO);
 
-    @Mapping(target = "bankDetailsId", source = "bankDetails.id")
-    CertificateDto toDto(Certificate certificate);
-
-    @Mapping(target = "bankDetails.id", source = "bankDetailsId")
     @Mapping(target = "id", ignore = true)
-    Certificate toModel(CertificateDto certificateDTO);
+    void createOrUpdateEntity(@MappingTarget Certificate entity, CertificateDto dto);
 }

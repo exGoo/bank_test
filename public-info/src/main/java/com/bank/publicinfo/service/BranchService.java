@@ -1,15 +1,19 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.repository.BranchRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.bank.publicinfo.entity.Branch;
 
-@Service
-public class BranchService {
-    private BranchRepository branchRepository;
+import java.util.List;
 
-    @Autowired
-    public void setBranchRepository(BranchRepository branchRepository) {
-        this.branchRepository = branchRepository;
-    }
+public interface BranchService {
+    List<Branch> findAllWithATMs();
+    Branch findById(Long id);
+
+    List<Branch> findByCity(String city);
+
+    Branch addBranch(Branch branch);
+
+    Branch deleteBranchById(Long id);
+
+    Branch updateBranch(Long id, Branch branch);
+
 }

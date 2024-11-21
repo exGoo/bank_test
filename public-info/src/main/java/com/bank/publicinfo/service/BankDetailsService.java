@@ -1,17 +1,20 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.repository.BankDetailsRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service
-public class BankDetailsService {
-    private BankDetailsRepository bankDetailsRepository;
+import com.bank.publicinfo.entity.BankDetails;
 
-    @Autowired
-    public void setBankDetailsRepository(BankDetailsRepository bankDetailsRepository) {
-        this.bankDetailsRepository = bankDetailsRepository;
-    }
+import java.util.List;
 
+public interface BankDetailsService {
+    List<BankDetails> findAllWithRelations();
 
+    BankDetails findById(Long id);
+
+    List<BankDetails> findByCity(String city);
+
+    BankDetails addBankDetails(BankDetails bankDetails);
+
+    void deleteBankDetailsById(Long id);
+
+    BankDetails updateBankDetails(Long id, BankDetails bankDetails);
 }
