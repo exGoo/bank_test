@@ -42,7 +42,7 @@ public interface HistoryService {
      * @param historyDto объект {@link HistoryDto}, содержащий обновлённые данные.
      * @throws EntityNotFoundException если история с указанным идентификатором не найдена.
      */
-    void updateHistory(Long id, HistoryDto historyDto);
+    History updateHistory(Long id, HistoryDto historyDto);
 
     /**
      * Частично обновляет существующую историю.
@@ -51,7 +51,7 @@ public interface HistoryService {
      * @param historyDto объект {@link HistoryDto}, содержащий обновлённые данные.
      * @throws EntityNotFoundException если история с указанным идентификатором не найдена.
      */
-    void editHistory(Long id, HistoryDto historyDto);
+    History editHistory(Long id, HistoryDto historyDto);
 
     /**
      * Удаляет историю по её идентификатору.

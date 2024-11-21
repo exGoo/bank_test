@@ -81,7 +81,7 @@ public class HistoryServiceImpl implements HistoryService {
      */
     @Override
     @Transactional
-    public void updateHistory(Long id, HistoryDto historyDto) {
+    public History updateHistory(Long id, HistoryDto historyDto) {
         History maybeHistory = repository.findById(id)
                 .orElseThrow(HistoryNotFoundException::new);
 
@@ -95,7 +95,7 @@ public class HistoryServiceImpl implements HistoryService {
                 .authorizationAuditId(historyDto.getAuthorizationAuditId())
                 .build();
 
-        repository.save(maybeHistory);
+        return repository.save(maybeHistory);
     }
 
     /**
@@ -106,7 +106,7 @@ public class HistoryServiceImpl implements HistoryService {
      * @throws HistoryNotFoundException если история не найдена.
      */
     @Override
-    public void editHistory(Long id, HistoryDto historyDto) {
+    public History editHistory(Long id, HistoryDto historyDto) {
         History maybeHistory = repository.findById(id)
                 .orElseThrow(HistoryNotFoundException::new);
 
@@ -129,7 +129,7 @@ public class HistoryServiceImpl implements HistoryService {
             maybeHistory.setAuthorizationAuditId(historyDto.getAuthorizationAuditId());
         }
 
-        repository.save(maybeHistory);
+        return repository.save(maybeHistory);
     }
 
     /**

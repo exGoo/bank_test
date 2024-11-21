@@ -24,7 +24,6 @@ import java.util.List;
 @Tag(name = "История", description = "API для работы с историей операций всех микросервисов")
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/")
 public class HistoryController {
 
     private final HistoryService service;
