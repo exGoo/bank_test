@@ -1,15 +1,11 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.repository.CertificateRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.bank.publicinfo.entity.Certificate;
 
-@Service
-public class CertificateService {
-    private CertificateRepository certificateRepository;
 
-    @Autowired
-    public void setCertificateRepository(CertificateRepository certificateRepository) {
-        this.certificateRepository = certificateRepository;
-    }
+public interface CertificateService {
+    Certificate addCertificate(Certificate certificate);
+
+    void deleteCertificate(Certificate certificate);
+
 }

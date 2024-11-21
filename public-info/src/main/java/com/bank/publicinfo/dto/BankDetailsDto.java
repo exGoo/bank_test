@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -15,4 +17,9 @@ public class BankDetailsDto {
     private Long inn;
     private Long kpp;
     private int corAccount;
+    private String city;
+    private String jointStockCompany;
+    private String name;
+    private List<LicenseDto> licenses;
+    private List<CertificateDto> certificates;
 }
