@@ -135,7 +135,7 @@ public class HistoryController {
 
     @Hidden
     @ExceptionHandler(HistoryNotFoundException.class)
-    private ResponseEntity<ErrorMessage> handlerException(HistoryNotFoundException exception) {
+    public ResponseEntity<ErrorMessage> handlerException(HistoryNotFoundException exception) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .contentType(MediaType.APPLICATION_JSON)
