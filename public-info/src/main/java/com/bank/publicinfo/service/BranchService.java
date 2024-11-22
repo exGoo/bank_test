@@ -1,19 +1,22 @@
 package com.bank.publicinfo.service;
 
+import com.bank.publicinfo.dto.BranchDto;
 import com.bank.publicinfo.entity.Branch;
 
 import java.util.List;
 
 public interface BranchService {
-    List<Branch> findAllWithATMs();
     Branch findById(Long id);
 
-    List<Branch> findByCity(String city);
+    List<BranchDto> findAllWithATMs();
 
-    Branch addBranch(Branch branch);
+    List<BranchDto> findByCity(String city);
 
-    Branch deleteBranchById(Long id);
+    BranchDto addBranch(BranchDto branch);
 
-    Branch updateBranch(Long id, Branch branch);
+    void deleteBranchById(Long id);
+
+    BranchDto updateBranch(Long id, BranchDto branch);
+
 
 }

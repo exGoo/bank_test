@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -20,6 +19,6 @@ public class BankDetailsDto {
     private String city;
     private String jointStockCompany;
     private String name;
-    private List<LicenseDto> licenses;
-    private List<CertificateDto> certificates;
+    private Set<LicenseDto> licenses;
+    private Set<CertificateDto> certificates;
 }

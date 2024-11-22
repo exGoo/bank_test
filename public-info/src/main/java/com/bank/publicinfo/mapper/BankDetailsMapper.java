@@ -12,12 +12,12 @@ import org.mapstruct.MappingTarget;
 public interface BankDetailsMapper {
     @Mapping(target = "licenses", source = "licenses")
     @Mapping(target = "certificates", source = "certificates")
-    BankDetailsDto modelToDto(BankDetails bankDetails);
+    BankDetailsDto toDto(BankDetails bankDetails);
 
     @InheritInverseConfiguration
-    BankDetails dtoToModel(BankDetailsDto bankDetailsDto);
+    BankDetails toModel(BankDetailsDto bankDetailsDto);
 
     @Mapping(target = "id", ignore = true)
-    void createOrUpdateEntity(@MappingTarget BankDetails entity, BankDetailsDto dto);
+    void updateEntity(@MappingTarget BankDetails entity, BankDetailsDto dto);
 
 }

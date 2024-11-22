@@ -8,9 +8,9 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ATMMapper {
-    ATMDto modelToDto(ATM atm);
+    ATMDto toDto(ATM atm);
 
-    ATM dtoToModel(ATMDto atmDto);
+    ATM toModel(ATMDto atmDto);
 
     @Mapping(target = "id", ignore = true)
     void createOrUpdate(@MappingTarget ATM entity, ATMDto dto);

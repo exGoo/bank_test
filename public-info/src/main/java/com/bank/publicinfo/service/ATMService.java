@@ -1,14 +1,18 @@
 package com.bank.publicinfo.service;
+import com.bank.publicinfo.dto.ATMDto;
 
 
-import com.bank.publicinfo.entity.ATM;
+import java.util.List;
 
 public interface ATMService {
+    ATMDto findById(Long id);
 
-    ATM addATM(ATM atm);
+    List<ATMDto> findAll();
 
-    void deleteBankDetailsById(Long id);
+    ATMDto addATM(ATMDto atm);
 
-    ATM updateATM(Long id, ATM atm);
+    void deleteATMById(Long id);
+
+    ATMDto updateATM(Long id, ATMDto atm);
 
 }
