@@ -1,10 +1,10 @@
 package com.bank.antifraud.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,16 +19,16 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
+@Builder
 @Entity
-@Table(name = "audit")
+@Table(name = "audit", schema = "anti_fraud")
 public class Audit {
 
     public static final int MAX_LENGTH_FOR_ENTITY_TYPE = 40;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "entity_type", nullable = false, length = MAX_LENGTH_FOR_ENTITY_TYPE)
@@ -40,11 +40,11 @@ public class Audit {
     @Column(name = "created_by", nullable = false)
     private String createdBy;
 
-    @Column(name = "modified_by")
-    private String modifiedBy;
-
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
+
+    @Column(name = "modified_by")
+    private String modifiedBy;
 
     @Column(name = "modified_at")
     private OffsetDateTime modifiedAt;

@@ -8,6 +8,6 @@ import org.mapstruct.ReportingPolicy;
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface SuspiciousPhoneTransfersMapper {
 
-    //TODO: Realize mapper for SPT
+    // todo realize mapper
 
 }

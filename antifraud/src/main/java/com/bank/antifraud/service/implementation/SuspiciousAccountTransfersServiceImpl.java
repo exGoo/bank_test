@@ -15,39 +15,39 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountTransfersService {
 
-    private final SuspiciousAccountTransfersRepository satr;
+    private final SuspiciousAccountTransfersRepository satRepository;
 
     @Override
     public void add(SuspiciousAccountTransfers sat) {
-        satr.save(sat);
+        satRepository.save(sat);
     }
 
     @Override
     @Transactional(readOnly = true)
     public SuspiciousAccountTransfers get(Long id) {
-        return satr.findById(id)
+        return satRepository.findById(id)
                 .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id));
     }
 
     @Override
-    public void update(SuspiciousAccountTransfers sat) {
-        if (!satr.existsById(sat.getId())) {
-            throw new NotFoundSuspiciousAccountTransfersException(sat.getId());
-        }
-        satr.save(sat);
+    public void update(Long id, SuspiciousAccountTransfers sat) {
+        final SuspiciousAccountTransfers currentSat = get(id);
+        currentSat.setIsBlocked(sat.getIsBlocked());
+        currentSat.setIsSuspicious(sat.getIsSuspicious());
+        currentSat.setBlockedReason(sat.getBlockedReason());
+        currentSat.setSuspiciousReason(sat.getSuspiciousReason());
+        satRepository.save(currentSat);
     }
 
     @Override
     public void remove(Long id) {
-        if (!satr.existsById(id)) {
-            throw new NotFoundSuspiciousAccountTransfersException(id);
-        }
-        satr.deleteById(id);
+        satRepository.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<SuspiciousAccountTransfers> getAll() {
-        return satr.findAll();
+        return satRepository.findAll();
     }
+
 }

@@ -9,7 +9,7 @@ public interface SuspiciousAccountTransfersService {
 
     SuspiciousAccountTransfers get(Long id);
 
-    void update(SuspiciousAccountTransfers sat);
+    void update(Long id, SuspiciousAccountTransfers sat);
 
     void remove(Long id);
 

@@ -2,9 +2,9 @@ package com.bank.antifraud.controller;
 
 import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
 import com.bank.antifraud.mapper.SuspiciousAccountTransfersMapper;
-import com.bank.antifraud.model.SuspiciousAccountTransfers;
 import com.bank.antifraud.service.SuspiciousAccountTransfersService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import org.webjars.NotFoundException;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/sat")
 @RequiredArgsConstructor
@@ -31,44 +32,44 @@ public class SuspiciousAccountTransferController {
 
     @GetMapping
     public ResponseEntity<List<SuspiciousAccountTransfersDto>> getAll() {
-        List<SuspiciousAccountTransfersDto> satDtoList = satMapper.toDtoList(satService.getAll());
-        return ResponseEntity.ok(satDtoList);
+        return ResponseEntity.ok(satMapper.toDtoList(satService.getAll()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SuspiciousAccountTransfersDto> getById(@PathVariable Long id) {
-        SuspiciousAccountTransfersDto satDto = satMapper.toDto(satService.get(id));
-        return ResponseEntity.ok(satDto);
+        return ResponseEntity.ok(satMapper.toDto(satService.get(id)));
     }
 
     @PostMapping
-    public ResponseEntity<SuspiciousAccountTransfersDto> save(@RequestBody SuspiciousAccountTransfersDto satDto) {
-        SuspiciousAccountTransfers sat = satMapper.toEntity(satDto);
-        satService.add(sat);
-    return ResponseEntity.ok(satMapper.toDto(sat));
+    public ResponseEntity<HttpStatus> save(@RequestBody SuspiciousAccountTransfersDto satDto) {
+        satService.add(satMapper.toEntity(satDto));
+        return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
-    @PatchMapping
-    public ResponseEntity<SuspiciousAccountTransfersDto> update(@RequestBody SuspiciousAccountTransfersDto satDto) {
-        SuspiciousAccountTransfers sat = satMapper.toEntity(satDto);
-        satService.update(sat);
-        return ResponseEntity.ok(satMapper.toDto(sat));
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> update(@PathVariable Long id,
+                                             @RequestBody SuspiciousAccountTransfersDto satDto) {
+        satService.update(id, satMapper.update(satDto));
+        return new ResponseEntity<>("Update suspicious account transfer with " + id + " successfully",
+                HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         satService.remove(id);
-        return new ResponseEntity<>("Deleted suspicious account transfer with " + id + " successfully",
-                HttpStatus.OK);
+        return new ResponseEntity<>("Delete suspicious account transfer with " + id + " successfully",
+                HttpStatus.NO_CONTENT);
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNotFound(NotFoundException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException e) {
+        log.error(e.getMessage());
         return new ResponseEntity<>("Incorrect body of request", HttpStatus.BAD_REQUEST);
     }
 

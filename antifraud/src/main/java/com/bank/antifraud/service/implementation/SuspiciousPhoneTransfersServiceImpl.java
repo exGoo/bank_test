@@ -1,56 +1,49 @@
 package com.bank.antifraud.service.implementation;
 
-import com.bank.antifraud.exception.NotFoundSuspiciousPhoneTransfersException;
+import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
+import com.bank.antifraud.model.SuspiciousAccountTransfers;
 import com.bank.antifraud.model.SuspiciousPhoneTransfers;
 import com.bank.antifraud.repository.SuspiciousPhoneTransfersRepository;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
 import java.util.List;
 
-@Service
-@Transactional
 @RequiredArgsConstructor
+@Service
 public class SuspiciousPhoneTransfersServiceImpl implements SuspiciousPhoneTransfersService {
 
-    private final SuspiciousPhoneTransfersRepository sptr;
+    private final SuspiciousPhoneTransfersRepository sptRepository;
 
     @Override
-    public void add(SuspiciousPhoneTransfers audit) {
-        sptr.save(audit);
+    public void add(SuspiciousPhoneTransfers sat) {
+        sptRepository.save(sat);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public SuspiciousPhoneTransfers get(Long id) {
-        return sptr.findById(id)
-                .orElseThrow(() -> new NotFoundSuspiciousPhoneTransfersException(id));
+        return sptRepository.findById(id)
+                .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id));
     }
 
     @Override
-    public void update(SuspiciousPhoneTransfers audit) {
-        if (!sptr.existsById(audit.getId())) {
-            throw new NotFoundSuspiciousPhoneTransfersException(audit.getId());
-        }
-        sptr.save(audit);
+    public void update(Long id, SuspiciousPhoneTransfers sat) {
+        final SuspiciousPhoneTransfers currentSat = get(id);
+        currentSat.setIsBlocked(sat.getIsBlocked());
+        currentSat.setIsSuspicious(sat.getIsSuspicious());
+        currentSat.setBlockedReason(sat.getBlockedReason());
+        currentSat.setSuspiciousReason(sat.getSuspiciousReason());
+        sptRepository.save(currentSat);
     }
 
     @Override
     public void remove(Long id) {
-        if (!sptr.existsById(id)) {
-            throw new NotFoundSuspiciousPhoneTransfersException(id);
-        }
-        sptr.deleteById(id);
+        sptRepository.deleteById(id);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<SuspiciousPhoneTransfers> getAll() {
-        return sptr.findAll();
+        return sptRepository.findAll();
     }
-
 }

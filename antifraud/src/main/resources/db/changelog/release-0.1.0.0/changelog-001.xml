@@ -5,7 +5,14 @@
         xsi:schemaLocation="
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
-    <changeSet author="Рустам" id="1672954987388-1">
+
+    <changeSet id="1732122096592-1" author="Vladislav Guliaev">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS anti_fraud;
+        </sql>
+    </changeSet>
+
+    <changeSet author="Рустам" id="1672954987388-2">
         <createTable remarks="аудит" tableName="audit">
             <column autoIncrement="true" name="id" remarks="технический идентификатор" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="audit_pkey"/>
@@ -30,7 +37,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Рустам" id="1672954987388-2">
+
+    <changeSet author="Рустам" id="1672954987388-3">
         <createTable remarks="подозрительные переводы по номеру cчёта" tableName="suspicious_account_transfers">
             <column autoIncrement="true" name="id" remarks="технический идентификатор" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="suspicious_account_transfers_pkey"/>
@@ -50,7 +58,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Рустам" id="1672954987388-3">
+
+    <changeSet author="Рустам" id="1672954987388-4">
         <createTable remarks="подозрительные переводы по номеру карты" tableName="suspicious_card_transfer">
             <column autoIncrement="true" name="id" remarks="технический идентификатор" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="suspicious_card_transfer_pkey"/>
@@ -70,7 +79,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Рустам" id="1672954987388-4">
+
+    <changeSet author="Рустам" id="1672954987388-5">
         <createTable remarks="подозрительные переводы по номеру телефона" tableName="suspicious_phone_transfers">
             <column autoIncrement="true" name="id" remarks="технический идентификатор" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="suspicious_phone_transfers_pkey"/>
@@ -90,13 +100,17 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="Рустам" id="1672954987388-5">
+
+    <changeSet author="Рустам" id="1672954987388-6">
         <addUniqueConstraint columnNames="account_transfer_id" constraintName="suspicious_account_transfers_id_key" tableName="suspicious_account_transfers"/>
     </changeSet>
-    <changeSet author="Рустам" id="1672954987388-6">
+
+    <changeSet author="Рустам" id="1672954987388-7">
         <addUniqueConstraint columnNames="card_transfer_id" constraintName="suspicious_card_transfer_id_key" tableName="suspicious_card_transfer"/>
     </changeSet>
-    <changeSet author="Рустам" id="1672954987388-7">
+
+    <changeSet author="Рустам" id="1672954987388-8">
         <addUniqueConstraint columnNames="phone_transfer_id" constraintName="suspicious_phone_transfers_id_key" tableName="suspicious_phone_transfers"/>
     </changeSet>
+
 </databaseChangeLog>

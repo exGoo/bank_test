@@ -13,14 +13,12 @@ import java.util.List;
         componentModel = MappingConstants.ComponentModel.SPRING)
 public interface SuspiciousAccountTransfersMapper {
 
+    @Mapping(target = "id", ignore = true)
     SuspiciousAccountTransfers toEntity(SuspiciousAccountTransfersDto satDto);
 
     SuspiciousAccountTransfersDto toDto(SuspiciousAccountTransfers sat);
 
     List<SuspiciousAccountTransfersDto> toDtoList(List<SuspiciousAccountTransfers> satList);
-
-    @Mapping(target = "id", ignore = true)
-    SuspiciousAccountTransfers save(SuspiciousAccountTransfersDto satDto);
 
     @Mapping(target = "accountTransferId", ignore = true)
     SuspiciousAccountTransfers update(SuspiciousAccountTransfersDto satDto);

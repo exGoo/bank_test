@@ -1,77 +1,61 @@
 package com.bank.antifraud.controller;
 
-import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
-import com.bank.antifraud.mapper.SuspiciousAccountTransfersMapper;
-import com.bank.antifraud.model.SuspiciousAccountTransfers;
-import com.bank.antifraud.service.SuspiciousAccountTransfersService;
+import com.bank.antifraud.mapper.SuspiciousCardTransferMapper;
+import com.bank.antifraud.model.SuspiciousCardTransfer;
+import com.bank.antifraud.service.SuspiciousCardTransferService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.webjars.NotFoundException;
 
 import java.util.List;
 
+@Slf4j
 @RestController
-@RequestMapping("/sct")
+@RequestMapping(value = "/sct")
 @RequiredArgsConstructor
 public class SuspiciousCardTransferController {
 
-    private final SuspiciousAccountTransfersService satService;
-    private final SuspiciousAccountTransfersMapper satMapper;
+    private final SuspiciousCardTransferService sctService;
+    private final SuspiciousCardTransferMapper sctMapper;
+
 
     @GetMapping
-    public ResponseEntity<List<SuspiciousAccountTransfersDto>> getAll() {
-        List<SuspiciousAccountTransfersDto> satDtoList = satMapper.toDtoList(satService.getAll());
-        return ResponseEntity.ok(satDtoList);
+    public ResponseEntity<List<SuspiciousCardTransfer>> getAll() {
+        List<SuspiciousCardTransfer> suspiciousCardTransfers = sctService.getAll();
+        return ResponseEntity.ok(suspiciousCardTransfers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SuspiciousAccountTransfersDto> getById(@PathVariable Long id) {
-        SuspiciousAccountTransfersDto satDto = satMapper.toDto(satService.get(id));
-        return ResponseEntity.ok(satDto);
+    public ResponseEntity<SuspiciousCardTransfer> get(@PathVariable("id") Long id) {
+        SuspiciousCardTransfer suspiciousCardTransfer = sctService.get(id);
+        return ResponseEntity.ok(suspiciousCardTransfer);
     }
 
-    @PostMapping
-    public ResponseEntity<SuspiciousAccountTransfersDto> save(@RequestBody SuspiciousAccountTransfersDto satDto) {
-        SuspiciousAccountTransfers sat = satMapper.toEntity(satDto);
-        satService.add(sat);
-    return ResponseEntity.ok(satMapper.toDto(sat));
+    @GetMapping
+    public ResponseEntity<Void> add(@RequestParam("sct") SuspiciousCardTransfer sct) {
+        sctService.add(sct);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping
-    public ResponseEntity<SuspiciousAccountTransfersDto> update(@RequestBody SuspiciousAccountTransfersDto satDto) {
-        SuspiciousAccountTransfers sat = satMapper.toEntity(satDto);
-        satService.update(sat);
-        return ResponseEntity.ok(satMapper.toDto(sat));
+    public ResponseEntity<Void> update(@RequestBody Long id, @RequestBody SuspiciousCardTransfer sct) {
+        sctService.update(id, sct);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        satService.remove(id);
-        return new ResponseEntity<>("Deleted suspicious account transfer with " + id + " successfully",
-                HttpStatus.OK);
+    @DeleteMapping
+    public ResponseEntity<Void> remove(@RequestBody Long id) {
+        sctService.remove(id);
+        return ResponseEntity.noContent().build();
     }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<String> handleNotFound(NotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrityViolation(DataIntegrityViolationException e) {
-        return new ResponseEntity<>("Incorrect body of request", HttpStatus.BAD_REQUEST);
-    }
-
-    //TODO: Fix controller SCT
 
 }
+

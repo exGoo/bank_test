@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,14 +17,13 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "suspicious_card_transfer", schema = "anti_fraud")
 public class SuspiciousCardTransfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "card_transfer_id", nullable = false, unique = true)
@@ -38,7 +36,7 @@ public class SuspiciousCardTransfer {
     private Boolean isSuspicious;
 
     @Column(name = "blocked_reason")
-    private String blockerReason;
+    private String blockedReason;
 
     @Column(name = "suspicious_reason", nullable = false)
     private String suspiciousReason;

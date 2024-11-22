@@ -1,15 +1,16 @@
 package com.bank.antifraud.service;
 
 import com.bank.antifraud.model.SuspiciousCardTransfer;
+
 import java.util.List;
 
 public interface SuspiciousCardTransferService {
 
-    void add(SuspiciousCardTransfer scd);
+    void add(SuspiciousCardTransfer sct);
 
     SuspiciousCardTransfer get(Long id);
 
-    void update(SuspiciousCardTransfer scd);
+    void update(Long id, SuspiciousCardTransfer sct);
 
     void remove(Long id);
 

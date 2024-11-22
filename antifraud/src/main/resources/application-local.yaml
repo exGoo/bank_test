@@ -14,8 +14,8 @@ management:
         include: '*'
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/postgres
-    username: postgres
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: user
     password: password
   liquibase:
     default-schema: anti_fraud
@@ -24,6 +24,9 @@ spring:
     drop-first: ${LIQUIBASE_DROP_FIRST:false}
   application:
     name: anti-fraud-app
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
 eureka:
   client:
