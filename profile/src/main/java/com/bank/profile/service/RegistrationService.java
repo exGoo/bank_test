@@ -5,7 +5,7 @@ import com.bank.profile.dto.RegistrationDto;
 import java.util.List;
 
 public interface RegistrationService {
-    void save(RegistrationDto registration);
+    RegistrationDto save(RegistrationDto registration);
     List<RegistrationDto> findAll();
     RegistrationDto findById(Long id);
     void update(Long id,RegistrationDto registration);

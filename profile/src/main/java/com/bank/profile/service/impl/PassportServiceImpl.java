@@ -1,5 +1,6 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.annotation.AuditSave;
 import com.bank.profile.dto.PassportDto;
 import com.bank.profile.dto.mapper.PassportMapper;
 import com.bank.profile.entity.Passport;
@@ -29,12 +30,13 @@ public class PassportServiceImpl implements PassportService {
     }
 
     @Override
-    public void save(PassportDto passport) {
+    @AuditSave(entityType = "passport")
+    public PassportDto save(PassportDto passport) {
         Passport newPassport = mapper.toEntity(passport);
         Registration registration = registrationRepository.findById(passport.getRegistrationId()).orElseThrow(
-                ()->new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
+                () -> new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
         newPassport.setRegistration(registration);
-        repository.save(newPassport);
+        return mapper.toDto(repository.save(newPassport));
     }
 
     @Override
@@ -54,9 +56,9 @@ public class PassportServiceImpl implements PassportService {
         Passport oldPassport = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Passport not found with ID: " + id));
         Registration registration = oldPassport.getRegistration();
-        if(passport.getRegistrationId() != null) {
+        if (passport.getRegistrationId() != null) {
             registration = registrationRepository.findById(passport.getRegistrationId()).orElseThrow(
-                    ()->new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
+                    () -> new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
         }
         mapper.updateEntityFromDto(oldPassport, passport);
         oldPassport.setRegistration(registration);

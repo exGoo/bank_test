@@ -1,5 +1,6 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.annotation.AuditSave;
 import com.bank.profile.dto.ProfileDto;
 import com.bank.profile.dto.mapper.ProfileMapper;
 import com.bank.profile.entity.AccountDetails;
@@ -43,7 +44,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile save(ProfileDto profile) {
+    @AuditSave(entityType = "profile")
+    public ProfileDto save(ProfileDto profile) {
         Profile newprofile = mapper.toEntity(profile);
         Passport passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
                 () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
@@ -55,7 +57,7 @@ public class ProfileServiceImpl implements ProfileService {
         newprofile.setAccountDetails(accountDetails);
         newprofile.setPassport(passport);
         newprofile.setActualRegistration(actualRegistration);
-       return repository.save(newprofile);
+       return mapper.toDto(repository.save(newprofile));
     }
 
     @Override

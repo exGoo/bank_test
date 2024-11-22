@@ -6,7 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,10 +33,10 @@ public class Audit {
     private String modifiedBy;
 
     @Column(name = "created_at", nullable = false)
-    private ZonedDateTime createdAt;
+    private OffsetDateTime createdAt;
 
     @Column(name = "modified_at")
-    private ZonedDateTime modifiedAt;
+    private OffsetDateTime modifiedAt;
 
     @Column(name = "new_entity_json")
     private String newEntityJson;

@@ -1,5 +1,6 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.annotation.AuditSave;
 import com.bank.profile.dto.ActualRegistrationDto;
 import com.bank.profile.dto.mapper.ActualRegistrationMapper;
 import com.bank.profile.entity.ActualRegistration;
@@ -26,8 +27,10 @@ public class ActualRegistrationServiceImpl implements ActualRegistrationService 
     }
 
     @Override
-    public void save(ActualRegistrationDto registration) {
-        repository.save(mapper.toEntity(registration));
+    @AuditSave(entityType = "actual_registration")
+    public ActualRegistrationDto save(ActualRegistrationDto registration) {
+        ActualRegistration actualRegistration = mapper.toEntity(registration);
+        return mapper.toDto(repository.save(actualRegistration));
     }
 
     @Override

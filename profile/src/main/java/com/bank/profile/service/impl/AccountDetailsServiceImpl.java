@@ -1,5 +1,6 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.annotation.AuditSave;
 import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.dto.mapper.AccountDetailsMapper;
 import com.bank.profile.entity.AccountDetails;
@@ -29,13 +30,15 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
         this.profileRepository = profileRepository;
     }
 
+    @AuditSave(entityType = "account_details")
     @Override
-    public void save(AccountDetailsDto accountDetails) {
+    public AccountDetailsDto save(AccountDetailsDto accountDetails) {
         AccountDetails newDetails = mapper.toEntity(accountDetails);
         Profile profile = profileRepository.findById(accountDetails.getProfileId()).orElseThrow(
                 () -> new EntityNotFoundException("Profile not found with ID: " + accountDetails.getProfileId()));
         newDetails.setProfile(profile);
-        repository.save(newDetails);
+        return mapper.toDto(repository.save(newDetails));
+
     }
 
     @Override

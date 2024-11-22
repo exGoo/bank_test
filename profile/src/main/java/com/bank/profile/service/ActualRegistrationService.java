@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ActualRegistrationService {
 
-    void save(ActualRegistrationDto registration);
+    ActualRegistrationDto save(ActualRegistrationDto registration);
     List<ActualRegistrationDto> findAll();
     ActualRegistrationDto findById(Long id);
     void update(Long id,ActualRegistrationDto registration);

@@ -1,5 +1,6 @@
 package com.bank.profile.service.impl;
 
+import com.bank.profile.annotation.AuditSave;
 import com.bank.profile.dto.RegistrationDto;
 import com.bank.profile.dto.mapper.RegistrationMapper;
 import com.bank.profile.entity.Registration;
@@ -25,9 +26,12 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    public void save(RegistrationDto registration) {
+    @AuditSave(entityType = "registration")
+    public RegistrationDto save(RegistrationDto registration) {
 
-        repository.save(mapper.toEntity(registration));
+        return mapper.toDto(
+                repository.save(mapper.toEntity(registration))
+        );
     }
 
     @Override
@@ -40,13 +44,13 @@ public class RegistrationServiceImpl implements RegistrationService {
     public RegistrationDto findById(Long id) {
 
         return mapper.toDto(repository.findById(id).orElseThrow(
-                ()->new EntityNotFoundException("registration not found with ID: "+ id)));
+                () -> new EntityNotFoundException("registration not found with ID: " + id)));
     }
 
     @Override
     public void update(Long id, RegistrationDto registration) {
         Registration oldRegistration = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("registration not found with ID: "+ id));
+                () -> new EntityNotFoundException("registration not found with ID: " + id));
         mapper.updateEntityFromDto(oldRegistration, registration);
         repository.save(oldRegistration);
     }
