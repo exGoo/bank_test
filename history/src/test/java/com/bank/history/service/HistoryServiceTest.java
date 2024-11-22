@@ -22,8 +22,10 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class HistoryServiceTest {
-    public static final Long HISTORY_ID = 1L;
-    public static final Long HISTORY_ID_TWO = 2L;
+    private static final Long HISTORY_ID = 1L;
+    private static final Long HISTORY_ID_TWO = 2L;
+    private static final History HISTORY = new History();
+    private static final HistoryDto HISTORY_DTO = new HistoryDto();
 
     @Mock
     private HistoryRepository repository;
@@ -53,19 +55,16 @@ class HistoryServiceTest {
 
     @Test
     void getHistoryById() {
-        HistoryDto historyDto = new HistoryDto();
-        History history = new History();
-
         when(repository.findById(HISTORY_ID))
-                .thenReturn(Optional.of(history));
-        when(mapper.historyToDto(history))
-                .thenReturn(historyDto);
+                .thenReturn(Optional.of(HISTORY));
+        when(mapper.historyToDto(HISTORY))
+                .thenReturn(HISTORY_DTO);
 
         HistoryDto actualResult = service.getHistoryById(HISTORY_ID);
 
-        assertEquals(historyDto, actualResult);
+        assertEquals(HISTORY_DTO, actualResult);
         verify(repository).findById(HISTORY_ID);
-        verify(mapper).historyToDto(history);
+        verify(mapper).historyToDto(HISTORY);
     }
 
     @Test
@@ -73,8 +72,9 @@ class HistoryServiceTest {
         when(repository.findById(HISTORY_ID))
                 .thenReturn(Optional.empty());
 
-        HistoryNotFoundException exception = assertThrows(HistoryNotFoundException.class,
-                () -> service.getHistoryById(HISTORY_ID));
+        HistoryNotFoundException exception =
+                assertThrows(HistoryNotFoundException.class,
+                        () -> service.getHistoryById(HISTORY_ID));
 
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         assertEquals("История не найдена", exception.getReason());
@@ -85,53 +85,42 @@ class HistoryServiceTest {
 
     @Test
     void createHistory() {
-        HistoryDto historyDto = new HistoryDto();
-        History history = new History();
+        when(repository.save(HISTORY))
+                .thenReturn(HISTORY);
+        when(mapper.dtoToHistory(HISTORY_DTO))
+                .thenReturn(HISTORY);
 
-        when(repository.save(history))
-                .thenReturn(history);
-        when(mapper.dtoToHistory(historyDto))
-                .thenReturn(history);
+        History actualResult = service.createHistory(HISTORY_DTO);
 
-        History actualResult = service.createHistory(historyDto);
-
-        assertEquals(history, actualResult);
-        verify(repository).save(history);
-        verify(mapper).dtoToHistory(historyDto);
+        assertEquals(HISTORY, actualResult);
+        verify(repository).save(HISTORY);
+        verify(mapper).dtoToHistory(HISTORY_DTO);
     }
 
     @Test
     void updateHistory() {
-        HistoryDto historyDto = new HistoryDto();
-        History history = new History();
-        History expectedResult = new History();
-
         when(repository.findById(HISTORY_ID))
-                .thenReturn(Optional.of(history));
+                .thenReturn(Optional.of(HISTORY));
         when(repository.save(any(History.class)))
-                .thenReturn(expectedResult);
+                .thenReturn(HISTORY);
 
-        History actualResult = service.updateHistory(HISTORY_ID, historyDto);
+        History actualResult = service.updateHistory(HISTORY_ID, HISTORY_DTO);
 
-        assertEquals(expectedResult, actualResult);
+        assertEquals(HISTORY, actualResult);
         verify(repository).findById(HISTORY_ID);
         verify(repository).save(any(History.class));
     }
 
     @Test
     void editHistory() {
-        HistoryDto historyDto = new HistoryDto();
-        History history = new History();
-        History expectedResult = new History();
-
         when(repository.findById(HISTORY_ID))
-                .thenReturn(Optional.of(history));
+                .thenReturn(Optional.of(HISTORY));
         when(repository.save(any(History.class)))
-                .thenReturn(expectedResult);
+                .thenReturn(HISTORY);
 
-        History actualResult = service.editHistory(HISTORY_ID, historyDto);
+        History actualResult = service.editHistory(HISTORY_ID, HISTORY_DTO);
 
-        assertEquals(expectedResult, actualResult);
+        assertEquals(HISTORY, actualResult);
         verify(repository).findById(HISTORY_ID);
         verify(repository).save(any(History.class));
     }
