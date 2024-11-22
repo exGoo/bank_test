@@ -30,9 +30,16 @@ public class ProfileServiceImpl implements ProfileService {
     ActualRegistrationRepository actualRegistrationRepository;
 
     @Autowired
-    public ProfileServiceImpl(ProfileRepository repository, ProfileMapper mapper) {
+    public ProfileServiceImpl(ProfileRepository repository, ProfileMapper mapper,
+                              PassportRepository passportRepository,
+                              AccountDetailsRepository accountDetailsRepository,
+                              ActualRegistrationRepository actualRegistrationRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.passportRepository = passportRepository;
+        this.accountDetailsRepository = accountDetailsRepository;
+        this.actualRegistrationRepository = actualRegistrationRepository;
+
     }
 
     @Override
