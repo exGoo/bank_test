@@ -37,13 +37,14 @@ public class ActualRegistrationServiceImpl implements ActualRegistrationService 
 
     @Override
     public ActualRegistrationDto findById(Long id) {
-        return mapper.toDto(repository.findById(id).get());
+        return mapper.toDto(repository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException("Actual registration not found with ID: "+id)));
     }
 
     @Override
     public void update(Long id, ActualRegistrationDto registration) {
         ActualRegistration OldActualRegistration = repository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Actual registration not found"));
+                new EntityNotFoundException("Actual registration not found with ID:" + id));
 
         mapper.updateEntityFromDto(OldActualRegistration, registration);
         repository.save(OldActualRegistration);

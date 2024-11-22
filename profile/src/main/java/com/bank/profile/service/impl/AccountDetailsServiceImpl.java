@@ -52,7 +52,7 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
     @Override
     public void update(Long id, AccountDetailsDto accountDetails) {
         AccountDetails oldDetails = repository.findById(id).orElseThrow(() ->
-                new EntityNotFoundException("Account details not found"));
+                new EntityNotFoundException("Account details not found with ID: " + id));
         Profile profile = oldDetails.getProfile();
         if (accountDetails.getProfileId() != null) {
             profile = profileRepository.findById(accountDetails.getProfileId()).orElseThrow(

@@ -39,13 +39,14 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Override
     public RegistrationDto findById(Long id) {
 
-        return mapper.toDto(repository.findById(id).get());
+        return mapper.toDto(repository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException("registration not found with ID: "+ id)));
     }
 
     @Override
     public void update(Long id, RegistrationDto registration) {
         Registration oldRegistration = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("registration not found"));
+                () -> new EntityNotFoundException("registration not found with ID: "+ id));
         mapper.updateEntityFromDto(oldRegistration, registration);
         repository.save(oldRegistration);
     }

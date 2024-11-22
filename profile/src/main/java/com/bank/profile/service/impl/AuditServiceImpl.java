@@ -37,13 +37,14 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public AuditDto findById(Long id) {
-        return mapper.toDto(repository.findById(id).get());
+        return mapper.toDto(repository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException("Audit not found with ID: "+id)));
     }
 
     @Override
     public void update(Long id, AuditDto audit) {
         Audit oldAudit = repository.findById(id).orElseThrow(
-                ()-> new EntityNotFoundException("audit not found"));
+                ()-> new EntityNotFoundException("audit not found with ID: "+id));
         mapper.updateEntityFromDto(oldAudit, audit);
         repository.save(oldAudit);
 

@@ -43,7 +43,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void save(ProfileDto profile) {
+    public Profile save(ProfileDto profile) {
         Profile newprofile = mapper.toEntity(profile);
         Passport passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
                 () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
@@ -55,7 +55,7 @@ public class ProfileServiceImpl implements ProfileService {
         newprofile.setAccountDetails(accountDetails);
         newprofile.setPassport(passport);
         newprofile.setActualRegistration(actualRegistration);
-        repository.save(newprofile);
+       return repository.save(newprofile);
     }
 
     @Override
@@ -65,13 +65,14 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public ProfileDto findById(Long id) {
-        return mapper.toDto(repository.findById(id).get());
+        return mapper.toDto(repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("profile not found with ID: " + id)));
     }
 
     @Override
     public void update(Long id, ProfileDto profile) {
         Profile oldProfile = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("profile not found"));
+                () -> new EntityNotFoundException("profile not found with ID: " + id));
         Passport passport = oldProfile.getPassport();
         if (profile.getPassportId() != null) {
             passport = passportRepository.findById(profile.getPassportId()).orElseThrow(

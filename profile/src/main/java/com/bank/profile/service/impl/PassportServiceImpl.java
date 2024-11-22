@@ -45,13 +45,14 @@ public class PassportServiceImpl implements PassportService {
 
     @Override
     public PassportDto findById(Long id) {
-        return mapper.toDto(repository.findById(id).get());
+        return mapper.toDto(repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("Passport not found with ID: " + id)));
     }
 
     @Override
     public void update(Long id, PassportDto passport) {
         Passport oldPassport = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Passport not found"));
+                () -> new EntityNotFoundException("Passport not found with ID: " + id));
         Registration registration = oldPassport.getRegistration();
         if(passport.getRegistrationId() != null) {
             registration = registrationRepository.findById(passport.getRegistrationId()).orElseThrow(
