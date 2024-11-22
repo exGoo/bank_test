@@ -1,12 +1,13 @@
 package com.bank.history.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Schema(description = "Объект истории, содержащий информацию о различных аудиторских данных")
 public class HistoryDto {
