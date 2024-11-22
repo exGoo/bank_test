@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "bank_details")
@@ -40,10 +40,10 @@ public class BankDetails {
     private String name;
 
     @OneToMany(mappedBy = "bankDetails", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<License> licenses;
+    private Set<License> licenses;
 
     @OneToMany(mappedBy = "bankDetails", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Certificate> certificates;
+    private Set<Certificate> certificates;
 
 
 }

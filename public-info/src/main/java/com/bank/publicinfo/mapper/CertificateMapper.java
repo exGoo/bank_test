@@ -8,8 +8,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CertificateMapper {
-    CertificateDto toDTO(Certificate certificate);
-    Certificate toEntity(CertificateDto certificateDTO);
+    CertificateDto toDto(Certificate certificate);
+    Certificate toModel(CertificateDto certificateDTO);
 
     @Mapping(target = "id", ignore = true)
     void createOrUpdateEntity(@MappingTarget Certificate entity, CertificateDto dto);

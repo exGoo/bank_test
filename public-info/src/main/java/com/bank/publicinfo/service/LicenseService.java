@@ -1,11 +1,18 @@
 package com.bank.publicinfo.service;
 
 
-import com.bank.publicinfo.entity.License;
+import com.bank.publicinfo.dto.LicenseDto;
+
+
+import java.util.List;
 
 public interface LicenseService {
-    License addLicence(License license);
+    LicenseDto findById(Long id);
 
-    void deleteLicence(License license);
+    List<LicenseDto> findAll();
+
+    LicenseDto addLicence(LicenseDto license);
+
+    void deleteLicenceById(Long id);
 }
 

@@ -7,8 +7,8 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface LicenseMapper {
-    LicenseDto toDTO(License license);
-    License toEntity(LicenseDto licenseDTO);
+    LicenseDto toDto(License license);
+    License toModel(LicenseDto licenseDTO);
 
     @Mapping(target = "id", ignore = true)
     void createOrUpdateEntity(@MappingTarget License entity, LicenseDto dto);

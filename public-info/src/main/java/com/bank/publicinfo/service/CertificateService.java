@@ -1,11 +1,19 @@
 package com.bank.publicinfo.service;
 
-import com.bank.publicinfo.entity.Certificate;
+import com.bank.publicinfo.dto.CertificateDto;
+
+
+import java.util.List;
 
 
 public interface CertificateService {
-    Certificate addCertificate(Certificate certificate);
 
-    void deleteCertificate(Certificate certificate);
+    CertificateDto findById(Long id);
+
+    List<CertificateDto> findAll();
+
+    CertificateDto addCertificate(CertificateDto certificate);
+
+    void deleteCertificateById(Long id);
 
 }
