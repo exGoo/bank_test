@@ -24,3 +24,11 @@ spring:
     drop-first: ${LIQUIBASE_DROP_FIRST:false}
   application:
     name: account-app
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        id:
+          new_generator_mappings: false
+          hibernate.default_schema: account
