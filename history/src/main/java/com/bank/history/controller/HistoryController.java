@@ -4,6 +4,7 @@ import com.bank.history.dto.HistoryDto;
 import com.bank.history.exception.HistoryNotFoundException;
 import com.bank.history.model.History;
 import com.bank.history.service.HistoryService;
+import io.micrometer.core.annotation.Timed;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,6 +24,7 @@ import java.util.List;
 //http://localhost:8088/api/history/swagger-ui/index.html
 @Tag(name = "История", description = "API для работы с историей операций всех микросервисов")
 @RequiredArgsConstructor
+@Timed
 @RestController
 public class HistoryController {
 
