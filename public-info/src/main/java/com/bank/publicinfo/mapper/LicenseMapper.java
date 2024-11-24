@@ -1,15 +1,18 @@
 package com.bank.publicinfo.mapper;
+
 import com.bank.publicinfo.dto.LicenseDto;
 import com.bank.publicinfo.entity.License;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface LicenseMapper {
+
+    @Mapping(target = "bankDetailsId", source = "bankDetails.id")
+    @Mapping(target = "photo", ignore = true)
     LicenseDto toDto(License license);
+
+    @Mapping(target = "bankDetails.id", source = "bankDetailsId")
+    @Mapping(target = "photo", ignore = true)
     License toModel(LicenseDto licenseDTO);
 
-    @Mapping(target = "id", ignore = true)
-    void createOrUpdateEntity(@MappingTarget License entity, LicenseDto dto);
 }

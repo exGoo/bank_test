@@ -8,14 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface BankDetailsRepository extends JpaRepository<BankDetails, Long> {
-    @Query("SELECT b FROM BankDetails b " +
-            "LEFT JOIN FETCH b.licenses " +
-            "LEFT JOIN FETCH b.certificates")
-    List<BankDetails> findAllWithRelations();
 
-    @Query("SELECT b FROM BankDetails b " +
-            "JOIN FETCH b.licenses " +
-            "JOIN FETCH b.certificates " +
+    @Query("SELECT DISTINCT b FROM BankDetails b " +
+            "LEFT JOIN b.licenses l " +
+            "LEFT JOIN b.certificates c " +
             "WHERE b.city = :city")
     List<BankDetails> findByCityWithRelations(@Param("city") String city);
 

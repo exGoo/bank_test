@@ -1,12 +1,10 @@
 package com.bank.publicinfo.service;
 
 import com.bank.publicinfo.dto.BranchDto;
-import com.bank.publicinfo.entity.Branch;
-
 import java.util.List;
 
 public interface BranchService {
-    Branch findById(Long id);
+    BranchDto findById(Long id);
 
     List<BranchDto> findAllWithATMs();
 
