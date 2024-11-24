@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 
 @Data
 @Builder

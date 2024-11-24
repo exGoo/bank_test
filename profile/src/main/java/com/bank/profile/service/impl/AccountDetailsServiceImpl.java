@@ -1,6 +1,7 @@
 package com.bank.profile.service.impl;
 
 import com.bank.profile.annotation.AuditSave;
+import com.bank.profile.annotation.AuditUpdate;
 import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.dto.mapper.AccountDetailsMapper;
 import com.bank.profile.entity.AccountDetails;
@@ -53,7 +54,8 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
     }
 
     @Override
-    public void update(Long id, AccountDetailsDto accountDetails) {
+    @AuditUpdate(entityType ="account_details" )
+    public AccountDetailsDto update(Long id, AccountDetailsDto accountDetails) {
         AccountDetails oldDetails = repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Account details not found with ID: " + id));
         Profile profile = oldDetails.getProfile();
@@ -63,7 +65,8 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
         }
         mapper.updateEntityFromDto(oldDetails, accountDetails);
         oldDetails.setProfile(profile);
-        repository.save(oldDetails);
+        return mapper.toDto(
+                repository.save(oldDetails));
 
     }
 

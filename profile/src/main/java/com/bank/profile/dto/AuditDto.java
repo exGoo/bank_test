@@ -3,7 +3,6 @@ package com.bank.profile.dto;
 import lombok.Data;
 
 import java.time.OffsetDateTime;
-import java.time.ZonedDateTime;
 @Data
 public class AuditDto {
     private Long id;
