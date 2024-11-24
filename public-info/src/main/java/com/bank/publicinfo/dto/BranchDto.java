@@ -1,14 +1,11 @@
 package com.bank.publicinfo.dto;
 
-import com.bank.publicinfo.entity.ATM;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,5 +16,5 @@ public class BranchDto {
     private String city;
     private LocalTime startOfWork;
     private LocalTime endOfWork;
-    private List<ATM> atms;
+    private Set<Long> atmsIds;
 }

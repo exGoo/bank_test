@@ -1,21 +1,30 @@
 package com.bank.publicinfo.mapper;
+
 import com.bank.publicinfo.dto.BranchDto;
+import com.bank.publicinfo.entity.ATM;
 import com.bank.publicinfo.entity.Branch;
-import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface BranchMapper {
-    @Mapping(target = "atms",source = "atms")
-    BranchDto modelToDto(Branch branch);
 
-    @InheritInverseConfiguration
-    Branch dtoToModel(BranchDto branchDto);
+    @Mapping(target = "atmsIds", source = "atms", qualifiedByName = "mapAtmsIds")
+    BranchDto toDto(Branch branch);
 
-    @Mapping(target = "id", ignore = true)
-    void createOrUpdateEntity(@MappingTarget Branch entity, BranchDto dto);
+    @Mapping(target = "atms", ignore = true)
+    Branch toModel(BranchDto branchDto);
+
+    @Named("mapAtmsIds")
+    default Set<Long> mapAtmsIds(Set<ATM> atms) {
+        return atms == null ? null : atms.stream()
+                .map(ATM::getId)
+                .collect(Collectors.toSet());
+    }
 
 
 }

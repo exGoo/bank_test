@@ -4,15 +4,14 @@ import com.bank.publicinfo.dto.ATMDto;
 import com.bank.publicinfo.entity.ATM;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ATMMapper {
+
+    @Mapping(target = "branchId", source = "branch.id")
     ATMDto toDto(ATM atm);
 
+    @Mapping(target = "branch.id", source = "branchId")
     ATM toModel(ATMDto atmDto);
-
-    @Mapping(target = "id", ignore = true)
-    void createOrUpdate(@MappingTarget ATM entity, ATMDto dto);
 
 }

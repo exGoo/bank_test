@@ -1,6 +1,7 @@
 package com.bank.publicinfo.controller;
 
 import com.bank.publicinfo.dto.BankDetailsDto;
+import com.bank.publicinfo.entity.BankDetails;
 import com.bank.publicinfo.service.impl.BankDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +44,7 @@ public class BankDetailsController {
         return new ResponseEntity<>(createdBankDetails, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<BankDetailsDto> updateBankDetails(@PathVariable Long id, @RequestBody BankDetailsDto bankDetailsDto) {
         BankDetailsDto updatedBankDetails = bankDetailsService.updateBankDetails(id, bankDetailsDto);
         return new ResponseEntity<>(updatedBankDetails, HttpStatus.OK);
