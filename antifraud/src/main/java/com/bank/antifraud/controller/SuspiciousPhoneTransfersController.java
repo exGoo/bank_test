@@ -1,8 +1,8 @@
 package com.bank.antifraud.controller;
 
-import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
-import com.bank.antifraud.mapper.SuspiciousAccountTransfersMapper;
-import com.bank.antifraud.service.SuspiciousAccountTransfersService;
+import com.bank.antifraud.dto.SuspiciousPhoneTransfersDto;
+import com.bank.antifraud.mapper.SuspiciousPhoneTransfersMapper;
+import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -15,55 +15,54 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.webjars.NotFoundException;
 
 import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/sat")
+@RequestMapping("/spt")
 @RequiredArgsConstructor
-public class SuspiciousAccountTransferController {
+public class SuspiciousPhoneTransfersController {
 
-    private final SuspiciousAccountTransfersService satService;
-    private final SuspiciousAccountTransfersMapper satMapper;
+    private final SuspiciousPhoneTransfersService sptService;
+    private final SuspiciousPhoneTransfersMapper sptMapper;
 
     @GetMapping
-    public ResponseEntity<List<SuspiciousAccountTransfersDto>> getAll() {
+    public ResponseEntity<List<SuspiciousPhoneTransfersDto>> getAll() {
         log.info("invoke method getAll");
-        return ResponseEntity.ok(satMapper.toDtoList(satService.getAll()));
+        return ResponseEntity.ok(sptMapper.toDtoList(sptService.getAll()));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SuspiciousAccountTransfersDto> get(@PathVariable Long id) {
+    public ResponseEntity<SuspiciousPhoneTransfersDto> get(@PathVariable("id") Long id) {
         log.info("invoke method get with id {}", id);
-        return ResponseEntity.ok(satMapper.toDto(satService.get(id)));
+        return ResponseEntity.ok(sptMapper.toDto(sptService.get(id)));
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> save(@RequestBody SuspiciousAccountTransfersDto satDto) {
-        log.info("invoke method save with arg({})", satDto);
-        satService.add(satMapper.toEntity(satDto));
+    public ResponseEntity<HttpStatus> add(@RequestBody SuspiciousPhoneTransfersDto sptDto) {
+        log.info("invoke method save with arg({})", sptDto);
+        sptService.add(sptMapper.toEntity(sptDto));
         log.info("invoked method save success");
         return ResponseEntity.ok(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,
-                                             @RequestBody SuspiciousAccountTransfersDto satDto) {
-        log.info("invoke method update with args(id: {}, dto: {})", id, satDto);
-        satService.update(id, satMapper.update(satDto));
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody SuspiciousPhoneTransfersDto sptDto) {
+        log.info("invoke method update with args(id: {}, dto: {})", id, sptDto);
+        sptService.update(id, sptMapper.update(sptDto));
         log.info("invoked method update success");
         return ResponseEntity.ok("Update success. Suspicious account transfer with id " + id + " was updated.");
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        log.info("invoke method delete with id {}", id);
-        satService.remove(id);
-        log.info("invoked method delete success");
+    public ResponseEntity<String> remove(@PathVariable Long id) {
+        log.info("invoke method remove with id {}", id);
+        sptService.remove(id);
+        log.info("invoked method remove success");
         return ResponseEntity.ok("Delete success. Suspicious account transfer with id " + id + " was deleted.");
     }
 
@@ -83,3 +82,4 @@ public class SuspiciousAccountTransferController {
     }
 
 }
+

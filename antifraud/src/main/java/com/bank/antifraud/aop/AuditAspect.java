@@ -30,8 +30,8 @@ public class AuditAspect {
     private Audit audit;
     private Audit lastAudit;
     private Object entity;
-    private Object result;
     private String oldJson;
+    private Object result;
 
     @Pointcut("execution(public * com.bank.antifraud.service.*Service.add(*))")
     public void isServiceAddMethod() {

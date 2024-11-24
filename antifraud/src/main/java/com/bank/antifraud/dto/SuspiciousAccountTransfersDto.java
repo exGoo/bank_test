@@ -12,9 +12,6 @@ import javax.validation.constraints.NotNull;
 public class SuspiciousAccountTransfersDto {
 
     @NotNull
-    Long id;
-
-    @NotNull
     Long accountTransferId;
 
     @NotNull

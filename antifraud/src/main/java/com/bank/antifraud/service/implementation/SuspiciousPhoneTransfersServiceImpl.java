@@ -1,7 +1,6 @@
 package com.bank.antifraud.service.implementation;
 
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
-import com.bank.antifraud.model.SuspiciousAccountTransfers;
 import com.bank.antifraud.model.SuspiciousPhoneTransfers;
 import com.bank.antifraud.repository.SuspiciousPhoneTransfersRepository;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
