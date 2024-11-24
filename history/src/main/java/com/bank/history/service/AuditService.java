@@ -1,8 +1,14 @@
 package com.bank.history.service;
 
-import com.bank.history.model.Audit;
+import com.bank.history.dto.AuditDto;
+
+import java.util.List;
 
 public interface AuditService {
 
-    void createAudit(Audit audit);
+    List<AuditDto> getAllAudits();
+
+    AuditDto getByCreatedBy(String createdBy);
+
+    void createAudit(AuditDto auditDto);
 }

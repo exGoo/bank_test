@@ -22,7 +22,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class HistoryControllerTest {
     private static final Long HISTORY_ID = 1L;
-    private static final Long HISTORY_ID_TWO = 2L;
     private static final History HISTORY = new History();
     private static final HistoryDto HISTORY_DTO = new HistoryDto();
 
