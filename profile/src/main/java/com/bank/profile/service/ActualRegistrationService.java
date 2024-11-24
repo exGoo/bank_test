@@ -9,6 +9,6 @@ public interface ActualRegistrationService {
     ActualRegistrationDto save(ActualRegistrationDto registration);
     List<ActualRegistrationDto> findAll();
     ActualRegistrationDto findById(Long id);
-    void update(Long id,ActualRegistrationDto registration);
+    ActualRegistrationDto update(Long id,ActualRegistrationDto registration);
     void deleteById(Long id);
 }

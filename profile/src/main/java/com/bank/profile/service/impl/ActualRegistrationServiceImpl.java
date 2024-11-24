@@ -1,6 +1,7 @@
 package com.bank.profile.service.impl;
 
 import com.bank.profile.annotation.AuditSave;
+import com.bank.profile.annotation.AuditUpdate;
 import com.bank.profile.dto.ActualRegistrationDto;
 import com.bank.profile.dto.mapper.ActualRegistrationMapper;
 import com.bank.profile.entity.ActualRegistration;
@@ -45,12 +46,14 @@ public class ActualRegistrationServiceImpl implements ActualRegistrationService 
     }
 
     @Override
-    public void update(Long id, ActualRegistrationDto registration) {
+    @AuditUpdate(entityType ="actual_registration" )
+    public ActualRegistrationDto update(Long id, ActualRegistrationDto registration) {
         ActualRegistration OldActualRegistration = repository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("Actual registration not found with ID:" + id));
 
         mapper.updateEntityFromDto(OldActualRegistration, registration);
-        repository.save(OldActualRegistration);
+       return mapper.toDto(
+               repository.save(OldActualRegistration));
 
 
     }

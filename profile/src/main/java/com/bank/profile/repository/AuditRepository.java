@@ -11,10 +11,11 @@ import java.util.Optional;
 @Repository
 public interface AuditRepository extends JpaRepository<Audit, Long> {
 
-    @Query("SELECT a FROM Audit a " +
-            "WHERE a.operationType = 'create' " +
-            "AND a.entityType = :entityType " +
-            "AND json_extract_path_text(a.entityJson, 'id') = :id")
-    Optional<Audit> findCreateAuditRecordByEntityAndId(@Param("entityType") String entityType,
-                                                       @Param("id") Long id);
+    @Query(value = "SELECT * FROM profile.audit " +
+            "WHERE operation_type = 'create' " +
+            "AND entity_type = ?1 " +
+            "AND cast((cast(entity_json AS JSON) ->> 'id')AS BIGINT) = ?2",
+            nativeQuery = true)
+    Optional<Audit> findCreateAuditRecordByEntityAndId(String entityType,
+                                                       Long id);
 }

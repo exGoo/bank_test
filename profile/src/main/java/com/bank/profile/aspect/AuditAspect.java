@@ -54,8 +54,19 @@ public class AuditAspect {
                 // Используем геттер для получения id
                 Method getIdMethod = result.getClass().getMethod("getId");
                 Long id = (Long) getIdMethod.invoke(result);
-                Optional<Audit> audit = repository.findCreateAuditRecordByEntityAndId(auditUpdate.entityType(), id);
-                audit.ifPresentOrElse((i)-> System.out.println(i),()-> System.out.println("нету"));
+                Audit create = repository.findCreateAuditRecordByEntityAndId(auditUpdate.entityType(), id).get();
+                Audit update = Audit.builder()
+                        .entityType(auditUpdate.entityType())
+                        .operationType("update")
+                        .createdBy(create.getCreatedBy())
+                        .createdAt(create.getCreatedAt())
+                        .modifiedAt(OffsetDateTime.now())
+                        .modifiedBy("user")
+                        .newEntityJson(serializeEntity(result))
+                        .entityJson(create.getEntityJson())
+                        .build();
+                repository.save(update);
+
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();

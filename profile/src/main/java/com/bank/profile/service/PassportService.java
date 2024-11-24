@@ -8,7 +8,7 @@ public interface PassportService {
     PassportDto save(PassportDto passport);
     List<PassportDto> findAll();
     PassportDto findById(Long id);
-    void update(Long id,PassportDto passport);
+    PassportDto update(Long id,PassportDto passport);
     void deleteById(Long id);
 
 }

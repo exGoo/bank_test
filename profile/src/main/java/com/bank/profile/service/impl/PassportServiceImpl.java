@@ -1,6 +1,7 @@
 package com.bank.profile.service.impl;
 
 import com.bank.profile.annotation.AuditSave;
+import com.bank.profile.annotation.AuditUpdate;
 import com.bank.profile.dto.PassportDto;
 import com.bank.profile.dto.mapper.PassportMapper;
 import com.bank.profile.entity.Passport;
@@ -52,7 +53,8 @@ public class PassportServiceImpl implements PassportService {
     }
 
     @Override
-    public void update(Long id, PassportDto passport) {
+    @AuditUpdate(entityType ="passport" )
+    public PassportDto update(Long id, PassportDto passport) {
         Passport oldPassport = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("Passport not found with ID: " + id));
         Registration registration = oldPassport.getRegistration();
@@ -62,7 +64,8 @@ public class PassportServiceImpl implements PassportService {
         }
         mapper.updateEntityFromDto(oldPassport, passport);
         oldPassport.setRegistration(registration);
-        repository.save(oldPassport);
+        return mapper.toDto(
+                repository.save(oldPassport));
 
 
     }

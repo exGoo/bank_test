@@ -1,6 +1,7 @@
 package com.bank.profile.service.impl;
 
 import com.bank.profile.annotation.AuditSave;
+import com.bank.profile.annotation.AuditUpdate;
 import com.bank.profile.dto.ProfileDto;
 import com.bank.profile.dto.mapper.ProfileMapper;
 import com.bank.profile.entity.AccountDetails;
@@ -57,7 +58,7 @@ public class ProfileServiceImpl implements ProfileService {
         newprofile.setAccountDetails(accountDetails);
         newprofile.setPassport(passport);
         newprofile.setActualRegistration(actualRegistration);
-       return mapper.toDto(repository.save(newprofile));
+        return mapper.toDto(repository.save(newprofile));
     }
 
     @Override
@@ -72,7 +73,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void update(Long id, ProfileDto profile) {
+    @AuditUpdate(entityType ="profile" )
+    public ProfileDto update(Long id, ProfileDto profile) {
         Profile oldProfile = repository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("profile not found with ID: " + id));
         Passport passport = oldProfile.getPassport();
@@ -96,7 +98,8 @@ public class ProfileServiceImpl implements ProfileService {
         oldProfile.setPassport(passport);
         oldProfile.setActualRegistration(actualRegistration);
         oldProfile.setAccountDetails(accountDetails);
-        repository.save(oldProfile);
+        return mapper.toDto(
+                repository.save(oldProfile));
 
     }
 

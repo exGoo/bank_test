@@ -8,6 +8,6 @@ public interface RegistrationService {
     RegistrationDto save(RegistrationDto registration);
     List<RegistrationDto> findAll();
     RegistrationDto findById(Long id);
-    void update(Long id,RegistrationDto registration);
+    RegistrationDto update(Long id,RegistrationDto registration);
     void deleteById(Long id);
 }

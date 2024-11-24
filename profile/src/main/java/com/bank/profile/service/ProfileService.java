@@ -8,6 +8,6 @@ public interface ProfileService {
     ProfileDto save(ProfileDto profile);
     List<ProfileDto> findAll();
     ProfileDto findById(Long id);
-    void update(Long id,ProfileDto profile);
+    ProfileDto update(Long id,ProfileDto profile);
     void deleteById(Long id);
 }
