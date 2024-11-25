@@ -1,11 +1,9 @@
 package com.bank.history.controller;
 
 import com.bank.history.dto.HistoryDto;
-import com.bank.history.exception.HistoryNotFoundException;
 import com.bank.history.model.History;
 import com.bank.history.service.HistoryService;
 import io.micrometer.core.annotation.Timed;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -150,16 +147,5 @@ public class HistoryController {
                 .status(HttpStatus.NO_CONTENT)
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
-    }
-
-    @Hidden
-    @ExceptionHandler(HistoryNotFoundException.class)
-    public ResponseEntity<ErrorMessage> handlerException(HistoryNotFoundException exception) {
-        log.error("Исключение: {} с сообщением: {}",
-                exception.getClass().getSimpleName(), exception.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorMessage(exception.getMessage()));
     }
 }

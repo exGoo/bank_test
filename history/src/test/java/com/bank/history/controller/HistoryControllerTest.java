@@ -9,13 +9,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springdoc.api.ErrorMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -120,17 +120,5 @@ class HistoryControllerTest {
 
         assertEquals(HttpStatus.NO_CONTENT, actualResult.getStatusCode());
         verify(service).deleteHistory(HISTORY_ID);
-    }
-
-    @Test
-    void handlerException() {
-        String message = "404 NOT_FOUND \"История не найдена\"";
-
-        ResponseEntity<ErrorMessage> actualResult =
-                controller.handlerException(new HistoryNotFoundException());
-
-        assertEquals(HttpStatus.NOT_FOUND, actualResult.getStatusCode());
-        assertNotNull(actualResult.getBody());
-        assertEquals(message, actualResult.getBody().getMessage());
     }
 }
