@@ -11,3 +11,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
