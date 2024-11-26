@@ -156,7 +156,7 @@ public class ProfileServiceImpl implements ProfileService {
             }
             List<AccountDetails> accountDetails = oldProfile.getAccountDetails();
             if (profile.getAccountDetailsId() != null) {
-                accountDetails = accountDetails = profile.getAccountDetailsId().isEmpty()
+                accountDetails = profile.getAccountDetailsId().isEmpty()
                         ? new ArrayList<>()
                         : accountDetailsRepository.findAllById(profile.getAccountDetailsId());
             }

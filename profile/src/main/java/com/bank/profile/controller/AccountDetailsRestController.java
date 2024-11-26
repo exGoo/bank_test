@@ -3,7 +3,6 @@ package com.bank.profile.controller;
 import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.service.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
