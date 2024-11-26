@@ -3,6 +3,7 @@ package com.bank.profile.controller;
 import com.bank.profile.dto.ProfileDto;
 import com.bank.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,24 +22,28 @@ public class ProfileRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody @Valid ProfileDto profile) {
+    public ResponseEntity<String> save(@RequestBody @Valid ProfileDto profile) {
         profileService.save(profile);
+        return ResponseEntity.ok("Profile saved");
     }
     @GetMapping("/{id}")
-    public ProfileDto getRegistrationById(@PathVariable Long id) {
-        return profileService.findById(id);
+    public ResponseEntity<ProfileDto> getRegistrationById(@PathVariable Long id) {
+        return ResponseEntity.ok(profileService.findById(id));
+
     }
     @GetMapping("")
-    public List<ProfileDto> getAllRegistrations() {
-        return profileService.findAll();
+    public ResponseEntity<List<ProfileDto>> getAllRegistrations() {
+        return ResponseEntity.ok(profileService.findAll());
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody @Valid ProfileDto profile) {
+    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid ProfileDto profile) {
         profileService.update(id,profile);
+        return ResponseEntity.ok("Profile updated");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
         profileService.deleteById(id);
+        return ResponseEntity.ok("registration deleted");
     }
 }

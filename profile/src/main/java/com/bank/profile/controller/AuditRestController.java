@@ -3,6 +3,7 @@ package com.bank.profile.controller;
 import com.bank.profile.dto.AuditDto;
 import com.bank.profile.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,26 +20,28 @@ public class AuditRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody @Valid AuditDto audit) {
-        System.out.println(audit);
+    public ResponseEntity<String> save(@RequestBody @Valid AuditDto audit) {
         auditService.save(audit);
+        return ResponseEntity.ok("Audit saved");
     }
     @GetMapping("/{id}")
-    public AuditDto getRegistrationById(@PathVariable Long id) {
-        return auditService.findById(id);
+    public ResponseEntity<AuditDto> getRegistrationById(@PathVariable Long id) {
+        return ResponseEntity.ok(auditService.findById(id));
     }
     @GetMapping("")
-    public List<AuditDto> getAllRegistrations() {
-        return auditService.findAll();
+    public ResponseEntity<List<AuditDto>> getAllRegistrations() {
+        return ResponseEntity.ok(auditService.findAll());
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody @Valid AuditDto audit) {
+    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid AuditDto audit) {
         auditService.update(id,audit);
+        return ResponseEntity.ok("Audit updated");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
         auditService.deleteById(id);
+        return ResponseEntity.ok("Audit deleted");
     }
 
 }

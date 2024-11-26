@@ -3,6 +3,8 @@ package com.bank.profile.controller;
 import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.service.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,28 +22,32 @@ public class AccountDetailsRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody @Valid AccountDetailsDto accountDetails) {
+    public ResponseEntity<String> save(@RequestBody @Valid AccountDetailsDto accountDetails) {
         accountDetailsService.save(accountDetails);
+        return ResponseEntity.ok("Account details saved");
     }
 
     @GetMapping("/{id}")
-    public AccountDetailsDto getById(@PathVariable Long id) {
-        return accountDetailsService.findById(id);
+    public ResponseEntity<AccountDetailsDto> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(accountDetailsService.findById(id));
     }
 
     @GetMapping("")
-    public List<AccountDetailsDto> getAll() {
-        return accountDetailsService.findAll();
+    public ResponseEntity<List<AccountDetailsDto>> getAll() {
+      return ResponseEntity.ok(accountDetailsService.findAll());
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody @Valid AccountDetailsDto accountDetails) {
+    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid AccountDetailsDto accountDetails) {
         accountDetailsService.update(id, accountDetails);
+        return ResponseEntity.ok("Account details updated");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         accountDetailsService.deleteById(id);
+        return ResponseEntity.ok("Account details deleted");
+
     }
 
 }

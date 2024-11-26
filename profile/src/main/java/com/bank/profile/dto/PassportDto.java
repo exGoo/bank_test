@@ -1,8 +1,6 @@
 package com.bank.profile.dto;
 
 import lombok.Data;
-import org.springframework.stereotype.Component;
-
 
 import javax.validation.constraints.Size;
 import java.time.LocalDate;

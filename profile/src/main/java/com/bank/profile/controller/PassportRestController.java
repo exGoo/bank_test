@@ -4,6 +4,7 @@ import com.bank.profile.dto.PassportDto;
 import com.bank.profile.dto.mapper.PassportMapper;
 import com.bank.profile.service.PassportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,24 +25,27 @@ public class PassportRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody @Valid PassportDto passport) {
+    public ResponseEntity<String> save(@RequestBody @Valid PassportDto passport) {
         passportService.save(passport);
+        return ResponseEntity.ok("Passport saved");
     }
     @GetMapping("/{id}")
-    public PassportDto getRegistrationById(@PathVariable Long id) {
-        return passportService.findById(id);
+    public ResponseEntity<PassportDto> getRegistrationById(@PathVariable Long id) {
+        return ResponseEntity.ok(passportService.findById(id));
     }
     @GetMapping("")
-    public List<PassportDto> getAllRegistrations() {
-        return passportService.findAll();
+    public ResponseEntity<List<PassportDto>> getAllRegistrations() {
+        return ResponseEntity.ok(passportService.findAll());
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody @Valid PassportDto passport) {
+    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid PassportDto passport) {
         passportService.update(id,passport);
+        return ResponseEntity.ok("Passport updated");
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
         passportService.deleteById(id);
+        return ResponseEntity.ok("Passport deleted");
     }
 }

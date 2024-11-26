@@ -34,7 +34,7 @@ public class AuditAspect {
 
 
     @AfterReturning(pointcut = "@annotation(auditSave)", returning = "result")
-    public void saveAspect(JoinPoint joinPoint, AuditSave auditSave, Object result) {
+    public void saveAspect(AuditSave auditSave, Object result) {
         String entityJson = serializeEntity(result);
         Audit audit = Audit.builder()
                 .entityType(auditSave.entityType())
@@ -46,7 +46,7 @@ public class AuditAspect {
         repository.save(audit);
     }
     @AfterReturning(pointcut = "@annotation(auditUpdate)",returning = "result")
-    public void updateAspect(JoinPoint joinPoint, AuditUpdate auditUpdate, Object result) {
+    public void updateAspect(AuditUpdate auditUpdate, Object result) {
         try {
             if (result != null) {
                 // Используем геттер для получения id
