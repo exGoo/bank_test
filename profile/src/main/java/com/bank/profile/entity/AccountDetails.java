@@ -22,7 +22,7 @@ public class AccountDetails {
     @Column(name = "account_id", nullable = false)
     private Long accountId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 }

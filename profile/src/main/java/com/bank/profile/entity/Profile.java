@@ -27,14 +27,14 @@ public class Profile {
    private Long inn;
    private Long snils;
 
-   @OneToOne(cascade = CascadeType.ALL)
+   @OneToOne()
    @JoinColumn(name = "passport_id", nullable = false)
    private Passport passport;
 
-   @OneToOne(cascade = CascadeType.ALL)
+   @OneToOne()
    @JoinColumn(name = "actual_registration_id")
    private ActualRegistration actualRegistration;
 
-   @OneToMany(mappedBy = "profile" , cascade = CascadeType.ALL)
+   @OneToMany(mappedBy = "profile")
    private List<AccountDetails> accountDetails;
 }

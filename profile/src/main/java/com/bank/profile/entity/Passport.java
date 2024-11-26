@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 @Data
 @Builder
@@ -52,7 +51,7 @@ public class Passport {
     @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "registration_id", nullable = false)
     private Registration registration;
 }
