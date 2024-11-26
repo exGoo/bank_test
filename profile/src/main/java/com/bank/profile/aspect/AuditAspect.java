@@ -7,6 +7,7 @@ import com.bank.profile.entity.Audit;
 import com.bank.profile.repository.AuditRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import java.time.OffsetDateTime;
 
 @Aspect
 @Component
+@Slf4j
 public class AuditAspect {
 
     AuditRepository repository;
@@ -34,7 +36,11 @@ public class AuditAspect {
 
     @AfterReturning(pointcut = "@annotation(auditSave)", returning = "result")
     public void saveAspect(AuditSave auditSave, Object result) {
-        String entityJson = serializeEntity(result);
+        log.info("попытка сохранить audit для {}", auditSave.entityType());
+
+       try {
+           String entityJson = serializeEntity(result);
+
         Audit audit = Audit.builder()
                 .entityType(auditSave.entityType())
                 .operationType("create")
@@ -42,10 +48,17 @@ public class AuditAspect {
                 .createdAt(OffsetDateTime.now())
                 .entityJson(entityJson)
                 .build();
-        repository.save(audit);
+         Audit save =  repository.save(audit);
+           log.info("audit сохранен с ID:{} ", save.getId());
+       } catch (Exception e){
+           log.error("ошибка при сохранении audit: {}",e.getMessage());
+           throw e;
+       }
+
     }
     @AfterReturning(pointcut = "@annotation(auditUpdate)",returning = "result")
     public void updateAspect(AuditUpdate auditUpdate, Object result) {
+        log.info("попытка сохранить audit для {}", auditUpdate.entityType());
         try {
             if (result != null) {
                 // Используем геттер для получения id
@@ -62,10 +75,12 @@ public class AuditAspect {
                         .newEntityJson(serializeEntity(result))
                         .entityJson(create.getEntityJson())
                         .build();
-                repository.save(update);
+               Audit save = repository.save(update);
+                log.info("audit сохранен с ID:{} ", save.getId());
 
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            log.error("ошибка при сохранении audit: {}",e.getMessage());
             e.printStackTrace();
         }
     }
