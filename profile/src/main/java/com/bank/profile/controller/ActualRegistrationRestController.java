@@ -5,6 +5,7 @@ import com.bank.profile.service.ActualRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class ActualRegistrationRestController {
         return actualRegistrationService.findAll();
     }
     @PostMapping("")
-    public void saveActualRegistration(@RequestBody ActualRegistrationDto actualRegistration) {
+    public void saveActualRegistration(@RequestBody @Valid ActualRegistrationDto actualRegistration) {
         actualRegistrationService.save(actualRegistration);
     }
     @DeleteMapping("/{id}")
@@ -33,7 +34,7 @@ public class ActualRegistrationRestController {
         actualRegistrationService.deleteById(id);
     }
     @PutMapping("/{id}")
-    public void updateActualRegistration(@PathVariable Long id, @RequestBody ActualRegistrationDto actualRegistration) {
+    public void updateActualRegistration(@PathVariable Long id, @RequestBody @Valid ActualRegistrationDto actualRegistration) {
         actualRegistrationService.update(id, actualRegistration);
     }
 }

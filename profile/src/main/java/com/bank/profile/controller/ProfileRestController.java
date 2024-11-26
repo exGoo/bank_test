@@ -5,6 +5,7 @@ import com.bank.profile.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class ProfileRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody ProfileDto profile) {
+    public void save(@RequestBody @Valid ProfileDto profile) {
         profileService.save(profile);
     }
     @GetMapping("/{id}")
@@ -32,7 +33,7 @@ public class ProfileRestController {
         return profileService.findAll();
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody ProfileDto profile) {
+    public void update(@PathVariable Long id,@RequestBody @Valid ProfileDto profile) {
         profileService.update(id,profile);
     }
 

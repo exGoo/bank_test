@@ -5,6 +5,7 @@ import com.bank.profile.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class RegistrationRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody RegistrationDto registration) {
+    public void save(@RequestBody @Valid RegistrationDto registration) {
         registrationService.save(registration);
     }
     @GetMapping("/{id}")
@@ -31,7 +32,7 @@ public class RegistrationRestController {
         return registrationService.findAll();
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody RegistrationDto registration) {
+    public void update(@PathVariable Long id,@RequestBody @Valid RegistrationDto registration) {
         registrationService.update(id,registration);
     }
 

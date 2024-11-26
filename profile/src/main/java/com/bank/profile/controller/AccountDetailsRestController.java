@@ -5,6 +5,7 @@ import com.bank.profile.service.AccountDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class AccountDetailsRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody AccountDetailsDto accountDetails) {
+    public void save(@RequestBody @Valid AccountDetailsDto accountDetails) {
         accountDetailsService.save(accountDetails);
     }
 
@@ -34,7 +35,7 @@ public class AccountDetailsRestController {
     }
 
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody AccountDetailsDto accountDetails) {
+    public void update(@PathVariable Long id,@RequestBody @Valid AccountDetailsDto accountDetails) {
         accountDetailsService.update(id, accountDetails);
     }
 

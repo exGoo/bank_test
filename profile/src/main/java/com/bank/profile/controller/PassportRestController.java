@@ -6,6 +6,7 @@ import com.bank.profile.service.PassportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,7 +24,7 @@ public class PassportRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody PassportDto passport) {
+    public void save(@RequestBody @Valid PassportDto passport) {
         passportService.save(passport);
     }
     @GetMapping("/{id}")
@@ -35,7 +36,7 @@ public class PassportRestController {
         return passportService.findAll();
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody PassportDto passport) {
+    public void update(@PathVariable Long id,@RequestBody @Valid PassportDto passport) {
         passportService.update(id,passport);
     }
 

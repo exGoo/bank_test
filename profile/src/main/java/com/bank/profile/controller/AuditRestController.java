@@ -5,6 +5,7 @@ import com.bank.profile.service.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 @RestController
 @RequestMapping("Audits")
@@ -18,7 +19,7 @@ public class AuditRestController {
     }
 
     @PostMapping("")
-    public void save(@RequestBody AuditDto audit) {
+    public void save(@RequestBody @Valid AuditDto audit) {
         System.out.println(audit);
         auditService.save(audit);
     }
@@ -31,7 +32,7 @@ public class AuditRestController {
         return auditService.findAll();
     }
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id,@RequestBody AuditDto audit) {
+    public void update(@PathVariable Long id,@RequestBody @Valid AuditDto audit) {
         auditService.update(id,audit);
     }
 
