@@ -11,6 +11,9 @@ import javax.validation.constraints.NotNull;
 public class SuspiciousPhoneTransfersDto {
 
     @NotNull
+    Long id;
+
+    @NotNull
     Long phoneTransferId;
 
     @NotNull

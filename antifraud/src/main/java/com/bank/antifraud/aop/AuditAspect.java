@@ -2,8 +2,8 @@ package com.bank.antifraud.aop;
 
 import com.bank.antifraud.model.Audit;
 import com.bank.antifraud.repository.AuditRepository;
-import com.bank.antifraud.util.Admin;
-import com.bank.antifraud.util.User;
+import com.bank.antifraud.util.users.Admin;
+import com.bank.antifraud.util.users.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;

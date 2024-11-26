@@ -1,4 +1,4 @@
-package com.bank.antifraud.util;
+package com.bank.antifraud.util.users;
 
 import lombok.Data;
 import org.springframework.stereotype.Component;

@@ -12,6 +12,9 @@ import javax.validation.constraints.NotNull;
 public class SuspiciousCardTransferDto {
 
     @NotNull
+    Long id;
+
+    @NotNull
     Long cardTransferId;
 
     @NotNull
