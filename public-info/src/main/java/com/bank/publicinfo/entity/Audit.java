@@ -1,13 +1,24 @@
 package com.bank.publicinfo.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
-@Table
+@Table(name = "audit")
+@Builder
 @Getter
 @Setter
 @ToString
@@ -37,11 +48,9 @@ public class Audit {
     private LocalDateTime modifiedAt;
 
     @Column
-    @Lob
     private String newEntityJson;
 
     @Column(nullable = false)
-    @Lob
     private String entityJson;
 
 

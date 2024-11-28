@@ -1,6 +1,8 @@
 package com.bank.publicinfo.service;
 
 import com.bank.publicinfo.dto.BankDetailsDto;
+import com.bank.publicinfo.entity.BankDetails;
+
 import java.util.List;
 
 public interface BankDetailsService {
@@ -10,7 +12,7 @@ public interface BankDetailsService {
 
     List<BankDetailsDto> findByCity(String city);
 
-    BankDetailsDto addBankDetails(BankDetailsDto bankDetails);
+    BankDetails addBankDetails(BankDetails bankDetails);
 
     void deleteBankDetailsById(Long id);
 

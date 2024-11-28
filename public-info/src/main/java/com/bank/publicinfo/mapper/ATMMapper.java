@@ -12,6 +12,7 @@ public interface ATMMapper {
     ATMDto toDto(ATM atm);
 
     @Mapping(target = "branch.id", source = "branchId")
+    @Mapping(target = "id", ignore = true)
     ATM toModel(ATMDto atmDto);
 
 }

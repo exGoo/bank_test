@@ -57,6 +57,10 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         log.info("Попытка получения информации о банках в городе {} , включающей id связанных сертификатов и лицензий", city);
         try {
             List<BankDetails> bankDetailsList = bankDetailsRepository.findByCityWithRelations(city);
+            if (bankDetailsList.isEmpty()) {
+                throw new RuntimeException();
+            }
+            log.info("Список информации о банках успешно получен");
             return bankDetailsList.stream().map(bankDetailsMapper::toDto).toList();
         } catch (Exception e) {
             log.error("Ошибка при поиске информации о банках в городе {}", city);
@@ -66,14 +70,14 @@ public class BankDetailsServiceImpl implements BankDetailsService {
 
     @Override
     @Transactional
-    public BankDetailsDto addBankDetails(BankDetailsDto bankDetailsDto) {
+    public BankDetails addBankDetails(BankDetails bankDetails) {
         try {
-            log.info("Попытка добавлении информации о банках со следующими данными {}", bankDetailsDto);
-            BankDetails bankDetails = bankDetailsMapper.toModel(bankDetailsDto);
+            log.info("Попытка добавления информации о банке со следующими данными {}", bankDetails);
             BankDetails saveBankDetails = bankDetailsRepository.save(bankDetails);
-            return bankDetailsMapper.toDto(saveBankDetails);
+            log.info("Информация о банке успешно добавлена");
+            return saveBankDetails;
         } catch (Exception e) {
-            log.error("Ошибка при добавлении информации о банках");
+            log.error("Ошибка при добавлении информации о банке", e);
             throw new DataValidationException("Please check the correctness of the entered data");
         }
     }
@@ -99,6 +103,9 @@ public class BankDetailsServiceImpl implements BankDetailsService {
                     return new EntityNotFoundException("Bank Details not found with id " + id);
                 });
         try {
+            if(dto.getId()!= null){
+                existingBankDetails.setId(dto.getId());
+            }
             if (dto.getBik() != null) {
                 existingBankDetails.setBik(dto.getBik());
             }

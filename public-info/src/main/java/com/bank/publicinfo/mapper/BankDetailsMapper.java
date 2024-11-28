@@ -2,14 +2,11 @@ package com.bank.publicinfo.mapper;
 
 import com.bank.publicinfo.dto.BankDetailsDto;
 import com.bank.publicinfo.entity.BankDetails;
-
 import com.bank.publicinfo.entity.Certificate;
 import com.bank.publicinfo.entity.License;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +20,7 @@ import java.util.stream.Collectors;
 
         @Mapping(target = "licenses", ignore = true)
         @Mapping(target = "certificates", ignore = true)
+        @Mapping(target = "id", ignore = true)
         BankDetails toModel(BankDetailsDto bankDetailsDto);
 
         @Named("mapLicenseIds")

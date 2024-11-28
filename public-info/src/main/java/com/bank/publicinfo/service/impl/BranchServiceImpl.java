@@ -57,6 +57,10 @@ public class BranchServiceImpl implements BranchService {
         log.info("Попытка поиска отделений в городе {}", city);
         try {
             List<Branch> branchList = branchRepository.findByCityWithAtms(city);
+            if (branchList.isEmpty()) {
+                throw new RuntimeException();
+            }
+            log.info("Список отделений в городе {} успешно получен", city);
             return branchList.stream().map(branchMapper::toDto).toList();
 
         } catch (Exception e) {
@@ -101,7 +105,7 @@ public class BranchServiceImpl implements BranchService {
                     return new EntityNotFoundException("ATM not found with id " + id);
                 });
         try {
-            log.info("Попытка изменения отделения с id:{}",id);
+            log.info("Попытка изменения отделения с id:{}", id);
             if (dto.getAddress() != null) {
                 existingBranch.setAddress(dto.getAddress());
             }
