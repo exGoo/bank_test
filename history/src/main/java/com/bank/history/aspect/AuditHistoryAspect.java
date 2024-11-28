@@ -14,6 +14,13 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+/**
+ * Аспект для аудита операций с историей.
+ * Он отслеживает вызовы методов создания и изменения истории.
+ * Делает записи в базу данных.
+ * <p>
+ * Поля createdBy и modifiedBy принимают id сущности истории.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

@@ -2,7 +2,8 @@ package com.bank.history.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HistoryTest {
 
@@ -29,7 +30,7 @@ class HistoryTest {
     }
 
     @Test
-    void settersAndGettersTest(){
+    void settersAndGettersTest() {
         History history = new History();
 
         history.setTransferAuditId(1001L);

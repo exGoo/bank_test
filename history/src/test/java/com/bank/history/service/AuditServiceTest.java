@@ -3,7 +3,6 @@ package com.bank.history.service;
 import com.bank.history.dto.AuditDto;
 import com.bank.history.mapper.AuditMapper;
 import com.bank.history.model.Audit;
-import com.bank.history.model.History;
 import com.bank.history.repository.AuditRepository;
 import com.bank.history.service.impl.AuditServiceImpl;
 import org.junit.jupiter.api.Test;

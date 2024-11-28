@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AuditMapperTest {
     private final AuditMapper mapper = Mappers.getMapper(AuditMapper.class);
