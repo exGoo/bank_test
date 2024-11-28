@@ -2,21 +2,35 @@ package com.bank.publicinfo.controller;
 
 import com.bank.publicinfo.dto.BankDetailsDto;
 import com.bank.publicinfo.entity.BankDetails;
-import com.bank.publicinfo.service.impl.BankDetailsServiceImpl;
+import com.bank.publicinfo.mapper.BankDetailsMapper;
+import com.bank.publicinfo.service.BankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/bank-details")
 public class BankDetailsController {
-    private BankDetailsServiceImpl bankDetailsService;
+    private BankDetailsService bankDetailsService;
+    private BankDetailsMapper bankDetailsMapper;
 
     @Autowired
-    public void setBankDetailsService(BankDetailsServiceImpl bankDetailsService) {
+    public void setBankDetailsMapper(BankDetailsMapper bankDetailsMapper) {
+        this.bankDetailsMapper = bankDetailsMapper;
+    }
+
+    @Autowired
+    public void setBankDetailsService(BankDetailsService bankDetailsService) {
         this.bankDetailsService = bankDetailsService;
     }
 
@@ -39,8 +53,9 @@ public class BankDetailsController {
     }
 
     @PostMapping
-    public ResponseEntity<BankDetailsDto> addBankDetails(@RequestBody BankDetailsDto bankDetailsDto) {
-        BankDetailsDto createdBankDetails = bankDetailsService.addBankDetails(bankDetailsDto);
+    public ResponseEntity<BankDetails> addBankDetails(@RequestBody BankDetailsDto bankDetailsDto) {
+        BankDetails bankDetails = bankDetailsMapper.toModel(bankDetailsDto);
+        BankDetails createdBankDetails = bankDetailsService.addBankDetails(bankDetails);
         return new ResponseEntity<>(createdBankDetails, HttpStatus.CREATED);
     }
 

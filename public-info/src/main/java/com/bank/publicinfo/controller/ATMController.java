@@ -1,7 +1,7 @@
 package com.bank.publicinfo.controller;
 
 import com.bank.publicinfo.dto.ATMDto;
-import com.bank.publicinfo.service.impl.ATMServiceImpl;
+import com.bank.publicinfo.service.ATMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +12,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/atms")
 public class ATMController {
-    private ATMServiceImpl atmService;
+    private ATMService atmService;
     @Autowired
-    public void setAtmService(ATMServiceImpl atmService) {
+    public void setAtmService(ATMService atmService) {
         this.atmService = atmService;
     }
     @GetMapping("/{id}")

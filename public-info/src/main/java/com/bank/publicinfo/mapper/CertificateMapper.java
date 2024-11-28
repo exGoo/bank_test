@@ -9,11 +9,10 @@ import org.mapstruct.Mapping;
 public interface CertificateMapper {
 
     @Mapping(target = "bankDetailsId", source = "bankDetails.id")
-    @Mapping(target = "photo", ignore = true)
     CertificateDto toDto(Certificate certificate);
 
     @Mapping(target = "bankDetails.id", source = "bankDetailsId")
-    @Mapping(target = "photo", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Certificate toModel(CertificateDto certificateDTO);
 
 }

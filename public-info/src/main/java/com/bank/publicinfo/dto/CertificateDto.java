@@ -1,6 +1,12 @@
 package com.bank.publicinfo.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -8,7 +14,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CertificateDto {
+
+    @NotNull
     private Long id;
+
     private byte[] photo;
+
+    @NotNull
     private Long bankDetailsId;
 }
