@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "audit", schema = "account")
 @Getter
 @Setter
+@Builder
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor

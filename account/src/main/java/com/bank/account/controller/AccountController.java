@@ -6,28 +6,22 @@ import com.bank.account.exception.AccountNotFoundException;
 import com.bank.account.mapper.AccountMapper;
 import com.bank.account.model.Account;
 import com.bank.account.service.AccountService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
 
-/**
- * AccountController является важным компонентом модуля Account,
- * предоставляющим интерфейс для взаимодействия с пользователем через HTTP запросы.
- * Этот контроллер управляет операциями, связанными с аккаунтами, включая создание,
- * получение, обновление и удаление аккаунтов. Контроллер обрабатывает HTTP-запросы,
- * преобразует данные между представлением (DTO) и моделью, а также взаимодействует
- * с сервисами для выполнения бизнес-логики.
- * */
+@Tag(name = "AccountController", description = "Контроллер для работы с аккаунтами пользователей")
 @RestController
 @RequestMapping("/")
 @Slf4j
@@ -36,24 +30,26 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountMapper accountMapper;
 
-    /**
-     * В этом конструкторе происходит подвязка бизнес-логики и маппера, отвечающих за все основные действия над объектами в БД.
-     * */
+
     public AccountController(AccountService accountService, AccountMapper accountMapper) {
         this.accountService = accountService;
         this.accountMapper = accountMapper;
     }
 
-    /**
-     * Метод createAccount отвечает за создание аккаунта посредством POST-запроса
-     * @param accountDto включает в себя такие поля, как - Long passportId,
-     *                   Long accountNumber, Long bankDetailsId, BigDecimal money,
-     *                   Boolean negativeBalance, Long profileId
-     *
-     * @return возвращает только что созданного пользователя, а также назначенный ему id в БД.
-     * */
     @PostMapping
-    public ResponseEntity<AccountDto> createAccount(@Valid @RequestBody AccountDto accountDto) {
+    @Operation(
+            summary = "Создать аккаунт пользователя",
+            description = "Возвращает только что созданный аккаунт пользователя, включая его ID в Базе Данных"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешный ответ",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "404", description = "Такой ответ подразумевает неверные данные",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    public ResponseEntity<AccountDto> createAccount(@Parameter(description = "Данные для создания Аккаунта")
+                                                        @Valid
+                                                        @RequestBody AccountDto accountDto) {
         try {
             log.info("AccountController: Запрос на создание аккаунта - {}", accountDto);
             accountDto.setId(null);
@@ -68,25 +64,33 @@ public class AccountController {
         }
     }
 
-    /**
-     * Метод getAccounts отвечает за выдачу списка всех аккаунтов, находящихся в базе посредством GET-запроса
-     *
-     * @return возвращает список всех пользователей из БД.
-     * */
+
     @GetMapping
+    @Operation(
+            summary = "Список аккаунтов",
+            description = "Возвращает список пользователей из БД"
+    )
+    @ApiResponse(responseCode = "200", description = "Успешный ответ",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
     public ResponseEntity<List<AccountDto>> getAccounts() {
         log.info("AccountController: Получен запрос на просмотр списка аккаунтов в базе.");
         return new ResponseEntity<>(accountMapper.accountsToDto(accountService.findAll()), HttpStatus.OK);
     }
 
-    /**
-     * Метод deleteAccount отвечает за удаление аккаунта посредством DELETE-запроса
-     * @param id включает в себя целевой id пользователя в БД, который необходимо удалить.
-     *
-     * @return возвращает ответ 200 ОК, с текстом "Аккаунт удален".
-     * */
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAccount(@PathVariable("id") Long id) {
+    @Operation(
+            summary = "Удаление аккаунта пользователя",
+            description = "Удаляет аккаунт пользователя из БД"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешный ответ",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "404", description = "Такой ответ подразумевает неверно указанный ID аккаунта",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    public ResponseEntity<String> deleteAccount(@Parameter(description = "ID Аккаунта")
+                                                    @PathVariable("id") Long id) {
         log.info("AccountController: Получен запрос на удаление аккаунта с ID {}", id);
         accountService.delete(accountService.findById(id));
         if (accountService.findById(id) == null) {
@@ -96,14 +100,19 @@ public class AccountController {
         return new ResponseEntity<>("Аккаунт удален", HttpStatus.OK);
     }
 
-    /**
-     * Метод findAccount отвечает за поиск аккаунта по его ID посредством GET-запроса
-     * @param id включает в себя целевой id пользователя в БД, который необходимо найти.
-     *
-     * @return возвращает найденного пользователя, либо статус 404 NOT_FOUND, если такового не существует.
-     * */
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDto> findAccount(@PathVariable("id") Long id) {
+    @Operation(
+            summary = "Поиск аккаунта пользователя",
+            description = "Поиск аккаунта пользователя из БД и возврат его клиенту"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешный ответ",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "404", description = "Такой ответ подразумевает неверно указанный ID аккаунта",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    public ResponseEntity<AccountDto> findAccount(@Parameter(description = "ID Аккаунта")
+                                                      @PathVariable("id") Long id) {
         log.info("AccountController: Получен запрос на поиск аккаунта с ID {}", id);
         Account account = accountService.findById(id);
         if (account == null) {
@@ -113,17 +122,21 @@ public class AccountController {
         return new ResponseEntity<>(accountMapper.toDto(account), HttpStatus.OK);
     }
 
-    /**
-     * Метод updateAccount отвечает за поиск аккаунта по его ID, а также его обновления посредством PATCH-запроса
-     * @param id включает в себя целевой id пользователя в БД, который необходимо найти.
-     * @param accountDto включает в себя такие поля, как - Long passportId,
-     *                   Long accountNumber, Long bankDetailsId, BigDecimal money,
-     *                   Boolean negativeBalance, Long profileId
-     *
-     * @return в случае успеха возвращает обновленный объект, в ином случае 404 NOT_FOUND.
-     * */
     @PatchMapping("/{id}")
-    public ResponseEntity<AccountDto> updateAccount(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
+    @Operation(
+            summary = "Обновление аккаунта пользователя",
+            description = "Обновляет аккаунт пользователя (либо конкретные его поля) в БД"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Успешный ответ",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+            @ApiResponse(responseCode = "404", description = "Такой ответ подразумевает неверно указанный ID аккаунта",
+                    content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
+    })
+    public ResponseEntity<AccountDto> updateAccount(@Parameter(description = "ID Аккаунта")
+                                                        @PathVariable("id") Long id,
+                                                    @Parameter(description = "Данные обновленного Аккаунта")
+                                                    @RequestBody AccountDto accountDto) {
         log.info("AccountController: Получен запрос на обновление аккаунта с ID {}", id);
         Account account = accountService.findById(id);
         if (account == null) {

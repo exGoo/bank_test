@@ -79,6 +79,7 @@ public class AuditAspect {
             ObjectMapper objectMapper = new ObjectMapper();
             jsonString = objectMapper.writeValueAsString(account);
         } catch (Exception e) {
+            log.warn("Audit: Ошибка преобразования в объект.");
             e.printStackTrace();
         }
         return jsonString;

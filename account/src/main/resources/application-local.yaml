@@ -32,3 +32,15 @@ spring:
         id:
           new_generator_mappings: false
           hibernate.default_schema: account
+springdoc:
+  api-docs:
+    path: /
+  swagger-ui:
+    url: /
+    path: /swagger-ui.html
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    appname: account-app
