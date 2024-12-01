@@ -92,10 +92,10 @@ public class AccountController {
     public ResponseEntity<String> deleteAccount(@Parameter(description = "ID Аккаунта")
                                                     @PathVariable("id") Long id) {
         log.info("AccountController: Получен запрос на удаление аккаунта с ID {}", id);
-        accountService.delete(accountService.findById(id));
         if (accountService.findById(id) == null) {
             throw new AccountNotFoundException(id);
         }
+        accountService.delete(accountService.findById(id));
         log.info("AccountController: Запрос на удаление аккаунта с ID {} удовлетворен, отправлен ответ.", id);
         return new ResponseEntity<>("Аккаунт удален", HttpStatus.OK);
     }
