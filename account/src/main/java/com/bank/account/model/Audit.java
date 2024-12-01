@@ -1,10 +1,12 @@
 package com.bank.account.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,24 +23,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Audit {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String entityType;
-
     private String operationType;
-
     private LocalDateTime createdAt;
-
     private String createdBy;
-
     private LocalDateTime modifiedAt;
-
     private String modifiedBy;
-
     private String entityJson;
-
     private String newEntityJson;
 }
