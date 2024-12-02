@@ -33,11 +33,11 @@ public class RegistrationRestController {
         return ResponseEntity.ok("Registration saved");
     }
     @GetMapping("/{id}")
-    public ResponseEntity<RegistrationDto> getRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<RegistrationDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(registrationService.findById(id));
     }
     @GetMapping("")
-    public ResponseEntity<List<RegistrationDto>> getAllRegistrations() {
+    public ResponseEntity<List<RegistrationDto>> getAll() {
         return ResponseEntity.ok(registrationService.findAll());
 
     }
@@ -49,7 +49,7 @@ public class RegistrationRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         registrationService.deleteById(id);
         return ResponseEntity.ok("Deleted Registration");
     }

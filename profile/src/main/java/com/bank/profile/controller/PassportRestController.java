@@ -37,11 +37,11 @@ public class PassportRestController {
         return ResponseEntity.ok("Passport saved");
     }
     @GetMapping("/{id}")
-    public ResponseEntity<PassportDto> getRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<PassportDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(passportService.findById(id));
     }
     @GetMapping("")
-    public ResponseEntity<List<PassportDto>> getAllRegistrations() {
+    public ResponseEntity<List<PassportDto>> getAll() {
         return ResponseEntity.ok(passportService.findAll());
     }
     @PutMapping("/{id}")
@@ -51,7 +51,7 @@ public class PassportRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         passportService.deleteById(id);
         return ResponseEntity.ok("Passport deleted");
     }

@@ -1,11 +1,13 @@
 package com.bank.profile.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 
 @Data
+@Builder
 public class AuditDto {
     private Long id;
     @Size(max = 40, message = "до 40")

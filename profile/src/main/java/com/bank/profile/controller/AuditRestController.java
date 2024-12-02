@@ -32,11 +32,11 @@ public class AuditRestController {
         return ResponseEntity.ok("Audit saved");
     }
     @GetMapping("/{id}")
-    public ResponseEntity<AuditDto> getRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<AuditDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(auditService.findById(id));
     }
     @GetMapping("")
-    public ResponseEntity<List<AuditDto>> getAllRegistrations() {
+    public ResponseEntity<List<AuditDto>> getAll() {
         return ResponseEntity.ok(auditService.findAll());
     }
     @PutMapping("/{id}")
@@ -46,7 +46,7 @@ public class AuditRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         auditService.deleteById(id);
         return ResponseEntity.ok("Audit deleted");
     }

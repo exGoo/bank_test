@@ -34,12 +34,12 @@ public class ProfileRestController {
         return ResponseEntity.ok("Profile saved");
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileDto> getRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<ProfileDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(profileService.findById(id));
 
     }
     @GetMapping("")
-    public ResponseEntity<List<ProfileDto>> getAllRegistrations() {
+    public ResponseEntity<List<ProfileDto>> getAll() {
         return ResponseEntity.ok(profileService.findAll());
     }
     @PutMapping("/{id}")
@@ -49,7 +49,7 @@ public class ProfileRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteRegistrationById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteById(@PathVariable Long id) {
         profileService.deleteById(id);
         return ResponseEntity.ok("registration deleted");
     }

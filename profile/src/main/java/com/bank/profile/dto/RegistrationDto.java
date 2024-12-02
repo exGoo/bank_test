@@ -1,10 +1,12 @@
 package com.bank.profile.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
 
 @Data
+@Builder
 public class RegistrationDto {
     private Long id;
     @Size(max = 166, message ="до 166")
