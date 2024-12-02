@@ -24,14 +24,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceImplTest {
-
     Registration ENTITY = Registration.builder()
-            .id(1L)
+            .id(1l)
             .build();
     RegistrationDto DTO = RegistrationDto.builder()
-            .id(1L)
+            .id(1l)
             .build();
 
     @Mock
@@ -108,6 +108,7 @@ class RegistrationServiceImplTest {
         //сущность отсутствует в БД
         when(repository.findById(any(Long.class))).thenReturn(Optional.empty());
 
+
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
                 , () -> service.update(999L, DTO)
@@ -133,6 +134,6 @@ class RegistrationServiceImplTest {
         EntityNotFoundException result = assertThrows(EntityNotFoundException.class
                 , () -> service.deleteById(999L)
         );
-        assertEquals(null, result.getMessage());
+        assertEquals(null,result.getMessage());
     }
 }

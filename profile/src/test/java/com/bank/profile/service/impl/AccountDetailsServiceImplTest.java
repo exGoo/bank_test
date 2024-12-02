@@ -14,10 +14,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
@@ -26,9 +28,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
 class AccountDetailsServiceImplTest {
-
     static AccountDetailsDto DTO = AccountDetailsDto.builder()
             .id(1L)
             .profileId(1L)
@@ -50,25 +52,6 @@ class AccountDetailsServiceImplTest {
 
     @InjectMocks
     static AccountDetailsServiceImpl accountDetailsServiceImpl;
-
-    static Stream<Arguments> provideInvalidDataForUpdate() {
-        return Stream.of(
-                Arguments.of(
-                        1L,
-                        AccountDetailsDto.builder().build(),
-                        "Account details not found with ID: 1",
-                        (Runnable) () -> when(repository.findById(1L)).thenReturn(Optional.empty())
-                ),
-                Arguments.of(1L,
-                        AccountDetailsDto.builder().id(1L).profileId(1L).build(),
-                        "Profile not found with ID: 1",
-                        (Runnable) () -> {
-                            when(repository.findById(1L)).thenReturn(Optional.of(ENTITY));
-                            when(profileRepository.findById(1L)).thenReturn(Optional.empty());
-                        }
-                )
-        );
-    }
 
     @Test
     void save() {
@@ -100,6 +83,7 @@ class AccountDetailsServiceImplTest {
         AccountDetailsDto result = accountDetailsServiceImpl.findById(1L);
 
         assertEquals(DTO.getId(), result.getId());
+
     }
 
     @Test
@@ -129,6 +113,27 @@ class AccountDetailsServiceImplTest {
         );
 
         assertEquals(expectedMessage, exception.getMessage());
+
+    }
+
+    static Stream<Arguments> provideInvalidDataForUpdate() {
+        return Stream.of(
+                Arguments.of(
+                        1L,
+                        AccountDetailsDto.builder().build(),
+                        "Account details not found with ID: 1",
+                        (Runnable) () -> when(repository.findById(1L)).thenReturn(Optional.empty())
+                ),
+                Arguments.of(1L,
+                        AccountDetailsDto.builder().id(1L).profileId(1L).build(),
+                        "Profile not found with ID: 1",
+                        (Runnable) () -> {
+                            when(repository.findById(1L)).thenReturn(Optional.of(ENTITY));
+                            when(profileRepository.findById(1L)).thenReturn(Optional.empty());
+                        }
+                )
+        );
+
     }
 
     @Test
@@ -138,6 +143,7 @@ class AccountDetailsServiceImplTest {
         accountDetailsServiceImpl.deleteById(1L);
 
         verify(repository, times(1)).deleteById(1L);
+
     }
 
     @Test
@@ -149,4 +155,5 @@ class AccountDetailsServiceImplTest {
         );
         assertEquals(null, result.getMessage());
     }
+
 }

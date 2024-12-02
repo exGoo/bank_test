@@ -11,9 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
@@ -36,6 +38,7 @@ class PassportServiceImplTest {
             .id(1L)
             .registrationId(1L)
             .build();
+
 
     @Mock
     PassportRepository repository;
@@ -60,8 +63,8 @@ class PassportServiceImplTest {
 
     @Test
     void givenInvalidData_whenSave_thenThrowException() {
-        when(mapper.toEntity(DTO)).thenReturn(ENTITY);
-        when(registrationRepository.findById(1L)).thenReturn(Optional.empty());
+      when(mapper.toEntity(DTO)).thenReturn(ENTITY);
+      when(registrationRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
                 , () -> service.save(DTO)
@@ -69,6 +72,7 @@ class PassportServiceImplTest {
 
         assertEquals("Registration not found with ID: 1", result.getMessage());
     }
+
 
     @Test
     void findAll() {
@@ -84,6 +88,7 @@ class PassportServiceImplTest {
     void givenInvalidData_whenFindAll_thenThrowException() {
         when(repository.findAll())
                 .thenThrow(new EntityNotFoundException("Ошибка при получении списка passport записей"));
+
 
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
@@ -112,6 +117,7 @@ class PassportServiceImplTest {
                 , () -> service.findById(1L)
         );
 
+
         assertEquals("passport not found with ID: 1", result.getMessage());
     }
 
@@ -125,9 +131,10 @@ class PassportServiceImplTest {
         when(repository.save(ENTITY)).thenReturn(ENTITY);
         when(mapper.toDto(ENTITY)).thenReturn(DTO);
 
+
         PassportDto result = service.update(1L, DTO);
 
-        assertEquals(DTO, result);
+       assertEquals(DTO, result);
     }
 
     @Test
@@ -139,15 +146,14 @@ class PassportServiceImplTest {
                 , () -> service.update(1L, DTO)
         );
 
+
         assertEquals("Passport not found with ID: 1", result.getMessage());
     }
 
     @Test
     void deleteById() {
         doNothing().when(repository).deleteById(1L);
-
         service.deleteById(1L);
-
         verify(repository, times(1)).deleteById(1L);
     }
 

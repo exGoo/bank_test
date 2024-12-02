@@ -18,10 +18,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,14 +33,15 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceImplTest {
 
     static ProfileDto DTO = ProfileDto.builder()
-            .id(1L)
-            .passportId(1L)
-            .actualRegistrationId(1L)
-            .accountDetailsId(List.of(1L, 2L))
+            .id(1l)
+            .passportId(1l)
+            .actualRegistrationId(1l)
+            .accountDetailsId(List.of(1l, 2l))
             .build();
     static Passport PASSPORT = Passport.builder()
             .id(1l)
@@ -47,8 +50,8 @@ class ProfileServiceImplTest {
             .id(1l)
             .build();
     static List<AccountDetails> ACCOUNT_DETAILS = List.of(
-            AccountDetails.builder().id(1L).build(),
-            AccountDetails.builder().id(2L).build());
+            AccountDetails.builder().id(1l).build(),
+            AccountDetails.builder().id(2l).build());
     static Profile ENTITY = Profile.builder()
             .id(1l)
             .passport(PASSPORT)
@@ -67,43 +70,6 @@ class ProfileServiceImplTest {
     static ActualRegistrationRepository actualRegistrationRepository;
     @InjectMocks
     static ProfileServiceImpl service;
-
-    static Stream<Arguments> provideInvalidDataForUpdate() {
-        return Stream.of(
-                Arguments.of(
-                        1L,
-                        ProfileDto.builder().build(),
-                        "profile not found with ID: 1",
-                        (Runnable) () -> when(repository.findById(any(Long.class))).thenReturn(Optional.empty())
-                ),
-                Arguments.of(
-                        1L,
-                        ProfileDto.builder()
-                                .id(1L)
-                                .passportId(2L)
-                                .build(),
-                        "Passport not found with ID: 2",
-                        (Runnable) () -> {
-                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
-                            when(passportRepository.findById(2L)).thenReturn(Optional.empty());
-                        }
-                ),
-                Arguments.of(
-                        1L,
-                        ProfileDto.builder()
-                                .id(1L)
-                                .passportId(2L)
-                                .actualRegistrationId(3L)
-                                .build(),
-                        "ActualRegistration not found with ID: 3",
-                        (Runnable) () -> {
-                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
-                            when(passportRepository.findById(any(Long.class))).thenReturn(Optional.of(PASSPORT));
-                            when(actualRegistrationRepository.findById(3L)).thenReturn(Optional.empty());
-                        }
-                )
-        );
-    }
 
     @Test
     void save() {
@@ -149,6 +115,7 @@ class ProfileServiceImplTest {
     void givenInvalidId_whenFindById_thenThrowException() {
         when(repository.findById(2L)).thenReturn(Optional.empty());
 
+
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
                 , () -> service.findById(2l)
@@ -170,7 +137,7 @@ class ProfileServiceImplTest {
         when(repository.save(ENTITY)).thenReturn(ENTITY);
         when(mapper.toDto(ENTITY)).thenReturn(DTO);
 
-        ProfileDto result = service.update(1L, DTO);
+        ProfileDto result = service.update(1l, DTO);
 
         assertEquals(DTO.getId(), result.getId());
         assertEquals(DTO.getPassportId(), result.getPassportId());
@@ -184,7 +151,9 @@ class ProfileServiceImplTest {
     void givenInvalidData_whenUpdateCalled_thenThrowEntityNotFoundException(
             Long id, ProfileDto dto, String exceptionMessage, Runnable mockSetup) {
 
+
         mockSetup.run();
+
 
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,
@@ -192,6 +161,43 @@ class ProfileServiceImplTest {
         );
 
         assertEquals(exceptionMessage, exception.getMessage());
+    }
+
+    static Stream<Arguments> provideInvalidDataForUpdate() {
+        return Stream.of(
+                Arguments.of(
+                        1L,
+                        ProfileDto.builder().build(),
+                        "profile not found with ID: 1",
+                        (Runnable) () -> when(repository.findById(any(Long.class))).thenReturn(Optional.empty())
+                ),
+                Arguments.of(
+                        1L,
+                        ProfileDto.builder()
+                                .id(1L)
+                                .passportId(2L)
+                                .build(),
+                        "Passport not found with ID: 2",
+                        (Runnable) () -> {
+                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
+                            when(passportRepository.findById(2L)).thenReturn(Optional.empty());
+                        }
+                ),
+                Arguments.of(
+                        1L,
+                        ProfileDto.builder()
+                                .id(1L)
+                                .passportId(2L)
+                                .actualRegistrationId(3L)
+                                .build(),
+                        "ActualRegistration not found with ID: 3",
+                        (Runnable) () -> {
+                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
+                            when(passportRepository.findById(any(Long.class))).thenReturn(Optional.of(PASSPORT));
+                            when(actualRegistrationRepository.findById(3L)).thenReturn(Optional.empty());
+                        }
+                )
+        );
     }
 
     @Test

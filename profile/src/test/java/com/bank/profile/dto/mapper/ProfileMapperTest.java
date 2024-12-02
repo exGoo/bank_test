@@ -3,12 +3,13 @@ package com.bank.profile.dto.mapper;
 import com.bank.profile.dto.ProfileDto;
 import com.bank.profile.entity.Profile;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ProfileMapperTest {
-
     Profile ENTITY = Profile.builder()
             .id(1L)
             .phoneNumber(9653648L)
@@ -34,6 +35,7 @@ class ProfileMapperTest {
         Profile result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
+
     }
 
     @Test
@@ -58,5 +60,6 @@ class ProfileMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
+
     }
 }

@@ -9,7 +9,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -18,7 +20,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ActualRegistrationRestControllerTest {
-
     ActualRegistrationDto DTO = ActualRegistrationDto.builder()
             .id(1L)
             .build();
@@ -32,44 +33,44 @@ class ActualRegistrationRestControllerTest {
     void getByID() {
         when(service.findById(1L)).thenReturn(DTO);
 
-        ResponseEntity<ActualRegistrationDto> result = controller.getById(1L);
+        ResponseEntity<ActualRegistrationDto> result = controller.getActualRegistration(1L);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
     @Test
-    void getAll() {
+    void getActualRegistrations() {
         when(service.findAll()).thenReturn(List.of(DTO));
-        ResponseEntity<List<ActualRegistrationDto>> result = controller.getAll();
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        ResponseEntity<List<ActualRegistrationDto>> result = controller.getActualRegistrations();
+        assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
     @Test
-    void save() {
+    void saveActualRegistration() {
         when(service.save(any(ActualRegistrationDto.class))).thenReturn(DTO);
 
-        ResponseEntity<ActualRegistrationDto> result = controller
-                .save(DTO);
+        ResponseEntity<String> result = controller
+                .saveActualRegistration(DTO);
 
         assertNotNull(result);
-        assertEquals(DTO, result.getBody());
+        assertEquals("Actual Registration Saved", result.getBody());
     }
 
     @Test
-    void deleteByID() {
+    void deleteActualRegistration() {
         doNothing().when(service).deleteById(1L);
 
-        ResponseEntity<String> result = controller.deleteById(1L);
+        ResponseEntity<String> result = controller.deleteActualRegistration(1L);
 
-        assertEquals("Actual Registration Deleted", result.getBody());
+        assertEquals("Actual Registration Deleted",result.getBody());
     }
 
     @Test
-    void update() {
+    void updateActualRegistration() {
         when(service.update(1L, DTO)).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller.update(1L, DTO);
+        ResponseEntity<String> result = controller.updateActualRegistration(1L, DTO);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 }

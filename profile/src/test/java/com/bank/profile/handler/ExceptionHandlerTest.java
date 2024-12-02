@@ -9,23 +9,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+
 import javax.persistence.EntityNotFoundException;
 import java.util.Map;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(MockitoExtension.class)
 class ExceptionHandlerTest {
+
+
 
     @InjectMocks
     ExceptionHandler exceptionHandler;
 
+
     @Test
     void handleEntityNotFoundException() {
-        EntityNotFoundException exception = new EntityNotFoundException("Passport not found with ID: 1");
-        ResponseEntity<Map<String, Object>> result = exceptionHandler.handleEntityNotFoundException(exception);
+    EntityNotFoundException exception = new EntityNotFoundException("Passport not found with ID: 1");
+      ResponseEntity<Map<String,Object>> result = exceptionHandler.handleEntityNotFoundException(exception);
 
-        assertEquals(HttpStatus.NOT_FOUND.value(), result.getBody().get("status"));
-        assertEquals("Passport not found with ID: 1", result.getBody().get("message"));
+      assertEquals(HttpStatus.NOT_FOUND.value(), result.getBody().get("status"));
+      assertEquals("Passport not found with ID: 1", result.getBody().get("message"));
     }
 
     @Test

@@ -3,13 +3,14 @@ package com.bank.profile.dto.mapper;
 import com.bank.profile.dto.PassportDto;
 import com.bank.profile.entity.Passport;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalDate;
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PassportMapperTest {
-
     Passport ENTITY = Passport.builder()
             .id(1L)
             .series(1234)
@@ -25,7 +26,6 @@ class PassportMapperTest {
             .divisionCode(1)
             .expirationDate(LocalDate.MIN)
             .build();
-
     PassportDto DTO = PassportDto.builder()
             .id(1L)
             .series(1234)
@@ -49,6 +49,7 @@ class PassportMapperTest {
         Passport result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
+
     }
 
     @Test
@@ -73,5 +74,6 @@ class PassportMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
+
     }
 }

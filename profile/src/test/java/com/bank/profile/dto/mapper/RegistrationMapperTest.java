@@ -3,12 +3,13 @@ package com.bank.profile.dto.mapper;
 import com.bank.profile.dto.RegistrationDto;
 import com.bank.profile.entity.Registration;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RegistrationMapperTest {
-
     Registration ENTITY = Registration.builder()
             .id(1L)
             .country("country")
@@ -43,6 +44,7 @@ class RegistrationMapperTest {
         Registration result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
+
     }
 
     @Test
@@ -67,5 +69,6 @@ class RegistrationMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
+
     }
 }

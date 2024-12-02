@@ -3,12 +3,13 @@ package com.bank.profile.dto.mapper;
 import com.bank.profile.dto.AccountDetailsDto;
 import com.bank.profile.entity.AccountDetails;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccountDetailsMapperTest {
-
     AccountDetails ENTITY = AccountDetails.builder()
             .id(1L)
             .accountId(1L)
@@ -22,9 +23,10 @@ class AccountDetailsMapperTest {
 
     @Test
     void toEntity() {
-        AccountDetails result = mapper.toEntity(DTO);
-        assertNotNull(result);
-        assertEquals(ENTITY, result);
+         AccountDetails result = mapper.toEntity(DTO);
+         assertNotNull(result);
+         assertEquals(ENTITY, result);
+
     }
 
     @Test
@@ -49,5 +51,6 @@ class AccountDetailsMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
+
     }
 }

@@ -9,16 +9,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
+
 @ExtendWith(MockitoExtension.class)
 class AccountDetailsRestControllerTest {
-
     AccountDetailsDto DTO = AccountDetailsDto.builder().id(1L).build();
 
     @Mock
@@ -30,11 +32,11 @@ class AccountDetailsRestControllerTest {
     void save() {
         when(service.save(any(AccountDetailsDto.class))).thenReturn(DTO);
 
-        ResponseEntity<AccountDetailsDto> result = controller
+        ResponseEntity<String> result = controller
                 .save(DTO);
 
         assertNotNull(result);
-        assertEquals(DTO, result.getBody());
+        assertEquals("Account details saved", result.getBody());
     }
 
     @Test
@@ -43,7 +45,7 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<AccountDetailsDto> result = controller.getById(1L);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
     @Test
@@ -52,7 +54,7 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<List<AccountDetailsDto>> result = controller.getAll();
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
     @Test
@@ -61,7 +63,8 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<String> result = controller.update(1L, DTO);
 
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK,result.getStatusCode());
+
     }
 
     @Test
@@ -70,6 +73,6 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<String> result = controller.deleteById(1L);
 
-        assertEquals("Account details deleted", result.getBody());
+        assertEquals("Account details deleted",result.getBody());
     }
 }
