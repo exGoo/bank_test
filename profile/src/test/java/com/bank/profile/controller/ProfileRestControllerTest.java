@@ -42,7 +42,7 @@ class ProfileRestControllerTest {
     void getById() {
         when(service.findById(1L)).thenReturn(DTO);
 
-        ResponseEntity<ProfileDto> result = controller.getRegistrationById(1L);
+        ResponseEntity<ProfileDto> result = controller.getById(1L);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
@@ -50,7 +50,7 @@ class ProfileRestControllerTest {
     @Test
     void getAll() {
         when(service.findAll()).thenReturn(List.of(DTO));
-        ResponseEntity<List<ProfileDto>> result = controller.getAllRegistrations();
+        ResponseEntity<List<ProfileDto>> result = controller.getAll();
         assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
@@ -67,7 +67,7 @@ class ProfileRestControllerTest {
     void deleteById() {
         doNothing().when(service).deleteById(1L);
 
-        ResponseEntity<String> result = controller.deleteRegistrationById(1L);
+        ResponseEntity<String> result = controller.deleteById(1L);
 
         assertEquals("registration deleted", result.getBody());
     }

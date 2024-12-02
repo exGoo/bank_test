@@ -45,7 +45,7 @@ class RegistrationRestControllerTest {
     void getById() {
         when(service.findById(1L)).thenReturn(DTO);
 
-        ResponseEntity<RegistrationDto> result = controller.getRegistrationById(1L);
+        ResponseEntity<RegistrationDto> result = controller.getById(1L);
 
         assertEquals(HttpStatus.OK,result.getStatusCode());
     }
@@ -53,7 +53,7 @@ class RegistrationRestControllerTest {
     @Test
     void getAll() {
         when(service.findAll()).thenReturn(List.of(DTO));
-        ResponseEntity<List<RegistrationDto>> result = controller.getAllRegistrations();
+        ResponseEntity<List<RegistrationDto>> result = controller.getAll();
         assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
@@ -67,10 +67,10 @@ class RegistrationRestControllerTest {
     }
 
     @Test
-    void deleteRegistrationById() {
+    void deleteById() {
         doNothing().when(service).deleteById(1L);
 
-        ResponseEntity<String> result = controller.deleteRegistrationById(1L);
+        ResponseEntity<String> result = controller.deleteById(1L);
 
         assertEquals("Deleted Registration",result.getBody());
     }

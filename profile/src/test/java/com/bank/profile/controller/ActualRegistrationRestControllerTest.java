@@ -33,43 +33,43 @@ class ActualRegistrationRestControllerTest {
     void getByID() {
         when(service.findById(1L)).thenReturn(DTO);
 
-        ResponseEntity<ActualRegistrationDto> result = controller.getActualRegistration(1L);
+        ResponseEntity<ActualRegistrationDto> result = controller.getById(1L);
 
         assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
     @Test
-    void getActualRegistrations() {
+    void getAll() {
         when(service.findAll()).thenReturn(List.of(DTO));
-        ResponseEntity<List<ActualRegistrationDto>> result = controller.getActualRegistrations();
+        ResponseEntity<List<ActualRegistrationDto>> result = controller.getAll();
         assertEquals(HttpStatus.OK,result.getStatusCode());
     }
 
     @Test
-    void saveActualRegistration() {
+    void save() {
         when(service.save(any(ActualRegistrationDto.class))).thenReturn(DTO);
 
         ResponseEntity<String> result = controller
-                .saveActualRegistration(DTO);
+                .save(DTO);
 
         assertNotNull(result);
         assertEquals("Actual Registration Saved", result.getBody());
     }
 
     @Test
-    void deleteActualRegistration() {
+    void deleteByID() {
         doNothing().when(service).deleteById(1L);
 
-        ResponseEntity<String> result = controller.deleteActualRegistration(1L);
+        ResponseEntity<String> result = controller.deleteByID(1L);
 
         assertEquals("Actual Registration Deleted",result.getBody());
     }
 
     @Test
-    void updateActualRegistration() {
+    void update() {
         when(service.update(1L, DTO)).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller.updateActualRegistration(1L, DTO);
+        ResponseEntity<String> result = controller.update(1L, DTO);
 
         assertEquals(HttpStatus.OK,result.getStatusCode());
     }
