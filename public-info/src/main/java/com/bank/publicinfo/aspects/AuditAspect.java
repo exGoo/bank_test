@@ -1,6 +1,5 @@
 package com.bank.publicinfo.aspects;
 
-
 import com.bank.publicinfo.entity.Audit;
 import com.bank.publicinfo.repository.AuditRepository;
 import com.bank.publicinfo.utils.Admin;
@@ -8,13 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
+
 import java.time.LocalDateTime;
 
 @Aspect
@@ -44,17 +44,15 @@ public class AuditAspect {
     public void isDeleteMethod() {
     }
 
-    @After(value = "isAddMethod()" +
-            "&& args(obj)",
-            argNames = "obj")
-    public void afterAdd(Object obj) {
+    @AfterReturning(value = "isAddMethod()", returning = "result")
+    public void afterAdd(Object result) {
         try {
             audit = Audit.builder()
-                    .entityType(obj.getClass().getSimpleName())
+                    .entityType(result.getClass().getSimpleName())
                     .operationType("CREATE")
                     .createdBy(admin.getUsername())
                     .createdAt(LocalDateTime.now())
-                    .entityJson(objectMapper.writeValueAsString(obj))
+                    .entityJson(objectMapper.writeValueAsString(result))
                     .build();
             auditRepository.save(audit);
         } catch (Throwable e) {
@@ -69,10 +67,9 @@ public class AuditAspect {
         try {
             entity = getEntityCondition(pjp, id);
             oldJson = objectMapper.writeValueAsString(entity);
-            lastAudit = findLastAudit(oldJson);
-
             result = pjp.proceed();
-
+            entity = getEntityCondition(pjp, id);
+            lastAudit = findLastAudit(id, obj.getClass().getSimpleName());
             audit = Audit.builder()
                     .entityType(lastAudit.getEntityType())
                     .operationType("UPDATE")
@@ -95,12 +92,11 @@ public class AuditAspect {
             argNames = "pjp, id")
     public Object afterDelete(ProceedingJoinPoint pjp, Long id) {
         try {
+
             entity = getEntityCondition(pjp, id);
             oldJson = objectMapper.writeValueAsString(entity);
-
             result = pjp.proceed();
-
-            lastAudit = findLastAudit(oldJson);
+            lastAudit = findLastAudit(id, entity.getClass().getSimpleName());
             audit = Audit.builder()
                     .entityType(lastAudit.getEntityType())
                     .operationType("DELETE")
@@ -128,11 +124,9 @@ public class AuditAspect {
         }
     }
 
-    private Audit findLastAudit(String json) {
-        audit = auditRepository.findTopByNewEntityJson(json)
-                .orElseGet(() -> auditRepository.findByEntityJson(json)
-                        .orElseThrow(() -> new NotFoundException("Last audit was not found")));
-        return audit;
+    private Audit findLastAudit(Long id, String entityType) {
+        return auditRepository.findByEntityJsonId(id.toString(), entityType)
+                .orElseThrow(() -> new NotFoundException("Аудит для данного id не найден"));
     }
 
 }

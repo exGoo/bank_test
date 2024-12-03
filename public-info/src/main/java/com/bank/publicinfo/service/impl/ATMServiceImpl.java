@@ -9,12 +9,12 @@ import com.bank.publicinfo.service.ATMService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 public class ATMServiceImpl implements ATMService {
+
     private ATMRepository atmRepository;
     private ATMMapper atmMapper;
 
@@ -48,8 +48,10 @@ public class ATMServiceImpl implements ATMService {
     public ATMDto addATM(ATMDto atm) {
         try {
             ATM newAtm = atmMapper.toModel(atm);
-            ATM saveAtm = atmRepository.save(newAtm);
-            return atmMapper.toDto(saveAtm);
+            ATM saveAtm = atmRepository.saveAndFlush(newAtm);
+            ATMDto savedDto = atmMapper.toDto(saveAtm);
+            log.info("Банкомат успешно добавлен");
+            return savedDto;
         } catch (Exception e) {
             throw new DataValidationException("Please check the correctness of the entered data");
         }
@@ -60,6 +62,7 @@ public class ATMServiceImpl implements ATMService {
     public void deleteATMById(Long id) {
         try {
             atmRepository.deleteById(id);
+            log.info("Банкомат успешно удален");
         } catch (Exception e) {
             throw new EntityNotFoundException("ATM not found with id " + id);
         }

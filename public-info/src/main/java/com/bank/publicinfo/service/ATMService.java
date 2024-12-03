@@ -4,6 +4,7 @@ import com.bank.publicinfo.dto.ATMDto;
 import java.util.List;
 
 public interface ATMService {
+
     ATMDto findById(Long id);
 
     List<ATMDto> findAll();

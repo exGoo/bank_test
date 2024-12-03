@@ -4,6 +4,7 @@ import com.bank.publicinfo.dto.BranchDto;
 import java.util.List;
 
 public interface BranchService {
+
     BranchDto findById(Long id);
 
     List<BranchDto> findAllWithATMs();

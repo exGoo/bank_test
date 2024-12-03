@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 @Slf4j
 public class BankDetailsServiceImpl implements BankDetailsService {
+
     private BankDetailsRepository bankDetailsRepository;
     private BankDetailsMapper bankDetailsMapper;
 
@@ -56,7 +56,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
 
         log.info("Попытка получения информации о банках в городе {} , включающей id связанных сертификатов и лицензий", city);
         try {
-            List<BankDetails> bankDetailsList = bankDetailsRepository.findByCityWithRelations(city);
+            List<BankDetails> bankDetailsList = bankDetailsRepository.findByCity(city);
             if (bankDetailsList.isEmpty()) {
                 throw new RuntimeException();
             }
@@ -70,14 +70,17 @@ public class BankDetailsServiceImpl implements BankDetailsService {
 
     @Override
     @Transactional
-    public BankDetails addBankDetails(BankDetails bankDetails) {
+    public BankDetailsDto addBankDetails(BankDetailsDto bankDetailsDto) {
         try {
-            log.info("Попытка добавления информации о банке со следующими данными {}", bankDetails);
+            log.info("Попытка добавлении информации о банке со следующими данными {}", bankDetailsDto);
+            BankDetails bankDetails = bankDetailsMapper.toModel(bankDetailsDto);
             BankDetails saveBankDetails = bankDetailsRepository.save(bankDetails);
+            BankDetailsDto savedDto = bankDetailsMapper.toDto(saveBankDetails);
+
             log.info("Информация о банке успешно добавлена");
-            return saveBankDetails;
+            return savedDto;
         } catch (Exception e) {
-            log.error("Ошибка при добавлении информации о банке", e);
+            log.error("Ошибка при добавлении информации о банках");
             throw new DataValidationException("Please check the correctness of the entered data");
         }
     }

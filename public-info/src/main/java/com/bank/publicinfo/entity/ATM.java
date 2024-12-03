@@ -47,7 +47,6 @@ public class ATM {
     @JoinColumn(name = "branch_id")
     private Branch branch;
 
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
