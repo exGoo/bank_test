@@ -1,9 +1,13 @@
 package com.bank.publicinfo.controller;
 
 import com.bank.publicinfo.dto.BankDetailsDto;
-import com.bank.publicinfo.entity.BankDetails;
-import com.bank.publicinfo.mapper.BankDetailsMapper;
 import com.bank.publicinfo.service.BankDetailsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,51 +24,79 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bank-details")
+@Tag(name = "Bank Details", description = "API для управления банковской информацией")
 public class BankDetailsController {
-    private BankDetailsService bankDetailsService;
-    private BankDetailsMapper bankDetailsMapper;
 
-    @Autowired
-    public void setBankDetailsMapper(BankDetailsMapper bankDetailsMapper) {
-        this.bankDetailsMapper = bankDetailsMapper;
-    }
+    private BankDetailsService bankDetailsService;
 
     @Autowired
     public void setBankDetailsService(BankDetailsService bankDetailsService) {
         this.bankDetailsService = bankDetailsService;
     }
 
+    @Operation(summary = "Получить банковскую информацию по ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное получение информации",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BankDetailsDto.class))),
+            @ApiResponse(responseCode = "404", description = "Информация не найдена")})
     @GetMapping("/{id}")
     public ResponseEntity<BankDetailsDto> getBankDetailsById(@PathVariable Long id) {
         BankDetailsDto bankDetailsDto = bankDetailsService.findById(id);
         return new ResponseEntity<>(bankDetailsDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "Получить информацию о всех банках")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное получение информации",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BankDetailsDto.class)))})
     @GetMapping
     public ResponseEntity<List<BankDetailsDto>> getAllBankDetails() {
         List<BankDetailsDto> bankDetailsDtos = bankDetailsService.findAllWithRelations();
         return new ResponseEntity<>(bankDetailsDtos, HttpStatus.OK);
     }
 
+    @Operation(summary = "Получить банковскую информацию по банкам в определенном городе")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное получение информации",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = BankDetailsDto.class))),
+            @ApiResponse(responseCode = "404", description = "Информация не найдена")})
     @GetMapping("/city/{city}")
     public ResponseEntity<List<BankDetailsDto>> getBankDetailsByCity(@PathVariable String city) {
         List<BankDetailsDto> bankDetailsDtos = bankDetailsService.findByCity(city);
         return new ResponseEntity<>(bankDetailsDtos, HttpStatus.OK);
     }
 
+    @Operation(summary = "Добавить новую банковскую информацию")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Успешное добавление"),
+            @ApiResponse(responseCode = "400", description = "Некорректный запрос")
+    })
     @PostMapping
-    public ResponseEntity<BankDetails> addBankDetails(@RequestBody BankDetailsDto bankDetailsDto) {
-        BankDetails bankDetails = bankDetailsMapper.toModel(bankDetailsDto);
-        BankDetails createdBankDetails = bankDetailsService.addBankDetails(bankDetails);
+    public ResponseEntity<BankDetailsDto> addBankDetails(@RequestBody BankDetailsDto bankDetailsDto) {
+        BankDetailsDto createdBankDetails = bankDetailsService.addBankDetails(bankDetailsDto);
         return new ResponseEntity<>(createdBankDetails, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Обновить банковскую информацию по ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Успешное обновление"),
+            @ApiResponse(responseCode = "404", description = "Информация не найдена"),
+            @ApiResponse(responseCode = "400", description = "Некорректный запрос")
+    })
     @PatchMapping("/{id}")
     public ResponseEntity<BankDetailsDto> updateBankDetails(@PathVariable Long id, @RequestBody BankDetailsDto bankDetailsDto) {
         BankDetailsDto updatedBankDetails = bankDetailsService.updateBankDetails(id, bankDetailsDto);
         return new ResponseEntity<>(updatedBankDetails, HttpStatus.OK);
     }
 
+    @Operation(summary = "Удалить банковскую иформацию по ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Успешное удаление"),
+            @ApiResponse(responseCode = "404", description = "Информация не найдена")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBankDetails(@PathVariable Long id) {
         bankDetailsService.deleteBankDetailsById(id);

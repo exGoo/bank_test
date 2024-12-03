@@ -34,7 +34,6 @@ public class Certificate {
 
     @Lob
     @Column(name = "photo")
-    @Transient
     private byte[] photo;
 
     @ManyToOne

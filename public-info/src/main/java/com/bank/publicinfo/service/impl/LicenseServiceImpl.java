@@ -12,13 +12,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 @Slf4j
 public class LicenseServiceImpl implements LicenseService {
+
     private LicenseRepository licenseRepository;
     private LicenseMapper licenseMapper;
     private BankDetailsRepository bankDetailsRepository;
@@ -65,8 +65,9 @@ public class LicenseServiceImpl implements LicenseService {
             log.info("Попытка добавления лицензии со следующей информацией {}", license);
             License newLicense = licenseMapper.toModel(license);
             License saveLicense = licenseRepository.save(newLicense);
+            LicenseDto savedDto = licenseMapper.toDto(saveLicense);
             log.info("Лицензия успешно добавлена");
-            return licenseMapper.toDto(saveLicense);
+            return savedDto;
         } catch (Exception e) {
             log.error("Ошибка при добавлении лицензии");
             throw new DataValidationException("Please check the correctness of the entered data");

@@ -53,7 +53,6 @@ public class Audit {
     @Column(nullable = false)
     private String entityJson;
 
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

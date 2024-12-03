@@ -10,13 +10,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service
 @Slf4j
 public class ATMServiceImpl implements ATMService {
+
     private ATMRepository atmRepository;
     private ATMMapper atmMapper;
 
@@ -58,8 +58,10 @@ public class ATMServiceImpl implements ATMService {
         try {
             log.info("Попытка добавления нового банкомата со следующими данными: {}", atm);
             ATM newAtm = atmMapper.toModel(atm);
-            ATM saveAtm = atmRepository.save(newAtm);
-            return atmMapper.toDto(saveAtm);
+            ATM saveAtm = atmRepository.saveAndFlush(newAtm);
+            ATMDto savedDto = atmMapper.toDto(saveAtm);
+            log.info("Банкомат успешно добавлен");
+            return savedDto;
         } catch (Exception e) {
             log.error("Произошла ошибка при добавлении банкомата");
             throw new DataValidationException("Please check the correctness of the entered data");
@@ -72,6 +74,7 @@ public class ATMServiceImpl implements ATMService {
         try {
             log.info("Попытка удаления банкомата с id: {}", id);
             atmRepository.deleteById(id);
+            log.info("Банкомат успешно удален");
         } catch (Exception e) {
             log.error("Произошла ошибка при удалении банкомата, id: {} отсутствует в базе", id);
             throw new EntityNotFoundException("ATM not found with id " + id);

@@ -1,10 +1,11 @@
 package com.bank.publicinfo.dto;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import lombok.ToString;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class BankDetailsDto {
 
     @NotNull
@@ -42,4 +44,5 @@ public class BankDetailsDto {
     private Set<Long> licenseIds;
 
     private Set<Long> certificateIds;
+
 }

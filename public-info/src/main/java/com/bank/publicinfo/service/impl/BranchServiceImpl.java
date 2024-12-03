@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
@@ -18,6 +17,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class BranchServiceImpl implements BranchService {
+
     private BranchRepository branchRepository;
     private BranchMapper branchMapper;
 
@@ -76,7 +76,9 @@ public class BranchServiceImpl implements BranchService {
             log.info("Попытка добавления отделения со следующими данными {}", branch);
             Branch newBranch = branchMapper.toModel(branch);
             Branch saveBranch = branchRepository.save(newBranch);
-            return branchMapper.toDto(saveBranch);
+            BranchDto savedDto = branchMapper.toDto(saveBranch);
+            log.info("Отделение успешно добавлено");
+            return savedDto;
         } catch (Exception e) {
             log.error("Ошибка при добавлении отделения");
             throw new DataValidationException("Please check the correctness of the entered data");
