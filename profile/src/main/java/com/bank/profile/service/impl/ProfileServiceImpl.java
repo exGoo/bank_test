@@ -73,25 +73,20 @@ public class ProfileServiceImpl implements ProfileService {
     @AuditSave(entityType = ENTITY_TYPE)
     public ProfileDto save(ProfileDto profile) {
         log.info("попытка сохранить {} : {}", ENTITY_TYPE, profile);
-        try {
-            Profile newprofile = mapper.toEntity(profile);
-            Passport passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
-                    () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
-            ActualRegistration actualRegistration = actualRegistrationRepository
-                    .findById(profile.getActualRegistrationId()).orElseThrow(
-                            () -> new EntityNotFoundException("ActualRegistration not found with ID: "
-                                    + profile.getActualRegistrationId()));
-            List<AccountDetails> accountDetails = accountDetailsRepository.findAllById(profile.getAccountDetailsId());
-            newprofile.setAccountDetails(accountDetails);
-            newprofile.setPassport(passport);
-            newprofile.setActualRegistration(actualRegistration);
-            Profile result = repository.save(newprofile);
-            log.info("{} сохранен с ID: {}", ENTITY_TYPE, result.getId());
-            return mapper.toDto(result);
-        } catch (EntityNotFoundException e) {
-            log.error("Ошибка при создании {}: {}", ENTITY_TYPE, e.getMessage());
-            throw e;
-        }
+        Profile newprofile = mapper.toEntity(profile);
+        Passport passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
+                () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
+        ActualRegistration actualRegistration = actualRegistrationRepository
+                .findById(profile.getActualRegistrationId()).orElseThrow(
+                        () -> new EntityNotFoundException("ActualRegistration not found with ID: "
+                                + profile.getActualRegistrationId()));
+        List<AccountDetails> accountDetails = accountDetailsRepository.findAllById(profile.getAccountDetailsId());
+        newprofile.setAccountDetails(accountDetails);
+        newprofile.setPassport(passport);
+        newprofile.setActualRegistration(actualRegistration);
+        Profile result = repository.save(newprofile);
+        log.info("{} сохранен с ID: {}", ENTITY_TYPE, result.getId());
+        return mapper.toDto(result);
     }
 
     /**
@@ -102,14 +97,9 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public List<ProfileDto> findAll() {
         log.info("Попытка получить список {}", ENTITY_TYPE);
-        try {
-            List<Profile> result = repository.findAll();
-            log.info("Найдено {} записей {}", result.size(), ENTITY_TYPE);
-            return mapper.toListDto(result);
-        } catch (Exception e) {
-            log.error("Ошибка при получении списка {} записей: {}", ENTITY_TYPE, e.getMessage());
-            throw e;
-        }
+        List<Profile> result = repository.findAll();
+        log.info("Найдено {} записей {}", result.size(), ENTITY_TYPE);
+        return mapper.toListDto(result);
     }
 
     /**
@@ -122,15 +112,10 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileDto findById(Long id) {
         log.info("Попытка получить {} с ID: {}", ENTITY_TYPE, id);
-        try {
-            ProfileDto result = mapper.toDto(repository.findById(id).orElseThrow(
-                    () -> new EntityNotFoundException("profile not found with ID: " + id)));
-            log.info("{} успешно получена: {}", ENTITY_TYPE, result);
-            return result;
-        } catch (EntityNotFoundException e) {
-            log.error("{} с ID: {} не найден:{}", ENTITY_TYPE, id, e.getMessage());
-            throw e;
-        }
+        ProfileDto result = mapper.toDto(repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("profile not found with ID: " + id)));
+        log.info("{} успешно получена: {}", ENTITY_TYPE, result);
+        return result;
     }
 
     /**
@@ -146,38 +131,31 @@ public class ProfileServiceImpl implements ProfileService {
     @AuditUpdate(entityType = ENTITY_TYPE)
     public ProfileDto update(Long id, ProfileDto profile) {
         log.info("Попытка обновить {} с ID: {}, новые данные: {}", ENTITY_TYPE, id, profile);
-        try {
-            Profile oldProfile = repository.findById(id).orElseThrow(
-                    () -> new EntityNotFoundException("profile not found with ID: " + id));
-
-            Passport passport = oldProfile.getPassport();
-            if (profile.getPassportId() != null) {
-                passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
-                        () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
-            }
-            ActualRegistration actualRegistration = oldProfile.getActualRegistration();
-            if (profile.getActualRegistrationId() != null) {
-                actualRegistration = actualRegistrationRepository.findById(profile.getActualRegistrationId()).orElseThrow(
-                        () -> new EntityNotFoundException("ActualRegistration not found with ID: " + profile.getActualRegistrationId()));
-            }
-            List<AccountDetails> accountDetails = oldProfile.getAccountDetails();
-            if (profile.getAccountDetailsId() != null) {
-                accountDetails = profile.getAccountDetailsId().isEmpty()
-                        ? new ArrayList<>()
-                        : accountDetailsRepository.findAllById(profile.getAccountDetailsId());
-            }
-            mapper.updateEntityFromDto(oldProfile, profile);
-            oldProfile.setPassport(passport);
-            oldProfile.setActualRegistration(actualRegistration);
-            oldProfile.setAccountDetails(accountDetails);
-            Profile result = repository.save(oldProfile);
-            log.info("{} с ID: {} успешно обновлен", ENTITY_TYPE, id);
-            return mapper.toDto(result);
-
-        } catch (EntityNotFoundException e) {
-            log.error("ошибка при обновлении {} с ID: {} message: {}", ENTITY_TYPE, id, e.getMessage());
-            throw e;
+        Profile oldProfile = repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException("profile not found with ID: " + id));
+        Passport passport = oldProfile.getPassport();
+        if (profile.getPassportId() != null) {
+            passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
+                    () -> new EntityNotFoundException("Passport not found with ID: " + profile.getPassportId()));
         }
+        ActualRegistration actualRegistration = oldProfile.getActualRegistration();
+        if (profile.getActualRegistrationId() != null) {
+            actualRegistration = actualRegistrationRepository.findById(profile.getActualRegistrationId()).orElseThrow(
+                    () -> new EntityNotFoundException("ActualRegistration not found with ID: " + profile.getActualRegistrationId()));
+        }
+        List<AccountDetails> accountDetails = oldProfile.getAccountDetails();
+        if (profile.getAccountDetailsId() != null) {
+            accountDetails = profile.getAccountDetailsId().isEmpty()
+                    ? new ArrayList<>()
+                    : accountDetailsRepository.findAllById(profile.getAccountDetailsId());
+        }
+        mapper.updateEntityFromDto(oldProfile, profile);
+        oldProfile.setPassport(passport);
+        oldProfile.setActualRegistration(actualRegistration);
+        oldProfile.setAccountDetails(accountDetails);
+        Profile result = repository.save(oldProfile);
+        log.info("{} с ID: {} успешно обновлен", ENTITY_TYPE, id);
+        return mapper.toDto(result);
     }
 
     /**
@@ -188,12 +166,7 @@ public class ProfileServiceImpl implements ProfileService {
      */
     @Override
     public void deleteById(Long id) {
-        try {
-            repository.deleteById(id);
-            log.info("{} с ID: {} удален", ENTITY_TYPE, id);
-        } catch (EntityNotFoundException e) {
-            log.error("Ошибка при удалении {}: {}", ENTITY_TYPE, e.getMessage());
-            throw e;
-        }
+        repository.deleteById(id);
+        log.info("{} с ID: {} удален", ENTITY_TYPE, id);
     }
 }
