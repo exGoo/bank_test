@@ -1,5 +1,6 @@
 package com.bank.profile.dto;
 
+import com.bank.profile.dto.util.Identifiable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import java.time.OffsetDateTime;
 
 @Data
 @Builder
-public class AuditDto {
+public class AuditDto implements Identifiable {
     private Long id;
     @Size(max = 40, message = "до 40")
     private String entityType;

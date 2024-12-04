@@ -61,7 +61,7 @@ public class ProfileServiceImpl implements ProfileService {
      *
      * @param profile DTO объекта профиля, который необходимо сохранить
      * @return сохраненный объект профиля в виде DTO
-     * @AuditSave Аннотация для маркировки методов, которые должны быть аудированы
+     * AuditSave Аннотация для маркировки методов, которые должны быть аудированы
      * @throws EntityNotFoundException если связанный паспорт или регистрационные данные не найдены
      */
     @Override
@@ -132,7 +132,7 @@ public class ProfileServiceImpl implements ProfileService {
      * @param id      идентификатор профиля для обновления
      * @param profile DTO объекта профиля с новыми данными
      * @return обновленный профиль в виде DTO
-     *  @AuditUpdate Аннотация для маркировки методов, которые должны быть аудированы
+     * AuditUpdate Аннотация для маркировки методов, которые должны быть аудированы
      * @throws EntityNotFoundException если профиль, паспорт или регистрационные данные не найдены
      */
     @Override

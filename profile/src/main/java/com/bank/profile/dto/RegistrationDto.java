@@ -1,5 +1,6 @@
 package com.bank.profile.dto;
 
+import com.bank.profile.dto.util.Identifiable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import javax.validation.constraints.Size;
 
 @Data
 @Builder
-public class RegistrationDto {
+public class RegistrationDto implements Identifiable {
     private Long id;
     @Size(max = 166, message ="до 166")
     private String country;

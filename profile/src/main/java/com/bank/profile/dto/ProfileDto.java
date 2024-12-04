@@ -1,5 +1,6 @@
 package com.bank.profile.dto;
 
+import com.bank.profile.dto.util.Identifiable;
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import javax.validation.constraints.Size;
 import java.util.List;
 @Data
 @Builder
-public class ProfileDto {
+public class ProfileDto implements Identifiable {
 
     private Long id;
     private Long phoneNumber;
