@@ -31,9 +31,9 @@ public class PassportRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> save(@RequestBody @Valid PassportDto passport) {
-        passportService.save(passport);
-        return ResponseEntity.ok("Passport saved");
+    public ResponseEntity<PassportDto> save(@RequestBody @Valid PassportDto passport) {
+        PassportDto result = passportService.save(passport);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")

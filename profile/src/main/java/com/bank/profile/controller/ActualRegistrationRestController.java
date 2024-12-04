@@ -38,9 +38,9 @@ public class ActualRegistrationRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> save(@RequestBody @Valid ActualRegistrationDto actualRegistration) {
-        actualRegistrationService.save(actualRegistration);
-        return ResponseEntity.ok("Actual Registration Saved");
+    public ResponseEntity<ActualRegistrationDto> save(@RequestBody @Valid ActualRegistrationDto actualRegistration) {
+        ActualRegistrationDto result = actualRegistrationService.save(actualRegistration);
+        return ResponseEntity.ok(result);
     }
 
     @DeleteMapping("/{id}")

@@ -28,9 +28,9 @@ public class AuditRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> save(@RequestBody @Valid AuditDto audit) {
-        auditService.save(audit);
-        return ResponseEntity.ok("Audit saved");
+    public ResponseEntity<AuditDto> save(@RequestBody @Valid AuditDto audit) {
+       AuditDto result = auditService.save(audit);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")

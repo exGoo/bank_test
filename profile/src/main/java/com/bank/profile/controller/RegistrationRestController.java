@@ -28,9 +28,9 @@ public class RegistrationRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> save(@RequestBody @Valid RegistrationDto registration) {
-        registrationService.save(registration);
-        return ResponseEntity.ok("Registration saved");
+    public ResponseEntity<RegistrationDto> save(@RequestBody @Valid RegistrationDto registration) {
+        RegistrationDto result = registrationService.save(registration);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")

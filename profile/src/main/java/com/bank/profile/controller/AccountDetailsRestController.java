@@ -28,9 +28,9 @@ public class AccountDetailsRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> save(@RequestBody @Valid AccountDetailsDto accountDetails) {
-        accountDetailsService.save(accountDetails);
-        return ResponseEntity.ok("Account details saved");
+    public ResponseEntity<AccountDetailsDto> save(@RequestBody @Valid AccountDetailsDto accountDetails) {
+       AccountDetailsDto result = accountDetailsService.save(accountDetails);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")

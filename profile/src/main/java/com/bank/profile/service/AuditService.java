@@ -5,7 +5,7 @@ import com.bank.profile.dto.AuditDto;
 import java.util.List;
 
 public interface AuditService {
-    void save(AuditDto audit);
+    AuditDto save(AuditDto audit);
 
     List<AuditDto> findAll();
 

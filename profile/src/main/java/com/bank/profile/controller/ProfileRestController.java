@@ -28,9 +28,9 @@ public class ProfileRestController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> save(@RequestBody @Valid ProfileDto profile) {
-        profileService.save(profile);
-        return ResponseEntity.ok("Profile saved");
+    public ResponseEntity<ProfileDto> save(@RequestBody @Valid ProfileDto profile) {
+        ProfileDto result = profileService.save(profile);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
