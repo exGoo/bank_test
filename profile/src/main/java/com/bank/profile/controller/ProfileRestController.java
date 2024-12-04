@@ -20,7 +20,6 @@ import java.util.List;
 @RequestMapping("/Profiles")
 public class ProfileRestController {
 
-
     ProfileService profileService;
 
     @Autowired
@@ -36,7 +35,6 @@ public class ProfileRestController {
     @GetMapping("/{id}")
     public ResponseEntity<ProfileDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(profileService.findById(id));
-
     }
     @GetMapping("")
     public ResponseEntity<List<ProfileDto>> getAll() {

@@ -22,6 +22,4 @@ public interface AccountDetailsMapper {
     void updateEntityFromDto(@MappingTarget AccountDetails target, AccountDetailsDto sourse);
 
     List<AccountDetailsDto> toDtoList(List<AccountDetails> accountDetailsList);
-
-
 }

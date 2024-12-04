@@ -19,7 +19,6 @@ public class ExeptionHandler {
         errorResponse.put("status", HttpStatus.NOT_FOUND.value());
         errorResponse.put("message", ex.getMessage());
         errorResponse.put("timestamp", System.currentTimeMillis());
-
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)

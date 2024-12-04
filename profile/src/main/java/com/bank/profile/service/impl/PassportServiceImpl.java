@@ -35,14 +35,14 @@ public class PassportServiceImpl implements PassportService {
     @Override
     @AuditSave(entityType = "passport")
     public PassportDto save(PassportDto passport) {
-            log.info("попытка сохранить passport : {}", passport);
+        log.info("попытка сохранить passport : {}", passport);
         try {
             Passport newPassport = mapper.toEntity(passport);
             Registration registration = registrationRepository.findById(passport.getRegistrationId()).orElseThrow(
                     () -> new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
             newPassport.setRegistration(registration);
-            Passport result= repository.save(newPassport);
-            log.info("passport сохранен с ID: {}",result.getId());
+            Passport result = repository.save(newPassport);
+            log.info("passport сохранен с ID: {}", result.getId());
             return mapper.toDto(result);
         } catch (EntityNotFoundException e) {
             log.error("Ошибка при создании passport: {}", e.getMessage());
@@ -53,15 +53,14 @@ public class PassportServiceImpl implements PassportService {
     @Override
     public List<PassportDto> findAll() {
         log.info("Попытка получить список passport");
-       try{
-          List<Passport> result = repository.findAll();
-           log.info("Найдено {} записей passport", result.size());
-           return mapper.toListDto(result);
-       }
-       catch (Exception e) {
-           log.error("Ошибка при получении списка passport записей: {}", e.getMessage());
-           throw e;
-       }
+        try {
+            List<Passport> result = repository.findAll();
+            log.info("Найдено {} записей passport", result.size());
+            return mapper.toListDto(result);
+        } catch (Exception e) {
+            log.error("Ошибка при получении списка passport записей: {}", e.getMessage());
+            throw e;
+        }
     }
 
     @Override
@@ -72,11 +71,9 @@ public class PassportServiceImpl implements PassportService {
                     () -> new EntityNotFoundException("passport not found with ID: " + id)));
             log.info("actual_registration успешно получена: {}", result);
             return result;
-        }
-        catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             log.error("passport с ID: {} не найден:{}", id, e.getMessage());
             throw e;
-
         }
     }
 
@@ -84,36 +81,34 @@ public class PassportServiceImpl implements PassportService {
     @AuditUpdate(entityType = "passport")
     public PassportDto update(Long id, PassportDto passport) {
         log.info("Попытка обновить passport с ID: {}, новые данные: {}", id, passport);
-      try {
-          Passport oldPassport = repository.findById(id).orElseThrow(
-                  () -> new EntityNotFoundException("Passport not found with ID: " + id));
-          Registration registration = oldPassport.getRegistration();
-          if (passport.getRegistrationId() != null) {
-              registration = registrationRepository.findById(passport.getRegistrationId()).orElseThrow(
-                      () -> new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
-          }
-          mapper.updateEntityFromDto(oldPassport, passport);
-          oldPassport.setRegistration(registration);
-         Passport result = repository.save(oldPassport);
-         log.info( "passport с ID: {} успешно обновлен", id);
-         return mapper.toDto(result);
-      }catch (EntityNotFoundException e) {
-          log.error("ошибка при обновлении passport с ID: {} message: {}", id, e.getMessage());
-          throw e;
-      }
-
+        try {
+            Passport oldPassport = repository.findById(id).orElseThrow(
+                    () -> new EntityNotFoundException("Passport not found with ID: " + id));
+            Registration registration = oldPassport.getRegistration();
+            if (passport.getRegistrationId() != null) {
+                registration = registrationRepository.findById(passport.getRegistrationId()).orElseThrow(
+                        () -> new EntityNotFoundException("Registration not found with ID: " + passport.getRegistrationId()));
+            }
+            mapper.updateEntityFromDto(oldPassport, passport);
+            oldPassport.setRegistration(registration);
+            Passport result = repository.save(oldPassport);
+            log.info("passport с ID: {} успешно обновлен", id);
+            return mapper.toDto(result);
+        } catch (EntityNotFoundException e) {
+            log.error("ошибка при обновлении passport с ID: {} message: {}", id, e.getMessage());
+            throw e;
+        }
     }
 
     @Override
     public void deleteById(Long id) {
-       log.info("попытка удаления passport с ID: {}", id);
-       try {
-        repository.deleteById(id);
-        log.info("passport с ID: {} удален", id);
-       }
-       catch (EntityNotFoundException e) {
-           log.error("Ошибка при удалении passport: {}", e.getMessage());
-           throw e;
-       }
+        log.info("попытка удаления passport с ID: {}", id);
+        try {
+            repository.deleteById(id);
+            log.info("passport с ID: {} удален", id);
+        } catch (EntityNotFoundException e) {
+            log.error("Ошибка при удалении passport: {}", e.getMessage());
+            throw e;
+        }
     }
 }

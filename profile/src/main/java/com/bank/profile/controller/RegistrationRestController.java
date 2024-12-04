@@ -32,19 +32,20 @@ public class RegistrationRestController {
         registrationService.save(registration);
         return ResponseEntity.ok("Registration saved");
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<RegistrationDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(registrationService.findById(id));
     }
+
     @GetMapping("")
     public ResponseEntity<List<RegistrationDto>> getAll() {
         return ResponseEntity.ok(registrationService.findAll());
-
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid RegistrationDto registration) {
-        registrationService.update(id,registration);
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody @Valid RegistrationDto registration) {
+        registrationService.update(id, registration);
         return ResponseEntity.ok("Registration Update ");
     }
 

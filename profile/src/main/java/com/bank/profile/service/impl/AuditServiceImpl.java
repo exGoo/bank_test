@@ -30,14 +30,13 @@ public class AuditServiceImpl implements AuditService {
     @Override
     public void save(AuditDto audit) {
         log.info("попытка сохранить audit : {}", audit);
-       try {
-           repository.save(mapper.toEntity(audit));
-           log.info("audit сохранен с ID: {}", audit.getId());
-       }
-       catch (Exception e) {
-           log.error("ошибка при сохранении audit: {}",e.getMessage());
-           log.error(e.getMessage());
-       }
+        try {
+            repository.save(mapper.toEntity(audit));
+            log.info("audit сохранен с ID: {}", audit.getId());
+        } catch (Exception e) {
+            log.error("ошибка при сохранении audit: {}", e.getMessage());
+            log.error(e.getMessage());
+        }
     }
 
     @Override

@@ -87,8 +87,6 @@ public class ActualRegistrationServiceImpl implements ActualRegistrationService 
             log.error("actual_registration с ID: {} не найден:{}", id, e.getMessage());
             throw e;
         }
-
-
     }
 
     @Override

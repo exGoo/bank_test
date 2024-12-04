@@ -49,8 +49,6 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
             log.error("ошибка при сохранении Account_details {}", e.getMessage());
             throw e;
         }
-
-
     }
 
     @Override
@@ -80,7 +78,6 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
     @AuditUpdate(entityType = "account_details")
     public AccountDetailsDto update(Long id, AccountDetailsDto accountDetails) {
         log.info("Попытка обновить account_details с ID: {}, новые данные: {}", id, accountDetails);
-
         try {
             AccountDetails oldDetails = repository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException("Account details not found with ID: " + id));
@@ -90,7 +87,6 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
                 profile = profileRepository.findById(accountDetails.getProfileId()).orElseThrow(
                         () -> new EntityNotFoundException("Profile not found with ID: " + accountDetails.getProfileId()));
                 log.info("profile с ID: {} найден для обновления", accountDetails.getProfileId());
-
             }
             mapper.updateEntityFromDto(oldDetails, accountDetails);
             oldDetails.setProfile(profile);
@@ -101,8 +97,6 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
             log.error("Ошибка при обновлении account_details с ID: {},  данные: {}", id, e.getMessage());
             throw e;
         }
-
-
     }
 
     @Override
@@ -116,6 +110,5 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
             log.error("Ошибка при удалении account_details: {}", e.getMessage());
             throw e;
         }
-
     }
 }

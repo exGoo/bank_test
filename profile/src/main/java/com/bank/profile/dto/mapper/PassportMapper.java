@@ -20,7 +20,4 @@ public interface PassportMapper {
     @Mapping(target = "id" , ignore = true)
     @Mapping(target = "registration", ignore = true)
     void updateEntityFromDto(@MappingTarget Passport passport, PassportDto passportDto);
-
-
-
 }

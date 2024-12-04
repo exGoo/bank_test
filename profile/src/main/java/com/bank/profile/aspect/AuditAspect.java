@@ -32,15 +32,11 @@ public class AuditAspect {
         this.mapper = mapper;
         this.objectMapper = objectMapper;
     }
-
-
     @AfterReturning(pointcut = "@annotation(auditSave)", returning = "result")
     public void saveAspect(AuditSave auditSave, Object result) {
         log.info("попытка сохранить audit для {}", auditSave.entityType());
-
        try {
            String entityJson = serializeEntity(result);
-
         Audit audit = Audit.builder()
                 .entityType(auditSave.entityType())
                 .operationType("create")
@@ -54,7 +50,6 @@ public class AuditAspect {
            log.error("ошибка при сохранении audit: {}",e.getMessage());
            throw e;
        }
-
     }
     @AfterReturning(pointcut = "@annotation(auditUpdate)",returning = "result")
     public void updateAspect(AuditUpdate auditUpdate, Object result) {
@@ -77,16 +72,12 @@ public class AuditAspect {
                         .build();
                Audit save = repository.save(update);
                 log.info("audit сохранен с ID:{} ", save.getId());
-
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             log.error("ошибка при сохранении audit: {}",e.getMessage());
             e.printStackTrace();
         }
     }
-
-
-
     private String serializeEntity(Object entity) {
         try {
             return objectMapper.writeValueAsString(entity);
@@ -94,6 +85,4 @@ public class AuditAspect {
             throw new RuntimeException("Error serializing entity", e);
         }
     }
-
-
 }

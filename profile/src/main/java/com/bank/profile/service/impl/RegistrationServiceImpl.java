@@ -37,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService {
             log.info("registration сохранен с ID: {}", result.getId());
             return mapper.toDto(result);
         } catch (Exception e) {
-            log.error("ошибка при сохранении registration: {}",e.getMessage());
+            log.error("ошибка при сохранении registration: {}", e.getMessage());
             throw e;
         }
     }

@@ -83,7 +83,6 @@ public class ProfileServiceImpl implements ProfileService {
             Profile result = repository.save(newprofile);
             log.info("profile сохранен с ID: {}", result.getId());
             return mapper.toDto(result);
-
         } catch (EntityNotFoundException e) {
             log.error("Ошибка при создании profile: {}", e.getMessage());
             throw e;
@@ -160,7 +159,6 @@ public class ProfileServiceImpl implements ProfileService {
                         ? new ArrayList<>()
                         : accountDetailsRepository.findAllById(profile.getAccountDetailsId());
             }
-
             mapper.updateEntityFromDto(oldProfile, profile);
             oldProfile.setPassport(passport);
             oldProfile.setActualRegistration(actualRegistration);
