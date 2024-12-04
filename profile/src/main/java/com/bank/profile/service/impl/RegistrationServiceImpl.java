@@ -19,6 +19,9 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class RegistrationServiceImpl implements RegistrationService {
+
+    private static final String ENTITY_TYPE = "registration";
+
     RegistrationRepository repository;
     RegistrationMapper mapper;
 
@@ -29,71 +32,71 @@ public class RegistrationServiceImpl implements RegistrationService {
     }
 
     @Override
-    @AuditSave(entityType = "registration")
+    @AuditSave(entityType = ENTITY_TYPE)
     public RegistrationDto save(RegistrationDto registration) {
-        log.info("попытка сохранить registration : {}", registration);
+        log.info("попытка сохранить {} : {}", ENTITY_TYPE, registration);
         try {
             Registration result = repository.save(mapper.toEntity(registration));
-            log.info("registration сохранен с ID: {}", result.getId());
+            log.info("{} сохранен с ID: {}", ENTITY_TYPE, result.getId());
             return mapper.toDto(result);
         } catch (Exception e) {
-            log.error("ошибка при сохранении registration: {}", e.getMessage());
+            log.error("ошибка при сохранении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public List<RegistrationDto> findAll() {
-        log.info("Попытка получить список registration");
+        log.info("Попытка получить список {}", ENTITY_TYPE);
         try {
             List<Registration> result = repository.findAll();
-            log.info("Найдено {} записей registration", result.size());
+            log.info("Найдено {} записей {}", result.size(), ENTITY_TYPE);
             return mapper.toListDto(result);
         } catch (Exception e) {
-            log.error("Ошибка при получении списка registration записей: {}", e.getMessage());
+            log.error("Ошибка при получении списка {} записей: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public RegistrationDto findById(Long id) {
-        log.info("Попытка получить registration с ID: {}", id);
+        log.info("Попытка получить {} с ID: {}", ENTITY_TYPE, id);
         try {
             RegistrationDto result = mapper.toDto(repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("registration not found with ID: " + id)));
-            log.info("registration успешно получена: {}", result);
+            log.info("{} успешно получена: {}", ENTITY_TYPE, result);
             return result;
         } catch (EntityNotFoundException e) {
-            log.error("registration с ID: {} не найден:{}", id, e.getMessage());
+            log.error("{} с ID: {} не найден:{}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
-    @AuditUpdate(entityType = "registration")
+    @AuditUpdate(entityType = ENTITY_TYPE)
     public RegistrationDto update(Long id, RegistrationDto registration) {
-        log.info("Попытка обновить registration с ID:{}", id);
+        log.info("Попытка обновить {} с ID:{}", ENTITY_TYPE, id);
         try {
             Registration oldRegistration = repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("registration not found with ID: " + id));
             mapper.updateEntityFromDto(oldRegistration, registration);
             Registration result = repository.save(oldRegistration);
-            log.info("registration с ID: {} успешно обновлен", id);
+            log.info("{} с ID: {} успешно обновлен", ENTITY_TYPE, id);
             return mapper.toDto(result);
         } catch (EntityNotFoundException e) {
-            log.error("ошибка при обновлении registration с ID: {} message: {}", id, e.getMessage());
+            log.error("ошибка при обновлении {} с ID: {} message: {}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        log.info("Попытка удалить registration с ID:{}", id);
+        log.info("Попытка удалить {} с ID:{}", ENTITY_TYPE, id);
         try {
             repository.deleteById(id);
-            log.info("registration с ID: {} удален", id);
+            log.info("{} с ID: {} удален", ENTITY_TYPE, id);
         } catch (EntityNotFoundException e) {
-            log.error("Ошибка при удалении registration: {}", e.getMessage());
+            log.error("Ошибка при удалении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }

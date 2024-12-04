@@ -22,6 +22,8 @@ import java.util.List;
 @Slf4j
 public class AccountDetailsServiceImpl implements AccountDetailsService {
 
+    private static final String ENTITY_TYPE = "account_details";
+
     AccountDetailsRepository repository;
     AccountDetailsMapper mapper;
     ProfileRepository profileRepository;
@@ -33,55 +35,55 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
         this.profileRepository = profileRepository;
     }
 
-    @AuditSave(entityType = "account_details")
+    @AuditSave(entityType = ENTITY_TYPE)
     @Override
     public AccountDetailsDto save(AccountDetailsDto accountDetails) {
-        log.info("попытка сохранить Account_details: {}", accountDetails);
+        log.info("попытка сохранить {}: {}", ENTITY_TYPE, accountDetails);
         try {
             AccountDetails newDetails = mapper.toEntity(accountDetails);
             Profile profile = profileRepository.findById(accountDetails.getProfileId()).orElseThrow(
                     () -> new EntityNotFoundException("Profile not found with ID: " + accountDetails.getProfileId()));
             newDetails.setProfile(profile);
             AccountDetails save = repository.save(newDetails);
-            log.info("Account_details: сохранен с ID: {}", save.getId());
+            log.info("{}: сохранен с ID: {}", ENTITY_TYPE, save.getId());
             return mapper.toDto(save);
         } catch (EntityNotFoundException e) {
-            log.error("ошибка при сохранении Account_details {}", e.getMessage());
+            log.error("ошибка при сохранении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public List<AccountDetailsDto> findAll() {
-        log.info("Попытка получить список account_details");
+        log.info("Попытка получить список {}", ENTITY_TYPE);
         List<AccountDetails> list = repository.findAll();
-        log.info("Список account_details успешно получен. Количество записей: {}", list.size());
+        log.info("Список {} успешно получен. Количество записей: {}", ENTITY_TYPE, list.size());
         return mapper.toDtoList(list);
     }
 
     @Override
     public AccountDetailsDto findById(Long id) {
-        log.info("Попытка получить account_details с ID: {}", id);
+        log.info("Попытка получить {} с ID: {}", ENTITY_TYPE, id);
         try {
             AccountDetailsDto accountDetails = mapper.toDto(repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("Account details not found with ID: " + id)));
-            log.info("account_details успешно получена: {}", accountDetails);
+            log.info("{} успешно получена: {}", ENTITY_TYPE, accountDetails);
             return accountDetails;
 
         } catch (EntityNotFoundException e) {
-            log.error("account_details с ID: {} не найден", id);
+            log.error("{} с ID: {} не найден", ENTITY_TYPE, id);
             throw e;
         }
     }
 
     @Override
-    @AuditUpdate(entityType = "account_details")
+    @AuditUpdate(entityType = ENTITY_TYPE)
     public AccountDetailsDto update(Long id, AccountDetailsDto accountDetails) {
-        log.info("Попытка обновить account_details с ID: {}, новые данные: {}", id, accountDetails);
+        log.info("Попытка обновить {} с ID: {}, новые данные: {}", ENTITY_TYPE, id, accountDetails);
         try {
             AccountDetails oldDetails = repository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException("Account details not found with ID: " + id));
-            log.info("account_details с ID: {} найден для обновления", id);
+            log.info("{} с ID: {} найден для обновления", ENTITY_TYPE, id);
             Profile profile = oldDetails.getProfile();
             if (accountDetails.getProfileId() != null) {
                 profile = profileRepository.findById(accountDetails.getProfileId()).orElseThrow(
@@ -91,23 +93,23 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
             mapper.updateEntityFromDto(oldDetails, accountDetails);
             oldDetails.setProfile(profile);
             AccountDetails details = repository.save(oldDetails);
-            log.info("account_details с ID: {} успешно обновлена", id);
+            log.info("{} с ID: {} успешно обновлена", ENTITY_TYPE, id);
             return mapper.toDto(details);
         } catch (EntityNotFoundException e) {
-            log.error("Ошибка при обновлении account_details с ID: {},  данные: {}", id, e.getMessage());
+            log.error("Ошибка при обновлении {} с ID: {},  данные: {}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        log.info("попытка удаления account_details с ID: {}", id);
+        log.info("попытка удаления {} с ID: {}", ENTITY_TYPE, id);
         try {
             repository.deleteById(id);
-            log.info("account_details с ID: {} удален", id);
+            log.info("{} с ID: {} удален", ENTITY_TYPE, id);
 
         } catch (Exception e) {
-            log.error("Ошибка при удалении account_details: {}", e.getMessage());
+            log.error("Ошибка при удалении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }

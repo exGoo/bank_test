@@ -9,7 +9,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ActualRegistrationMapper {
 
     ActualRegistration toEntity(ActualRegistrationDto dto);
@@ -17,6 +17,7 @@ public interface ActualRegistrationMapper {
     ActualRegistrationDto toDto(ActualRegistration entity);
 
     List<ActualRegistrationDto> toDtoList(List<ActualRegistration> entities);
+
     @Mapping(target = "id", ignore = true)
     void updateEntityFromDto(@MappingTarget ActualRegistration entity, ActualRegistrationDto dto);
 }

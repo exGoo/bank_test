@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
+
 @RestControllerAdvice
 public class ExeptionHandler {
 
@@ -21,6 +22,7 @@ public class ExeptionHandler {
         errorResponse.put("timestamp", System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();

@@ -20,6 +20,8 @@ import java.util.List;
 @Slf4j
 public class ActualRegistrationServiceImpl implements ActualRegistrationService {
 
+    private static final String ENTITY_TYPE = "actual_registration";
+
     ActualRegistrationRepository repository;
     ActualRegistrationMapper mapper;
 
@@ -30,73 +32,73 @@ public class ActualRegistrationServiceImpl implements ActualRegistrationService 
     }
 
     @Override
-    @AuditSave(entityType = "actual_registration")
+    @AuditSave(entityType = ENTITY_TYPE)
     public ActualRegistrationDto save(ActualRegistrationDto registration) {
-        log.info("попытка сохранить actual_registration: {}", registration);
+        log.info("попытка сохранить {}: {}", ENTITY_TYPE, registration);
         try {
             ActualRegistration actualRegistration = mapper.toEntity(registration);
             ActualRegistration save = repository.save(actualRegistration);
-            log.info("actual_registration сохранен с ID: {}", save.getId());
+            log.info("{} сохранен с ID: {}", ENTITY_TYPE, save.getId());
             return mapper.toDto(save);
         } catch (Exception e) {
-            log.error("Ошибка при создании actual_registration: {}", e.getMessage());
+            log.error("Ошибка при создании {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public List<ActualRegistrationDto> findAll() {
-        log.info("Попытка получить список actual_registration");
+        log.info("Попытка получить список {}", ENTITY_TYPE);
         try {
             List<ActualRegistrationDto> result = mapper.toDtoList(repository.findAll());
-            log.info("Найдено {} записей actual_registration", result.size());
+            log.info("Найдено {} записей {}", result.size(), ENTITY_TYPE);
             return result;
         } catch (Exception e) {
-            log.error("Ошибка при получении списка actual_registration записей: {}", e.getMessage());
+            log.error("Ошибка при получении списка {} записей: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public ActualRegistrationDto findById(Long id) {
-        log.info("Попытка получить actual_registration с ID: {}", id);
+        log.info("Попытка получить {} с ID: {}", ENTITY_TYPE, id);
         try {
             ActualRegistrationDto result = mapper.toDto(repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("Actual registration not found with ID: " + id)));
-            log.info("actual_registration успешно получена: {}", result);
+            log.info("{} успешно получена: {}", ENTITY_TYPE, result);
             return result;
         } catch (EntityNotFoundException e) {
-            log.error("actual_registration с ID: {} не найден:{}", id, e.getMessage());
+            log.error("{} с ID: {} не найден:{}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
-    @AuditUpdate(entityType = "actual_registration")
+    @AuditUpdate(entityType = ENTITY_TYPE)
     public ActualRegistrationDto update(Long id, ActualRegistrationDto registration) {
         try {
             ActualRegistration OldActualRegistration = repository.findById(id).orElseThrow(() ->
                     new EntityNotFoundException("Actual registration not found with ID:" + id));
-            log.info("actual_registration с ID: {} найден для обновления", id);
+            log.info("{} с ID: {} найден для обновления", ENTITY_TYPE, id);
             mapper.updateEntityFromDto(OldActualRegistration, registration);
             ActualRegistration result = repository.save(OldActualRegistration);
-            log.info("actual_registration с ID: {} успешно обновлена", id);
+            log.info("{} с ID: {} успешно обновлена", ENTITY_TYPE, id);
             return mapper.toDto(result);
 
         } catch (EntityNotFoundException e) {
-            log.error("actual_registration с ID: {} не найден:{}", id, e.getMessage());
+            log.error("{} с ID: {} не найден:{}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        log.info("попытка удаления actual_registration с ID: {}", id);
+        log.info("попытка удаления {} с ID: {}", ENTITY_TYPE, id);
         try {
             repository.deleteById(id);
-            log.info("actual_registration с ID: {} удален", id);
+            log.info("{} с ID: {} удален", ENTITY_TYPE, id);
         } catch (Exception e) {
-            log.error("Ошибка при удалении actual_registration: {}", e.getMessage());
+            log.error("Ошибка при удалении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }

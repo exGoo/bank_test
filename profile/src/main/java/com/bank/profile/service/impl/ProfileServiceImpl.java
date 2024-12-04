@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Сервис для управления профилями пользователей.
  * Предоставляет операции для создания, обновления, получения и удаления профилей.
@@ -30,18 +31,21 @@ import java.util.List;
 @Slf4j
 public class ProfileServiceImpl implements ProfileService {
 
+    private static final String ENTITY_TYPE = "profile";
+
     ProfileRepository repository;
     ProfileMapper mapper;
     PassportRepository passportRepository;
     AccountDetailsRepository accountDetailsRepository;
     ActualRegistrationRepository actualRegistrationRepository;
+
     /**
      * Конструктор для внедрения зависимостей.
      *
-     * @param repository                 репозиторий для управления профилями
-     * @param mapper                     маппер для преобразования между DTO и сущностями
-     * @param passportRepository         репозиторий для управления паспортами
-     * @param accountDetailsRepository   репозиторий для управления учетными записями
+     * @param repository                   репозиторий для управления профилями
+     * @param mapper                       маппер для преобразования между DTO и сущностями
+     * @param passportRepository           репозиторий для управления паспортами
+     * @param accountDetailsRepository     репозиторий для управления учетными записями
      * @param actualRegistrationRepository репозиторий для управления регистрационными данными
      */
     @Autowired
@@ -56,6 +60,7 @@ public class ProfileServiceImpl implements ProfileService {
         this.actualRegistrationRepository = actualRegistrationRepository;
 
     }
+
     /**
      * Сохраняет новый профиль.
      *
@@ -65,9 +70,9 @@ public class ProfileServiceImpl implements ProfileService {
      * @throws EntityNotFoundException если связанный паспорт или регистрационные данные не найдены
      */
     @Override
-    @AuditSave(entityType = "profile")
+    @AuditSave(entityType = ENTITY_TYPE)
     public ProfileDto save(ProfileDto profile) {
-        log.info("попытка сохранить profile : {}", profile);
+        log.info("попытка сохранить {} : {}", ENTITY_TYPE, profile);
         try {
             Profile newprofile = mapper.toEntity(profile);
             Passport passport = passportRepository.findById(profile.getPassportId()).orElseThrow(
@@ -81,10 +86,10 @@ public class ProfileServiceImpl implements ProfileService {
             newprofile.setPassport(passport);
             newprofile.setActualRegistration(actualRegistration);
             Profile result = repository.save(newprofile);
-            log.info("profile сохранен с ID: {}", result.getId());
+            log.info("{} сохранен с ID: {}", ENTITY_TYPE, result.getId());
             return mapper.toDto(result);
         } catch (EntityNotFoundException e) {
-            log.error("Ошибка при создании profile: {}", e.getMessage());
+            log.error("Ошибка при создании {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
@@ -96,16 +101,17 @@ public class ProfileServiceImpl implements ProfileService {
      */
     @Override
     public List<ProfileDto> findAll() {
-        log.info("Попытка получить список profile");
+        log.info("Попытка получить список {}", ENTITY_TYPE);
         try {
             List<Profile> result = repository.findAll();
-            log.info("Найдено {} записей profile", result.size());
+            log.info("Найдено {} записей {}", result.size(), ENTITY_TYPE);
             return mapper.toListDto(result);
         } catch (Exception e) {
-            log.error("Ошибка при получении списка profile записей: {}", e.getMessage());
+            log.error("Ошибка при получении списка {} записей: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
+
     /**
      * Ищет профиль по его идентификатору.
      *
@@ -115,17 +121,18 @@ public class ProfileServiceImpl implements ProfileService {
      */
     @Override
     public ProfileDto findById(Long id) {
-        log.info("Попытка получить profile с ID: {}", id);
+        log.info("Попытка получить {} с ID: {}", ENTITY_TYPE, id);
         try {
             ProfileDto result = mapper.toDto(repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("profile not found with ID: " + id)));
-            log.info("profile успешно получена: {}", result);
+            log.info("{} успешно получена: {}", ENTITY_TYPE, result);
             return result;
         } catch (EntityNotFoundException e) {
-            log.error("profile с ID: {} не найден:{}", id, e.getMessage());
+            log.error("{} с ID: {} не найден:{}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
+
     /**
      * Обновляет существующий профиль.
      *
@@ -136,9 +143,9 @@ public class ProfileServiceImpl implements ProfileService {
      * @throws EntityNotFoundException если профиль, паспорт или регистрационные данные не найдены
      */
     @Override
-    @AuditUpdate(entityType = "profile")
+    @AuditUpdate(entityType = ENTITY_TYPE)
     public ProfileDto update(Long id, ProfileDto profile) {
-        log.info("Попытка обновить profile с ID: {}, новые данные: {}", id, profile);
+        log.info("Попытка обновить {} с ID: {}, новые данные: {}", ENTITY_TYPE, id, profile);
         try {
             Profile oldProfile = repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("profile not found with ID: " + id));
@@ -164,14 +171,15 @@ public class ProfileServiceImpl implements ProfileService {
             oldProfile.setActualRegistration(actualRegistration);
             oldProfile.setAccountDetails(accountDetails);
             Profile result = repository.save(oldProfile);
-            log.info("profile с ID: {} успешно обновлен", id);
+            log.info("{} с ID: {} успешно обновлен", ENTITY_TYPE, id);
             return mapper.toDto(result);
 
         } catch (EntityNotFoundException e) {
-            log.error("ошибка при обновлении profile с ID: {} message: {}", id, e.getMessage());
+            log.error("ошибка при обновлении {} с ID: {} message: {}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
+
     /**
      * Удаляет профиль по его идентификатору.
      *
@@ -182,9 +190,9 @@ public class ProfileServiceImpl implements ProfileService {
     public void deleteById(Long id) {
         try {
             repository.deleteById(id);
-            log.info("profile с ID: {} удален", id);
+            log.info("{} с ID: {} удален", ENTITY_TYPE, id);
         } catch (EntityNotFoundException e) {
-            log.error("Ошибка при удалении profile: {}", e.getMessage());
+            log.error("Ошибка при удалении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }

@@ -35,17 +35,20 @@ public class PassportRestController {
         passportService.save(passport);
         return ResponseEntity.ok("Passport saved");
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<PassportDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(passportService.findById(id));
     }
+
     @GetMapping("")
     public ResponseEntity<List<PassportDto>> getAll() {
         return ResponseEntity.ok(passportService.findAll());
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid PassportDto passport) {
-        passportService.update(id,passport);
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody @Valid PassportDto passport) {
+        passportService.update(id, passport);
         return ResponseEntity.ok("Passport updated");
     }
 

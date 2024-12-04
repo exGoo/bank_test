@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+
 @RestController
 @RequestMapping("Audits")
 public class AuditRestController {
@@ -31,17 +32,20 @@ public class AuditRestController {
         auditService.save(audit);
         return ResponseEntity.ok("Audit saved");
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<AuditDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(auditService.findById(id));
     }
+
     @GetMapping("")
     public ResponseEntity<List<AuditDto>> getAll() {
         return ResponseEntity.ok(auditService.findAll());
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid AuditDto audit) {
-        auditService.update(id,audit);
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody @Valid AuditDto audit) {
+        auditService.update(id, audit);
         return ResponseEntity.ok("Audit updated");
     }
 

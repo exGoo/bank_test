@@ -10,31 +10,31 @@ import javax.validation.constraints.Size;
 @Builder
 public class RegistrationDto implements Identifiable {
     private Long id;
-    @Size(max = 166, message ="до 166")
+    @Size(max = 166, message = "до 166")
     private String country;
 
-    @Size(max = 160, message ="до 160")
+    @Size(max = 160, message = "до 160")
     private String region;
 
-    @Size(max = 160, message ="до 160")
+    @Size(max = 160, message = "до 160")
     private String city;
 
-    @Size(max = 160, message ="до 160")
+    @Size(max = 160, message = "до 160")
     private String district;
 
-    @Size(max = 230, message ="до 230")
+    @Size(max = 230, message = "до 230")
     private String locality;
 
-    @Size(max = 230, message ="до 230")
+    @Size(max = 230, message = "до 230")
     private String street;
 
-    @Size(max = 20, message ="до 20")
+    @Size(max = 20, message = "до 20")
     private String houseNumber;
 
-    @Size(max = 20, message ="до 20")
+    @Size(max = 20, message = "до 20")
     private String houseBlock;
 
-    @Size(max = 40, message ="до 40")
+    @Size(max = 40, message = "до 40")
     private String flatNumber;
     private Long index;
 }

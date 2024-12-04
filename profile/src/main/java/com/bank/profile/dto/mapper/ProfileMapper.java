@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(componentModel = "spring",nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ProfileMapper {
 
     Profile toEntity(ProfileDto dto);
@@ -29,6 +29,7 @@ public interface ProfileMapper {
     }
 
     List<ProfileDto> toListDto(List<Profile> entities);
+
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "passport", ignore = true)
     @Mapping(target = "actualRegistration", ignore = true)

@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
+
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface PassportMapper {
 
@@ -17,7 +18,8 @@ public interface PassportMapper {
     PassportDto toDto(Passport passport);
 
     List<PassportDto> toListDto(List<Passport> passports);
-    @Mapping(target = "id" , ignore = true)
+
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "registration", ignore = true)
     void updateEntityFromDto(@MappingTarget Passport passport, PassportDto passportDto);
 }

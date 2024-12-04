@@ -21,6 +21,11 @@ import java.time.OffsetDateTime;
 @Slf4j
 public class AuditAspect {
 
+    private static final String OPERATION_CREATE = "create";
+    private static final String OPERATION_UPDATE = "update";
+    private static final String USER = "user";
+
+
     AuditRepository repository;
     AuditMapper mapper;
     ObjectMapper objectMapper;
@@ -39,8 +44,8 @@ public class AuditAspect {
             String entityJson = serializeEntity(result);
             Audit audit = Audit.builder()
                     .entityType(auditSave.entityType())
-                    .operationType("create")
-                    .createdBy("user")
+                    .operationType(OPERATION_CREATE)
+                    .createdBy(USER)
                     .createdAt(OffsetDateTime.now())
                     .entityJson(entityJson)
                     .build();
@@ -61,11 +66,11 @@ public class AuditAspect {
                 Audit create = repository.findCreateAuditRecordByEntityAndId(auditUpdate.entityType(), id).get();
                 Audit update = Audit.builder()
                         .entityType(auditUpdate.entityType())
-                        .operationType("update")
+                        .operationType(OPERATION_UPDATE)
                         .createdBy(create.getCreatedBy())
                         .createdAt(create.getCreatedAt())
                         .modifiedAt(OffsetDateTime.now())
-                        .modifiedBy("user")
+                        .modifiedBy(USER)
                         .newEntityJson(serializeEntity(result))
                         .entityJson(create.getEntityJson())
                         .build();
@@ -74,7 +79,7 @@ public class AuditAspect {
             }
         } catch (Exception e) {
             log.error("ошибка при сохранении audit: {}", e.getMessage());
-            e.printStackTrace();
+            throw e;
         }
     }
 

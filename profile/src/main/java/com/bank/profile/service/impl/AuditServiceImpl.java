@@ -18,6 +18,8 @@ import java.util.List;
 @Slf4j
 public class AuditServiceImpl implements AuditService {
 
+    private static final String ENTITY_TYPE = "audit";
+
     AuditRepository repository;
     AuditMapper mapper;
 
@@ -29,66 +31,66 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     public void save(AuditDto audit) {
-        log.info("попытка сохранить audit : {}", audit);
+        log.info("попытка сохранить {} : {}", ENTITY_TYPE, audit);
         try {
             repository.save(mapper.toEntity(audit));
-            log.info("audit сохранен с ID: {}", audit.getId());
+            log.info("{} сохранен с ID: {}", ENTITY_TYPE, audit.getId());
         } catch (Exception e) {
-            log.error("ошибка при сохранении audit: {}", e.getMessage());
+            log.error("ошибка при сохранении {}: {}", ENTITY_TYPE, e.getMessage());
             log.error(e.getMessage());
         }
     }
 
     @Override
     public List<AuditDto> findAll() {
-        log.info("Попытка получить список audit");
+        log.info("Попытка получить список {}", ENTITY_TYPE);
         try {
             List<AuditDto> result = mapper.toListDto(repository.findAll());
-            log.info("Найдено {} записей audit", result.size());
+            log.info("Найдено {} записей {}", result.size(), ENTITY_TYPE);
             return result;
         } catch (EntityNotFoundException e) {
-            log.error("Ошибка при получении списка audit записей: {}", e.getMessage());
+            log.error("Ошибка при получении списка {} записей: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public AuditDto findById(Long id) {
-        log.info("Попытка получить audit с ID:{}", id);
+        log.info("Попытка получить {} с ID:{}", ENTITY_TYPE, id);
         try {
             AuditDto result = mapper.toDto(repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("Audit not found with ID: " + id)));
-            log.info("Audit успешно получена: {}", result);
+            log.info("{} успешно получена: {}", ENTITY_TYPE, result);
             return result;
         } catch (EntityNotFoundException e) {
-            log.error("Audit с ID: {} не найден:{}", id, e.getMessage());
+            log.error("{} с ID: {} не найден:{}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public void update(Long id, AuditDto audit) {
-        log.info("Попытка обновить audit с ID:{}", id);
+        log.info("Попытка обновить {} с ID:{}", ENTITY_TYPE, id);
         try {
             Audit oldAudit = repository.findById(id).orElseThrow(
                     () -> new EntityNotFoundException("audit not found with ID: " + id));
             mapper.updateEntityFromDto(oldAudit, audit);
             repository.save(oldAudit);
-            log.info("audit с ID: {} успешно обновлен", id);
+            log.info("{} с ID: {} успешно обновлен", ENTITY_TYPE, id);
         } catch (EntityNotFoundException e) {
-            log.error("ошибка при обновлении audit с ID: {} message: {}", id, e.getMessage());
+            log.error("ошибка при обновлении {} с ID: {} message: {}", ENTITY_TYPE, id, e.getMessage());
             throw e;
         }
     }
 
     @Override
     public void deleteById(Long id) {
-        log.info("Попытка удалить audit с ID:{}", id);
+        log.info("Попытка удалить {} с ID:{}", ENTITY_TYPE, id);
         try {
             repository.deleteById(id);
-            log.info("audit с ID: {} удален", id);
+            log.info("{} с ID: {} удален", ENTITY_TYPE, id);
         } catch (EntityNotFoundException e) {
-            log.error("Ошибка при удалении audit: {}", e.getMessage());
+            log.error("Ошибка при удалении {}: {}", ENTITY_TYPE, e.getMessage());
             throw e;
         }
     }

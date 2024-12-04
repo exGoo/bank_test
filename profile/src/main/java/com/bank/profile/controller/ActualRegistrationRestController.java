@@ -21,28 +21,34 @@ import java.util.List;
 public class ActualRegistrationRestController {
 
     ActualRegistrationService actualRegistrationService;
+
     @Autowired
     public ActualRegistrationRestController(ActualRegistrationService actualRegistrationService) {
         this.actualRegistrationService = actualRegistrationService;
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ActualRegistrationDto> getById(@PathVariable Long id) {
-       return ResponseEntity.ok(actualRegistrationService.findById(id));
+        return ResponseEntity.ok(actualRegistrationService.findById(id));
     }
+
     @GetMapping
     public ResponseEntity<List<ActualRegistrationDto>> getAll() {
         return ResponseEntity.ok(actualRegistrationService.findAll());
     }
+
     @PostMapping("")
     public ResponseEntity<String> save(@RequestBody @Valid ActualRegistrationDto actualRegistration) {
         actualRegistrationService.save(actualRegistration);
         return ResponseEntity.ok("Actual Registration Saved");
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
         actualRegistrationService.deleteById(id);
         return ResponseEntity.ok("Actual Registration Deleted");
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable Long id, @RequestBody @Valid ActualRegistrationDto actualRegistration) {
         actualRegistrationService.update(id, actualRegistration);

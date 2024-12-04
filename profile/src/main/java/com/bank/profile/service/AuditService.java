@@ -6,9 +6,13 @@ import java.util.List;
 
 public interface AuditService {
     void save(AuditDto audit);
+
     List<AuditDto> findAll();
+
     AuditDto findById(Long id);
-    void update(Long id,AuditDto audit);
+
+    void update(Long id, AuditDto audit);
+
     void deleteById(Long id);
 
 }

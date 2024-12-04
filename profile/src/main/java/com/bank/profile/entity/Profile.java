@@ -21,28 +21,28 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "profile" , schema = "profile")
+@Table(name = "profile", schema = "profile")
 public class Profile {
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   @Column(name = "phone_number", nullable = false)
-   private Long phoneNumber;
+    @Column(name = "phone_number", nullable = false)
+    private Long phoneNumber;
 
-   private String email;
-   private String nameOnCard;
-   private Long inn;
-   private Long snils;
+    private String email;
+    private String nameOnCard;
+    private Long inn;
+    private Long snils;
 
-   @OneToOne()
-   @JoinColumn(name = "passport_id", nullable = false)
-   private Passport passport;
+    @OneToOne()
+    @JoinColumn(name = "passport_id", nullable = false)
+    private Passport passport;
 
-   @OneToOne()
-   @JoinColumn(name = "actual_registration_id")
-   private ActualRegistration actualRegistration;
+    @OneToOne()
+    @JoinColumn(name = "actual_registration_id")
+    private ActualRegistration actualRegistration;
 
-   @OneToMany(mappedBy = "profile")
-   private List<AccountDetails> accountDetails;
+    @OneToMany(mappedBy = "profile")
+    private List<AccountDetails> accountDetails;
 }

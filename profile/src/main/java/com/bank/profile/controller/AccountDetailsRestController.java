@@ -40,11 +40,11 @@ public class AccountDetailsRestController {
 
     @GetMapping("")
     public ResponseEntity<List<AccountDetailsDto>> getAll() {
-      return ResponseEntity.ok(accountDetailsService.findAll());
+        return ResponseEntity.ok(accountDetailsService.findAll());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid AccountDetailsDto accountDetails) {
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody @Valid AccountDetailsDto accountDetails) {
         accountDetailsService.update(id, accountDetails);
         return ResponseEntity.ok("Account details updated");
     }

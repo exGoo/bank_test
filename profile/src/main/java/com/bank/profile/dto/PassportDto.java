@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+
 @Data
 @Builder
 public class PassportDto implements Identifiable {
@@ -14,11 +15,11 @@ public class PassportDto implements Identifiable {
     private Long number;
     @Size(max = 255)
     private String lastName;
-    @Size(max = 255,message = "до 255 ")
+    @Size(max = 255, message = "до 255 ")
     private String firstName;
     @Size(max = 255, message = "до 255 ")
     private String middleName;
-    @Size(max = 3,message = "от 0 до 3")
+    @Size(max = 3, message = "от 0 до 3")
     private String gender;
     private LocalDate birthDate;
     @Size(max = 480, message = "до 480 ")

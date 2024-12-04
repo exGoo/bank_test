@@ -6,16 +6,17 @@ import lombok.Data;
 
 import javax.validation.constraints.Size;
 import java.util.List;
+
 @Data
 @Builder
 public class ProfileDto implements Identifiable {
 
     private Long id;
     private Long phoneNumber;
-    @Size(max = 264,message ="до 264")
+    @Size(max = 264, message = "до 264")
     private String email;
 
-    @Size(max = 370, message ="до 370")
+    @Size(max = 370, message = "до 370")
     private String nameOnCard;
 
     private Long inn;

@@ -17,6 +17,7 @@ public interface AuditMapper {
     AuditDto toDto(Audit audit);
 
     List<AuditDto> toListDto(List<Audit> audits);
+
     @Mapping(target = "id", ignore = true)
     void updateEntityFromDto(@MappingTarget Audit audit, AuditDto dto);
 }

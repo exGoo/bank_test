@@ -32,17 +32,20 @@ public class ProfileRestController {
         profileService.save(profile);
         return ResponseEntity.ok("Profile saved");
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProfileDto> getById(@PathVariable Long id) {
         return ResponseEntity.ok(profileService.findById(id));
     }
+
     @GetMapping("")
     public ResponseEntity<List<ProfileDto>> getAll() {
         return ResponseEntity.ok(profileService.findAll());
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id,@RequestBody @Valid ProfileDto profile) {
-        profileService.update(id,profile);
+    public ResponseEntity<String> update(@PathVariable Long id, @RequestBody @Valid ProfileDto profile) {
+        profileService.update(id, profile);
         return ResponseEntity.ok("Profile updated");
     }
 

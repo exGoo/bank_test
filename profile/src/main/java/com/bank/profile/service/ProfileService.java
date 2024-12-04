@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface ProfileService {
     ProfileDto save(ProfileDto profile);
+
     List<ProfileDto> findAll();
+
     ProfileDto findById(Long id);
-    ProfileDto update(Long id,ProfileDto profile);
+
+    ProfileDto update(Long id, ProfileDto profile);
+
     void deleteById(Long id);
 }

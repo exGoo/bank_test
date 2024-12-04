@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface RegistrationService {
     RegistrationDto save(RegistrationDto registration);
+
     List<RegistrationDto> findAll();
+
     RegistrationDto findById(Long id);
-    RegistrationDto update(Long id,RegistrationDto registration);
+
+    RegistrationDto update(Long id, RegistrationDto registration);
+
     void deleteById(Long id);
 }
