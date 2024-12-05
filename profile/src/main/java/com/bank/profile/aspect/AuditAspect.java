@@ -25,7 +25,6 @@ public class AuditAspect {
     private static final String OPERATION_UPDATE = "update";
     private static final String USER = "user";
 
-
     AuditRepository repository;
     AuditMapper mapper;
     ObjectMapper objectMapper;

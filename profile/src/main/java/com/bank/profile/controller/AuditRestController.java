@@ -54,5 +54,4 @@ public class AuditRestController {
         auditService.deleteById(id);
         return ResponseEntity.ok("Audit deleted");
     }
-
 }

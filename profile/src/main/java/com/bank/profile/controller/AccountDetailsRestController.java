@@ -53,7 +53,5 @@ public class AccountDetailsRestController {
     public ResponseEntity<String> deleteById(@PathVariable Long id) {
         accountDetailsService.deleteById(id);
         return ResponseEntity.ok("Account details deleted");
-
     }
-
 }

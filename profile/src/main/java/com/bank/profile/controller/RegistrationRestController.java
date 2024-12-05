@@ -54,5 +54,4 @@ public class RegistrationRestController {
         registrationService.deleteById(id);
         return ResponseEntity.ok("Deleted Registration");
     }
-
 }
