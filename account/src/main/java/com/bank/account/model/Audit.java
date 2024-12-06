@@ -26,7 +26,6 @@ public class Audit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String entityType;
 
     private String operationType;

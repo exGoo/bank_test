@@ -36,7 +36,6 @@ public class AccountController {
     private final AccountService accountService;
     private final AccountMapper accountMapper;
 
-
     public AccountController(AccountService accountService, AccountMapper accountMapper) {
         this.accountService = accountService;
         this.accountMapper = accountMapper;
@@ -70,7 +69,6 @@ public class AccountController {
         }
     }
 
-
     @GetMapping
     @Operation(
             summary = "Список аккаунтов",
@@ -82,7 +80,6 @@ public class AccountController {
         log.info("AccountController: Получен запрос на просмотр списка аккаунтов в базе.");
         return new ResponseEntity<>(accountMapper.accountsToDto(accountService.findAll()), HttpStatus.OK);
     }
-
 
     @DeleteMapping("/{id}")
     @Operation(

@@ -9,17 +9,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 
 @Component
 @Aspect
 @Slf4j
 public class AuditAspect {
-
     private static final String WATCHDOG = "Account ";
     private static final String CREATE = "create";
     private static final String UPDATE = "update";
-    private static final String DELETE = "delete";
     private static final LocalDateTime TIMESTAMP = LocalDateTime.now();
 
     private final AuditService auditService;
@@ -72,27 +71,6 @@ public class AuditAspect {
         }
         auditService.save(newAudit);
         log.info("Audit: Произведено обновление аккаунта с ID {} - {}", account.getId(), newAudit);
-    }
-
-    @After("execution(void com.bank.account.service.impl.AccountServiceImpl.delete(com.bank.account.model.Account)) && args(account)")
-    public void afterDelete(Account account) {
-        Audit audit = auditService.findLastAuditByUser(account.getId().toString());
-
-        Audit newAudit = new Audit();
-        newAudit.setEntityType(WATCHDOG);
-        newAudit.setOperationType(DELETE);
-        newAudit.setCreatedAt(audit.getCreatedAt());
-        newAudit.setCreatedBy(audit.getCreatedBy());
-        newAudit.setModifiedAt(TIMESTAMP);
-        newAudit.setModifiedBy(audit.getModifiedBy());
-        newAudit.setNewEntityJson(null);
-        if (audit.getNewEntityJson() == null) {
-            newAudit.setEntityJson(audit.getEntityJson());
-        } else {
-            newAudit.setEntityJson(audit.getNewEntityJson());
-        }
-        auditService.save(newAudit);
-        log.info("Audit: Произведено удаление аккаунта с ID {}", account.getId());
     }
 
     public String objectConverterToJson(Account account) {
