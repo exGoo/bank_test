@@ -31,11 +31,11 @@ class ProfileRestControllerTest {
     void save() {
         when(service.save(any(ProfileDto.class))).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller
+        ResponseEntity<ProfileDto> result = controller
                 .save(DTO);
 
         assertNotNull(result);
-        assertEquals("Profile saved", result.getBody());
+        assertEquals(DTO, result.getBody());
     }
 
     @Test

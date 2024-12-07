@@ -24,7 +24,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceImplTest {
     Registration ENTITY = Registration.builder()
@@ -107,7 +106,6 @@ class RegistrationServiceImplTest {
     void givenInvalidId_whenUpdateCalled_thenThrowException() {
         //сущность отсутствует в БД
         when(repository.findById(any(Long.class))).thenReturn(Optional.empty());
-
 
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class

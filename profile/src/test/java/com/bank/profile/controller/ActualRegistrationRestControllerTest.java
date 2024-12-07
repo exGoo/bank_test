@@ -49,18 +49,18 @@ class ActualRegistrationRestControllerTest {
     void save() {
         when(service.save(any(ActualRegistrationDto.class))).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller
+        ResponseEntity<ActualRegistrationDto> result = controller
                 .save(DTO);
 
         assertNotNull(result);
-        assertEquals("Actual Registration Saved", result.getBody());
+        assertEquals(DTO, result.getBody());
     }
 
     @Test
     void deleteByID() {
         doNothing().when(service).deleteById(1L);
 
-        ResponseEntity<String> result = controller.deleteByID(1L);
+        ResponseEntity<String> result = controller.deleteById(1L);
 
         assertEquals("Actual Registration Deleted",result.getBody());
     }

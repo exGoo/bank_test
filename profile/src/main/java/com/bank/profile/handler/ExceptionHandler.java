@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
@@ -14,11 +13,11 @@ import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
-public class ExeptionHandler {
+public class ExceptionHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException ex) {
-        log.error("ошибка: {}",ex.getMessage());
+        log.error("ошибка: {}", ex.getMessage());
         Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("status", HttpStatus.NOT_FOUND.value());
         errorResponse.put("message", ex.getMessage());
@@ -26,7 +25,7 @@ public class ExeptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {

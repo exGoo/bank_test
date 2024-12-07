@@ -31,11 +31,11 @@ class PassportRestControllerTest {
     void save() {
         when(service.save(any(PassportDto.class))).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller
+        ResponseEntity<PassportDto> result = controller
                 .save(DTO);
 
         assertNotNull(result);
-        assertEquals("Passport saved", result.getBody());
+        assertEquals(DTO, result.getBody());
     }
 
     @Test

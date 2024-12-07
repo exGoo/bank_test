@@ -29,7 +29,9 @@ public class PassportServiceImpl implements PassportService {
     RegistrationRepository registrationRepository;
 
     @Autowired
-    public PassportServiceImpl(PassportRepository repository, PassportMapper mapper, RegistrationRepository registrationRepository) {
+    public PassportServiceImpl(PassportRepository repository,
+                               PassportMapper mapper,
+                               RegistrationRepository registrationRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.registrationRepository = registrationRepository;

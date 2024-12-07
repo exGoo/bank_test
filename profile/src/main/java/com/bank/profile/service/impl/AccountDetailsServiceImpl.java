@@ -29,7 +29,9 @@ public class AccountDetailsServiceImpl implements AccountDetailsService {
     ProfileRepository profileRepository;
 
     @Autowired
-    public AccountDetailsServiceImpl(AccountDetailsRepository repository, AccountDetailsMapper mapper, ProfileRepository profileRepository) {
+    public AccountDetailsServiceImpl(AccountDetailsRepository repository,
+                                     AccountDetailsMapper mapper,
+                                     ProfileRepository profileRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.profileRepository = profileRepository;

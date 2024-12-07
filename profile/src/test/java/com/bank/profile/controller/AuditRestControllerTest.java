@@ -31,13 +31,13 @@ class AuditRestControllerTest {
 
     @Test
     void save() {
-        doNothing().when(service).save(any(AuditDto.class));
+        when(service.save(any(AuditDto.class))).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller
+        ResponseEntity<AuditDto> result = controller
                 .save(DTO);
 
         assertNotNull(result);
-        assertEquals("Audit saved", result.getBody());
+        assertEquals(DTO, result.getBody());
     }
 
     @Test

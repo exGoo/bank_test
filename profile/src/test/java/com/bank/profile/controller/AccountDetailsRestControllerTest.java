@@ -18,7 +18,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(MockitoExtension.class)
 class AccountDetailsRestControllerTest {
     AccountDetailsDto DTO = AccountDetailsDto.builder().id(1L).build();
@@ -32,11 +31,11 @@ class AccountDetailsRestControllerTest {
     void save() {
         when(service.save(any(AccountDetailsDto.class))).thenReturn(DTO);
 
-        ResponseEntity<String> result = controller
+        ResponseEntity<AccountDetailsDto> result = controller
                 .save(DTO);
 
         assertNotNull(result);
-        assertEquals("Account details saved", result.getBody());
+        assertEquals(DTO, result.getBody());
     }
 
     @Test

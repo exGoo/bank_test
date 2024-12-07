@@ -21,14 +21,15 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
 @ExtendWith(MockitoExtension.class)
 class AuditServiceImplTest {
-AuditDto DTO = AuditDto.builder()
-        .id(1L)
-        .build();
-Audit ENTITY = Audit.builder()
-        .id(1L)
-        .build();
+    AuditDto DTO = AuditDto.builder()
+            .id(1L)
+            .build();
+    Audit ENTITY = Audit.builder()
+            .id(1L)
+            .build();
 
     @Mock
     static AuditRepository repository;
@@ -41,10 +42,10 @@ Audit ENTITY = Audit.builder()
     void save() {
         when(mapper.toEntity(DTO)).thenReturn(ENTITY);
         when(repository.save(ENTITY)).thenReturn(ENTITY);
+        when(mapper.toDto(ENTITY)).thenReturn(DTO);
 
-
-        service.save(DTO);
-
+        AuditDto result = service.save(DTO);
+        assertEquals(DTO, result);
         verify(repository, times(1)).save(ENTITY);
         verify(mapper, times(1)).toEntity(DTO);
     }
@@ -54,19 +55,15 @@ Audit ENTITY = Audit.builder()
         when(mapper.toEntity(DTO))
                 .thenThrow(new RuntimeException("Ошибка при создании audit:"));
 
-
         RuntimeException result = assertThrows(
                 RuntimeException.class
                 , () -> service.save(DTO)
         );
-
         assertEquals("Ошибка при создании audit:", result.getMessage());
     }
 
-
     @Test
     void findAll() {
-
         when(repository.findAll()).thenReturn(List.of(ENTITY));
         when(mapper.toListDto(List.of(ENTITY))).thenReturn(List.of(DTO));
 
@@ -79,7 +76,6 @@ Audit ENTITY = Audit.builder()
     void givenInvalidData_whenFindAll_thenThrowException() {
         when(repository.findAll())
                 .thenThrow(new EntityNotFoundException("Ошибка при получении списка audit записей"));
-
 
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
@@ -108,8 +104,7 @@ Audit ENTITY = Audit.builder()
                 , () -> service.findById(1L)
         );
 
-
-        assertEquals("Audit not found with ID: 1" , result.getMessage());
+        assertEquals("Audit not found with ID: 1", result.getMessage());
     }
 
     @Test
@@ -117,7 +112,6 @@ Audit ENTITY = Audit.builder()
         when(repository.findById(1L)).thenReturn(Optional.of(ENTITY));
         doNothing().when(mapper).updateEntityFromDto(ENTITY, DTO);
         when(repository.save(ENTITY)).thenReturn(ENTITY);
-
 
         service.update(1L, DTO);
 
@@ -134,7 +128,6 @@ Audit ENTITY = Audit.builder()
                 EntityNotFoundException.class
                 , () -> service.update(1L, DTO)
         );
-
 
         assertEquals("audit not found with ID: 1", result.getMessage());
     }
