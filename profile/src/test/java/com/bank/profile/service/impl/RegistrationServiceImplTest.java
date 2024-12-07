@@ -27,10 +27,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceImplTest {
     Registration ENTITY = Registration.builder()
-            .id(1l)
+            .id(1L)
             .build();
     RegistrationDto DTO = RegistrationDto.builder()
-            .id(1l)
+            .id(1L)
             .build();
 
     @Mock
