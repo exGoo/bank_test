@@ -22,7 +22,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(MockitoExtension.class)
 class ActualRegistrationServiceImplTest {
 static ActualRegistration ENTITY = ActualRegistration.builder()
@@ -53,7 +52,6 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
     void givenInvalidData_whenSave_thenThrowException() {
         when(mapper.toEntity(DTO)).thenThrow(new RuntimeException("Ошибка при создании actual_registration:"));
 
-
         RuntimeException result = assertThrows(
                 RuntimeException.class
                 , () -> service.save(DTO)
@@ -61,9 +59,6 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
 
         assertEquals("Ошибка при создании actual_registration:", result.getMessage());
     }
-
-
-
 
     @Test
     void findAll() {
@@ -74,11 +69,11 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
 
         assertEquals(List.of(DTO), result);
     }
+
     @Test
     void givenInvalidData_whenFindAll_thenThrowException() {
         when(repository.findAll())
                 .thenThrow(new RuntimeException("Ошибка при получении списка actual_registration записей"));
-
 
         RuntimeException result = assertThrows(
                 RuntimeException.class
@@ -106,7 +101,6 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
                 , () -> service.findById(1L)
         );
 
-
         assertEquals("Actual registration not found with ID: 1", result.getMessage());
     }
 
@@ -130,7 +124,6 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
                 EntityNotFoundException.class
                 , () -> service.update(1L, DTO)
         );
-
 
         assertEquals("Actual registration not found with ID:1", result.getMessage());
     }

@@ -33,7 +33,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceImplTest {
 
@@ -115,7 +114,6 @@ class ProfileServiceImplTest {
     void givenInvalidId_whenFindById_thenThrowException() {
         when(repository.findById(2L)).thenReturn(Optional.empty());
 
-
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
                 , () -> service.findById(2l)
@@ -151,9 +149,7 @@ class ProfileServiceImplTest {
     void givenInvalidData_whenUpdateCalled_thenThrowEntityNotFoundException(
             Long id, ProfileDto dto, String exceptionMessage, Runnable mockSetup) {
 
-
         mockSetup.run();
-
 
         EntityNotFoundException exception = assertThrows(
                 EntityNotFoundException.class,

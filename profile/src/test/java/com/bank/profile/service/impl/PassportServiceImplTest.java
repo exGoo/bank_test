@@ -39,7 +39,6 @@ class PassportServiceImplTest {
             .registrationId(1L)
             .build();
 
-
     @Mock
     PassportRepository repository;
     @Mock
@@ -73,7 +72,6 @@ class PassportServiceImplTest {
         assertEquals("Registration not found with ID: 1", result.getMessage());
     }
 
-
     @Test
     void findAll() {
         when(repository.findAll()).thenReturn(List.of(ENTITY));
@@ -88,7 +86,6 @@ class PassportServiceImplTest {
     void givenInvalidData_whenFindAll_thenThrowException() {
         when(repository.findAll())
                 .thenThrow(new EntityNotFoundException("Ошибка при получении списка passport записей"));
-
 
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
@@ -117,7 +114,6 @@ class PassportServiceImplTest {
                 , () -> service.findById(1L)
         );
 
-
         assertEquals("passport not found with ID: 1", result.getMessage());
     }
 
@@ -130,7 +126,6 @@ class PassportServiceImplTest {
         doNothing().when(mapper).updateEntityFromDto(ENTITY, DTO);
         when(repository.save(ENTITY)).thenReturn(ENTITY);
         when(mapper.toDto(ENTITY)).thenReturn(DTO);
-
 
         PassportDto result = service.update(1L, DTO);
 
@@ -145,7 +140,6 @@ class PassportServiceImplTest {
                 EntityNotFoundException.class
                 , () -> service.update(1L, DTO)
         );
-
 
         assertEquals("Passport not found with ID: 1", result.getMessage());
     }

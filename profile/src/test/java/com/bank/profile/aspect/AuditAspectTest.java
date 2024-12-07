@@ -3,6 +3,7 @@ package com.bank.profile.aspect;
 import com.bank.profile.annotation.AuditSave;
 import com.bank.profile.annotation.AuditUpdate;
 import com.bank.profile.dto.mapper.AuditMapper;
+import com.bank.profile.dto.util.Identifiable;
 import com.bank.profile.entity.Audit;
 import com.bank.profile.repository.AuditRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -126,11 +127,10 @@ class AuditAspectTest {
         verify(objectMapper, times(1)).writeValueAsString(result);
     }
 
-
     @Data
     @AllArgsConstructor
-    private class TestEntity {
-        private long id;
+    private class TestEntity implements Identifiable {
+        private Long id;
         private String name;
     }
 }
