@@ -64,7 +64,6 @@ class AccountDetailsRestControllerTest {
         ResponseEntity<String> result = controller.update(1L, DTO);
 
         assertEquals(HttpStatus.OK, result.getStatusCode());
-
     }
 
     @Test

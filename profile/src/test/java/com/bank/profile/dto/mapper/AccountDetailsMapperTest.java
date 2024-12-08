@@ -27,7 +27,6 @@ class AccountDetailsMapperTest {
         AccountDetails result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
-
     }
 
     @Test
@@ -52,6 +51,5 @@ class AccountDetailsMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
-
     }
 }

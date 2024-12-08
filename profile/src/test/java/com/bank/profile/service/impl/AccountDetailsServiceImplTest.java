@@ -155,5 +155,4 @@ class AccountDetailsServiceImplTest {
         );
         assertEquals(null, result.getMessage());
     }
-
 }
