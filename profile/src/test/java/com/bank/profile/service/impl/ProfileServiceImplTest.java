@@ -18,12 +18,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -37,10 +35,10 @@ import static org.mockito.Mockito.when;
 class ProfileServiceImplTest {
 
     static ProfileDto DTO = ProfileDto.builder()
-            .id(1l)
-            .passportId(1l)
-            .actualRegistrationId(1l)
-            .accountDetailsId(List.of(1l, 2l))
+            .id(1L)
+            .passportId(1L)
+            .actualRegistrationId(1L)
+            .accountDetailsId(List.of(1L, 2L))
             .build();
     static Passport PASSPORT = Passport.builder()
             .id(1l)
@@ -49,8 +47,8 @@ class ProfileServiceImplTest {
             .id(1l)
             .build();
     static List<AccountDetails> ACCOUNT_DETAILS = List.of(
-            AccountDetails.builder().id(1l).build(),
-            AccountDetails.builder().id(2l).build());
+            AccountDetails.builder().id(1L).build(),
+            AccountDetails.builder().id(2L).build());
     static Profile ENTITY = Profile.builder()
             .id(1l)
             .passport(PASSPORT)
@@ -172,7 +170,7 @@ class ProfileServiceImplTest {
         when(repository.save(ENTITY)).thenReturn(ENTITY);
         when(mapper.toDto(ENTITY)).thenReturn(DTO);
 
-        ProfileDto result = service.update(1l, DTO);
+        ProfileDto result = service.update(1L, DTO);
 
         assertEquals(DTO.getId(), result.getId());
         assertEquals(DTO.getPassportId(), result.getPassportId());
