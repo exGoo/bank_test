@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PassportRestControllerTest {
+
     PassportDto DTO = PassportDto.builder().id(1L).build();
 
     @Mock
@@ -44,7 +45,7 @@ class PassportRestControllerTest {
 
         ResponseEntity<PassportDto> result = controller.getById(1L);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -52,7 +53,7 @@ class PassportRestControllerTest {
 
         when(service.findAll()).thenReturn(List.of(DTO));
         ResponseEntity<List<PassportDto>> result = controller.getAll();
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -61,7 +62,7 @@ class PassportRestControllerTest {
 
         ResponseEntity<String> result = controller.update(1L, DTO);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -70,6 +71,6 @@ class PassportRestControllerTest {
 
         ResponseEntity<String> result = controller.deleteById(1L);
 
-        assertEquals("Passport deleted",result.getBody());
+        assertEquals("Passport deleted", result.getBody());
     }
 }

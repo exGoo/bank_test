@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 public class PassportDto implements Identifiable {
+
     private Long id;
     private Integer series;
     private Long number;

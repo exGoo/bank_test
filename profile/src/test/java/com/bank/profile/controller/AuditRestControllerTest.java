@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuditRestControllerTest {
+
     AuditDto DTO = AuditDto.builder()
             .id(1L)
             .build();
@@ -46,7 +47,7 @@ class AuditRestControllerTest {
 
         ResponseEntity<AuditDto> result = controller.getById(1L);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -55,7 +56,7 @@ class AuditRestControllerTest {
 
         ResponseEntity<List<AuditDto>> result = controller.getAll();
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -64,7 +65,7 @@ class AuditRestControllerTest {
 
         ResponseEntity<String> result = controller.update(1L, DTO);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
         assertEquals("Audit updated", result.getBody());
     }
 
@@ -74,6 +75,6 @@ class AuditRestControllerTest {
 
         ResponseEntity<String> result = controller.deleteById(1L);
 
-        assertEquals("Audit deleted",result.getBody());
+        assertEquals("Audit deleted", result.getBody());
     }
 }

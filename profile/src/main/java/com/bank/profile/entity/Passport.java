@@ -23,6 +23,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "passport", schema = "profile")
 public class Passport {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

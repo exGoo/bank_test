@@ -20,6 +20,7 @@ import java.time.OffsetDateTime;
 @Entity
 @Table(name = "audit", schema = "profile")
 public class Audit {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

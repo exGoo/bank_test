@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 @Data
 @Builder
 public class AuditDto implements Identifiable {
+
     private Long id;
     @Size(max = 40, message = "до 40")
     private String entityType;

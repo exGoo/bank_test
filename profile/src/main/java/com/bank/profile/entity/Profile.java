@@ -23,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name = "profile", schema = "profile")
 public class Profile {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ActualRegistrationMapperTest {
+
     ActualRegistrationDto DTO = ActualRegistrationDto.builder()
             .id(1L)
             .country("country")
@@ -41,10 +42,10 @@ class ActualRegistrationMapperTest {
 
     @Test
     void toEntity() {
-       ActualRegistration result = mapper.toEntity(DTO);
+        ActualRegistration result = mapper.toEntity(DTO);
 
-       assertNotNull(result);
-       assertEquals(ENTITY, result);
+        assertNotNull(result);
+        assertEquals(ENTITY, result);
 
     }
 

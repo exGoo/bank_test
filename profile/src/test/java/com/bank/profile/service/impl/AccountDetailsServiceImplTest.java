@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AccountDetailsServiceImplTest {
+
     static AccountDetailsDto DTO = AccountDetailsDto.builder()
             .id(1L)
             .profileId(1L)
@@ -51,6 +52,26 @@ class AccountDetailsServiceImplTest {
 
     @InjectMocks
     static AccountDetailsServiceImpl accountDetailsServiceImpl;
+
+    static Stream<Arguments> provideInvalidDataForUpdate() {
+        return Stream.of(
+                Arguments.of(
+                        1L,
+                        AccountDetailsDto.builder().build(),
+                        "Account details not found with ID: 1",
+                        (Runnable) () -> when(repository.findById(1L)).thenReturn(Optional.empty())
+                ),
+                Arguments.of(1L,
+                        AccountDetailsDto.builder().id(1L).profileId(1L).build(),
+                        "Profile not found with ID: 1",
+                        (Runnable) () -> {
+                            when(repository.findById(1L)).thenReturn(Optional.of(ENTITY));
+                            when(profileRepository.findById(1L)).thenReturn(Optional.empty());
+                        }
+                )
+        );
+
+    }
 
     @Test
     void save() {
@@ -112,26 +133,6 @@ class AccountDetailsServiceImplTest {
         );
 
         assertEquals(expectedMessage, exception.getMessage());
-
-    }
-
-    static Stream<Arguments> provideInvalidDataForUpdate() {
-        return Stream.of(
-                Arguments.of(
-                        1L,
-                        AccountDetailsDto.builder().build(),
-                        "Account details not found with ID: 1",
-                        (Runnable) () -> when(repository.findById(1L)).thenReturn(Optional.empty())
-                ),
-                Arguments.of(1L,
-                        AccountDetailsDto.builder().id(1L).profileId(1L).build(),
-                        "Profile not found with ID: 1",
-                        (Runnable) () -> {
-                            when(repository.findById(1L)).thenReturn(Optional.of(ENTITY));
-                            when(profileRepository.findById(1L)).thenReturn(Optional.empty());
-                        }
-                )
-        );
 
     }
 

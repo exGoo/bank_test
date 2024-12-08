@@ -5,6 +5,7 @@ import com.bank.profile.dto.PassportDto;
 import java.util.List;
 
 public interface PassportService {
+
     PassportDto save(PassportDto passport);
 
     List<PassportDto> findAll();

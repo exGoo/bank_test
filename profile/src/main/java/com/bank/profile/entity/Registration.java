@@ -19,6 +19,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "registration", schema = "profile")
 public class Registration {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

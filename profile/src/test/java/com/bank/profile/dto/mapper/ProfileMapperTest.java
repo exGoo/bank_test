@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ProfileMapperTest {
+
     Profile ENTITY = Profile.builder()
             .id(1L)
             .phoneNumber(9653648L)

@@ -29,7 +29,7 @@ public class AuditRestController {
 
     @PostMapping("")
     public ResponseEntity<AuditDto> save(@RequestBody @Valid AuditDto audit) {
-       AuditDto result = auditService.save(audit);
+        AuditDto result = auditService.save(audit);
         return ResponseEntity.ok(result);
     }
 

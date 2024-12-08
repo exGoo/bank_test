@@ -1,7 +1,7 @@
 <?xml version="1.1" encoding="UTF-8"?>
 <databaseChangeLog
-        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="
         http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
@@ -121,7 +121,8 @@
             <column name="passport_id" remarks="ссылка на паспорт" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="actual_registration_id" remarks="ссылка на фактическую регистрацию(может и не быть)" type="BIGINT"/>
+            <column name="actual_registration_id" remarks="ссылка на фактическую регистрацию(может и не быть)"
+                    type="BIGINT"/>
         </createTable>
     </changeSet>
     <changeSet author="Рустам" id="1672956301685-6">
@@ -153,15 +154,27 @@
         <addUniqueConstraint columnNames="snils" constraintName="profile_snils_key" tableName="profile"/>
     </changeSet>
     <changeSet author="Рустам" id="1672956301685-9">
-        <addForeignKeyConstraint baseColumnNames="actual_registration_id" baseTableName="profile" constraintName="actual_registration__profile_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="actual_registration"/>
+        <addForeignKeyConstraint baseColumnNames="actual_registration_id" baseTableName="profile"
+                                 constraintName="actual_registration__profile_fk" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="actual_registration"/>
     </changeSet>
     <changeSet author="Рустам" id="1672956301685-10">
-        <addForeignKeyConstraint baseColumnNames="passport_id" baseTableName="profile" constraintName="passport__profile_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="passport"/>
+        <addForeignKeyConstraint baseColumnNames="passport_id" baseTableName="profile"
+                                 constraintName="passport__profile_fk" deferrable="false" initiallyDeferred="false"
+                                 onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id"
+                                 referencedTableName="passport"/>
     </changeSet>
     <changeSet author="Рустам" id="1672956301685-11">
-        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="account_details_id" constraintName="profile__account_details_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="profile"/>
+        <addForeignKeyConstraint baseColumnNames="profile_id" baseTableName="account_details_id"
+                                 constraintName="profile__account_details_fk" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="profile"/>
     </changeSet>
     <changeSet author="Рустам" id="1672956301685-12">
-        <addForeignKeyConstraint baseColumnNames="registration_id" baseTableName="passport" constraintName="registration__passport_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="registration"/>
+        <addForeignKeyConstraint baseColumnNames="registration_id" baseTableName="passport"
+                                 constraintName="registration__passport_fk" deferrable="false" initiallyDeferred="false"
+                                 onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id"
+                                 referencedTableName="registration"/>
     </changeSet>
 </databaseChangeLog>

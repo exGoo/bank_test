@@ -5,6 +5,7 @@ import com.bank.profile.dto.ProfileDto;
 import java.util.List;
 
 public interface ProfileService {
+
     ProfileDto save(ProfileDto profile);
 
     List<ProfileDto> findAll();

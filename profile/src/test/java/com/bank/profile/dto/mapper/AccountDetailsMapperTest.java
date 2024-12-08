@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccountDetailsMapperTest {
+
     AccountDetails ENTITY = AccountDetails.builder()
             .id(1L)
             .accountId(1L)
@@ -23,9 +24,9 @@ class AccountDetailsMapperTest {
 
     @Test
     void toEntity() {
-         AccountDetails result = mapper.toEntity(DTO);
-         assertNotNull(result);
-         assertEquals(ENTITY, result);
+        AccountDetails result = mapper.toEntity(DTO);
+        assertNotNull(result);
+        assertEquals(ENTITY, result);
 
     }
 

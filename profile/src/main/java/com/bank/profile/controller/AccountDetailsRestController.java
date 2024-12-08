@@ -29,7 +29,7 @@ public class AccountDetailsRestController {
 
     @PostMapping("")
     public ResponseEntity<AccountDetailsDto> save(@RequestBody @Valid AccountDetailsDto accountDetails) {
-       AccountDetailsDto result = accountDetailsService.save(accountDetails);
+        AccountDetailsDto result = accountDetailsService.save(accountDetails);
         return ResponseEntity.ok(result);
     }
 

@@ -21,6 +21,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "account_details_id", schema = "profile")
 public class AccountDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

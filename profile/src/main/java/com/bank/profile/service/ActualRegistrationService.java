@@ -5,6 +5,7 @@ import com.bank.profile.dto.ActualRegistrationDto;
 import java.util.List;
 
 public interface ActualRegistrationService {
+
     ActualRegistrationDto save(ActualRegistrationDto registration);
 
     List<ActualRegistrationDto> findAll();

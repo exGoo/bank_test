@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 @Data
 @Builder
 public class ActualRegistrationDto implements Identifiable {
+
     private Long id;
     @Size(max = 40, message = "до 40")
     private String country;

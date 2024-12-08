@@ -26,6 +26,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegistrationServiceImplTest {
+
     Registration ENTITY = Registration.builder()
             .id(1L)
             .build();
@@ -132,6 +133,6 @@ class RegistrationServiceImplTest {
         EntityNotFoundException result = assertThrows(EntityNotFoundException.class
                 , () -> service.deleteById(999L)
         );
-        assertEquals(null,result.getMessage());
+        assertEquals(null, result.getMessage());
     }
 }

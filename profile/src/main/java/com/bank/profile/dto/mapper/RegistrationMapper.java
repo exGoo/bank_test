@@ -11,6 +11,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface RegistrationMapper {
+
     Registration toEntity(RegistrationDto registrationDto);
 
     RegistrationDto toDto(Registration registration);

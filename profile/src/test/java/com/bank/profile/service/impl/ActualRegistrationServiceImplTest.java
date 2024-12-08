@@ -24,18 +24,19 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ActualRegistrationServiceImplTest {
-static ActualRegistration ENTITY = ActualRegistration.builder()
-        .id(1L)
-        .build();
-static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
-        .id(1L)
-        .build();
+
+    static ActualRegistration ENTITY = ActualRegistration.builder()
+            .id(1L)
+            .build();
+    static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
+            .id(1L)
+            .build();
     @Mock
-   static ActualRegistrationRepository repository;
-   @Mock
+    static ActualRegistrationRepository repository;
+    @Mock
     static ActualRegistrationMapper mapper;
-   @InjectMocks
-   static ActualRegistrationServiceImpl service;
+    @InjectMocks
+    static ActualRegistrationServiceImpl service;
 
     @Test
     void save() {
@@ -80,7 +81,7 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
                 , () -> service.findAll()
         );
 
-        assertEquals("Ошибка при получении списка actual_registration записей",result.getMessage());
+        assertEquals("Ошибка при получении списка actual_registration записей", result.getMessage());
     }
 
     @Test
@@ -92,6 +93,7 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
 
         assertEquals(DTO, result);
     }
+
     @Test
     void givenInvalidDate_whenFindById_thenThrowException() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
@@ -134,6 +136,7 @@ static ActualRegistrationDto DTO = ActualRegistrationDto.builder()
         service.deleteById(1L);
         verify(repository, times(1)).deleteById(1L);
     }
+
     @Test
     void givenInvalidData_whenDeleteById_thenThrowException() {
         doThrow(new EntityNotFoundException("Ошибка при удалении actual_registration"))

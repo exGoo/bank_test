@@ -24,12 +24,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuditServiceImplTest {
-    AuditDto DTO = AuditDto.builder()
-            .id(1L)
-            .build();
-    Audit ENTITY = Audit.builder()
-            .id(1L)
-            .build();
 
     @Mock
     static AuditRepository repository;
@@ -37,6 +31,12 @@ class AuditServiceImplTest {
     static AuditMapper mapper;
     @InjectMocks
     static AuditServiceImpl service;
+    AuditDto DTO = AuditDto.builder()
+            .id(1L)
+            .build();
+    Audit ENTITY = Audit.builder()
+            .id(1L)
+            .build();
 
     @Test
     void save() {
