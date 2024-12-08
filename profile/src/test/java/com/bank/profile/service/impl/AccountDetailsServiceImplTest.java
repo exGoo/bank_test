@@ -14,12 +14,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
@@ -70,7 +68,6 @@ class AccountDetailsServiceImplTest {
                         }
                 )
         );
-
     }
 
     @Test
@@ -103,7 +100,6 @@ class AccountDetailsServiceImplTest {
         AccountDetailsDto result = accountDetailsServiceImpl.findById(1L);
 
         assertEquals(DTO.getId(), result.getId());
-
     }
 
     @Test
@@ -133,7 +129,6 @@ class AccountDetailsServiceImplTest {
         );
 
         assertEquals(expectedMessage, exception.getMessage());
-
     }
 
     @Test
@@ -143,7 +138,6 @@ class AccountDetailsServiceImplTest {
         accountDetailsServiceImpl.deleteById(1L);
 
         verify(repository, times(1)).deleteById(1L);
-
     }
 
     @Test
