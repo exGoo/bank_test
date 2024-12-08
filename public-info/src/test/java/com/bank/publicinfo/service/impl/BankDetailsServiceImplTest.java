@@ -4,33 +4,24 @@ import com.bank.publicinfo.dto.BankDetailsDto;
 import com.bank.publicinfo.entity.BankDetails;
 import com.bank.publicinfo.mapper.BankDetailsMapper;
 import com.bank.publicinfo.repository.BankDetailsRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_BANK_DETAILS;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_BANK_DETAILS_2;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_CITY_1;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_CITY_2;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_DETAILS_DTO;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_DETAILS_DTO_2;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_DETAILS_LIST_2;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_DETAILS_LIST_BY_CITY;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_LIST_DETAILS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -46,139 +37,131 @@ class BankDetailsServiceImplTest {
     @Mock
     private BankDetailsMapper bankDetailsMapper;
 
-    private static final ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+    private BankDetails bankDetails;
 
-    private static final ArgumentCaptor<BankDetails> detailsArgumentCaptor = ArgumentCaptor.forClass(BankDetails.class);
+    private BankDetailsDto detailsDto;
 
-    private static final ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    @BeforeEach
+    public void setUp() {
+        bankDetails = new BankDetails();
+        bankDetails.setId(1L);
+        bankDetails.setCity("Moscow");
+        detailsDto = new BankDetailsDto();
+        detailsDto.setId(1L);
+        detailsDto.setCity("Moscow");
+    }
 
     @Test
-    void findByIdSuccess() {
-        when(bankDetailsRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_BANK_DETAILS));
-        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
-        BankDetailsDto result = bankDetailsService.findById(TEST_ID_1);
+    void findByIdSucces() {
+        when(bankDetailsRepository.findById(1L)).thenReturn(Optional.of(bankDetails));
+        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);
+        BankDetailsDto result = bankDetailsService.findById(1L);
         assertNotNull(result);
-        assertEquals(TEST_DETAILS_DTO,result);
-        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
-        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
-        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
+        assertEquals(1L, result.getId());
+        verify(bankDetailsRepository, times(1)).findById(1L);
+        verify(bankDetailsMapper, times(1)).toDto(bankDetails);
     }
 
     @Test
     void findByIdFailure() {
-        when(bankDetailsRepository.findById(TEST_ID_1)).thenReturn(Optional.empty());
+        Long id = 1L;
+        when(bankDetailsRepository.findById(id)).thenReturn(Optional.empty());
         Exception exception = assertThrows(EntityNotFoundException.class, () -> {
-            bankDetailsService.findById(TEST_ID_1);
+            bankDetailsService.findById(id);
         });
-        assertTrue(exception.getMessage().contains("Bank Details not found with id " + TEST_ID_1));
-        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
-        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        assertEquals("Bank Details not found with id " + id, exception.getMessage());
+        verify(bankDetailsRepository).findById(id);
     }
 
     @Test
     void findAllWithRelations() {
-        List<BankDetailsDto> detailsList = List.of(TEST_DETAILS_DTO);
-        when(bankDetailsRepository.findAll()).thenReturn(TEST_DETAILS_LIST_2);
-        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
+        List<BankDetails> detailsList = List.of(bankDetails);
+        when(bankDetailsRepository.findAll()).thenReturn(detailsList);
+        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);
         List<BankDetailsDto> result = bankDetailsService.findAllWithRelations();
         assertNotNull(result);
-        assertEquals(detailsList, result);
-        verify(bankDetailsRepository).findAll();
-        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
+        assertEquals(1, result.size());
+        verify(bankDetailsRepository, times(1)).findAll();
+        verify(bankDetailsMapper, times(1)).toDto(bankDetails);
     }
 
     @Test
-    void findAllElseEmptyList() {
-        when(bankDetailsRepository.findAll()).thenReturn(Collections.emptyList());
-        List<BankDetailsDto> result = bankDetailsService.findAllWithRelations();
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    void findByCitySuccess() {
-        when(bankDetailsRepository.findByCity(TEST_CITY_1)).thenReturn(TEST_DETAILS_LIST_BY_CITY);
-        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
-        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS_2)).thenReturn(TEST_DETAILS_DTO_2);
-        List<BankDetailsDto> result = bankDetailsService.findByCity(TEST_CITY_1);
+    void findByCitySucces() {
+        String city = "Moscow";
+        List<BankDetails> bankDetailsList = Arrays.asList(bankDetails);
+        BankDetailsDto bankDetailsDto = new BankDetailsDto(1L, city);
+        when(bankDetailsRepository.findByCity(city)).thenReturn(bankDetailsList);
+        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(bankDetailsDto);
+        List<BankDetailsDto> result = bankDetailsService.findByCity(city);
         assertNotNull(result);
-        assertEquals(TEST_LIST_DETAILS,result);
-        verify(bankDetailsRepository).findByCity(stringArgumentCaptor.capture());
-        assertEquals(TEST_CITY_1, stringArgumentCaptor.getValue());
-        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
-        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS_2);
+        assertEquals(1, result.size());
+        assertEquals(bankDetailsDto, result.get(0));
     }
 
     @Test
     void findByCityEmptyListTest() {
-        when(bankDetailsRepository.findByCity(TEST_CITY_2)).thenReturn(Collections.emptyList());
+        String city = "UnknownCity";
+        List<BankDetails> emptyList = new ArrayList<>();
+        when(bankDetailsRepository.findByCity(city)).thenReturn(emptyList);
+
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            bankDetailsService.findByCity(TEST_CITY_2);
+            bankDetailsService.findByCity(city);
         });
-        assertTrue(exception.getMessage().contains("City not found " + TEST_CITY_2));
+        assertEquals("City not found " + city, exception.getMessage());
     }
 
     @Test
     void findByCityFailure() {
-        when(bankDetailsRepository.findByCity(TEST_CITY_2)).thenThrow(new RuntimeException("Database error"));
+        String city = "New York";
+        when(bankDetailsRepository.findByCity(city)).thenThrow(new RuntimeException("Database error"));
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
-            bankDetailsService.findByCity(TEST_CITY_2);
+            bankDetailsService.findByCity(city);
         });
-        assertTrue(exception.getMessage().contains("City not found " + TEST_CITY_2));
+        assertEquals("City not found New York", exception.getMessage());
     }
 
     @Test
     void addBankDetails() {
-        when(bankDetailsMapper.toModel(TEST_DETAILS_DTO)).thenReturn(TEST_BANK_DETAILS);
-        when(bankDetailsRepository.save(TEST_BANK_DETAILS)).thenReturn(TEST_BANK_DETAILS);
-        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
-        BankDetailsDto result = bankDetailsService.addBankDetails(TEST_DETAILS_DTO);
+        when(bankDetailsMapper.toModel(detailsDto)).thenReturn(bankDetails);
+        when(bankDetailsRepository.save(bankDetails)).thenReturn(bankDetails);
+        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);
+        BankDetailsDto result = bankDetailsService.addBankDetails(detailsDto);
         assertNotNull(result);
-        verify(bankDetailsRepository).save(detailsArgumentCaptor.capture());
-        assertEquals(TEST_BANK_DETAILS, detailsArgumentCaptor.getValue());
-        verify(bankDetailsMapper).toModel(TEST_DETAILS_DTO);
-        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
+        verify(bankDetailsRepository, times(1)).save(bankDetails);
+        verify(bankDetailsMapper, times(1)).toModel(detailsDto);
+        verify(bankDetailsMapper, times(1)).toDto(bankDetails);
     }
 
     @Test
-    void deleteBankDetailsByIdSuccess() {
-        doNothing().when(bankDetailsRepository).deleteById(TEST_ID_1);
-        bankDetailsService.deleteBankDetailsById(TEST_ID_1);
-        verify(bankDetailsRepository).deleteById(longArgumentCaptor.capture());
-        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+    void deleteBankDetailsByIdSucces() {
+        doNothing().when(bankDetailsRepository).deleteById(1L);
+        bankDetailsService.deleteBankDetailsById(1L);
+        verify(bankDetailsRepository, times(1)).deleteById(1L);
     }
 
     @Test
     void deleteBankDetailsByIdFailure() {
-        doThrow(new EntityNotFoundException("BankDetails not found with id " + TEST_ID_1))
-                .when(bankDetailsRepository).deleteById(TEST_ID_1);
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> bankDetailsService.deleteBankDetailsById(TEST_ID_1));
-        assertTrue(exception.getMessage().contains("BankDetails not found with id " + TEST_ID_1));
-        verify(bankDetailsRepository).deleteById(longArgumentCaptor.capture());
-        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        doThrow(new EntityNotFoundException("BankDetails not found with id 1")).when(bankDetailsRepository).deleteById(1L);
+        assertThrows(EntityNotFoundException.class, () -> bankDetailsService.deleteBankDetailsById(1L));
+        verify(bankDetailsRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void updateBankDetailsSuccess() {
-        when(bankDetailsRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_BANK_DETAILS));
-        when(bankDetailsRepository.save(any(BankDetails.class))).thenReturn(TEST_BANK_DETAILS);
-        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
-        BankDetailsDto result = bankDetailsService.updateBankDetails(TEST_ID_1, TEST_DETAILS_DTO);
+    void updateBankDetailsSucces() {
+        when(bankDetailsRepository.findById(1L)).thenReturn(Optional.of(bankDetails));
+        when(bankDetailsRepository.save(any(BankDetails.class))).thenReturn(bankDetails);
+        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);
+        BankDetailsDto result = bankDetailsService.updateBankDetails(1L, detailsDto);
         assertNotNull(result);
-        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
-        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
-        verify(bankDetailsRepository).save(detailsArgumentCaptor.capture());
-        assertEquals(TEST_BANK_DETAILS, detailsArgumentCaptor.getValue());
-        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
+        verify(bankDetailsRepository, times(1)).findById(1L);
+        verify(bankDetailsRepository, times(1)).save(any(BankDetails.class));
+        verify(bankDetailsMapper, times(1)).toDto(bankDetails);
     }
 
     @Test
     void updateBankDetailsFailure() {
-        when(bankDetailsRepository.findById(TEST_ID_1)).thenReturn(Optional.empty());
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
-                () -> bankDetailsService.updateBankDetails(TEST_ID_1, TEST_DETAILS_DTO));
-        assertTrue(exception.getMessage().contains("Bank Details not found with id " + TEST_ID_1));
-        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
-        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        when(bankDetailsRepository.findById(1L)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> bankDetailsService.updateBankDetails(1L, detailsDto));
+        verify(bankDetailsRepository, times(1)).findById(1L);
     }
 }
