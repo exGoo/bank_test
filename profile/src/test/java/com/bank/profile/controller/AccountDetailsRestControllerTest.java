@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AccountDetailsRestControllerTest {
+
     AccountDetailsDto DTO = AccountDetailsDto.builder().id(1L).build();
 
     @Mock
@@ -44,7 +45,7 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<AccountDetailsDto> result = controller.getById(1L);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -53,7 +54,7 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<List<AccountDetailsDto>> result = controller.getAll();
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -62,7 +63,7 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<String> result = controller.update(1L, DTO);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
 
     }
 
@@ -72,6 +73,6 @@ class AccountDetailsRestControllerTest {
 
         ResponseEntity<String> result = controller.deleteById(1L);
 
-        assertEquals("Account details deleted",result.getBody());
+        assertEquals("Account details deleted", result.getBody());
     }
 }

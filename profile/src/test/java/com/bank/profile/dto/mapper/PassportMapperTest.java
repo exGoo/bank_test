@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class PassportMapperTest {
+
     Passport ENTITY = Passport.builder()
             .id(1L)
             .series(1234)

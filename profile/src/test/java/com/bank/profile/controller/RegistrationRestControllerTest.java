@@ -20,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegistrationRestControllerTest {
+
     RegistrationDto DTO = RegistrationDto.builder()
             .id(1L)
             .build();
@@ -46,14 +47,14 @@ class RegistrationRestControllerTest {
 
         ResponseEntity<RegistrationDto> result = controller.getById(1L);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
     void getAll() {
         when(service.findAll()).thenReturn(List.of(DTO));
         ResponseEntity<List<RegistrationDto>> result = controller.getAll();
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -62,7 +63,7 @@ class RegistrationRestControllerTest {
 
         ResponseEntity<String> result = controller.update(1L, DTO);
 
-        assertEquals(HttpStatus.OK,result.getStatusCode());
+        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 
     @Test
@@ -71,6 +72,6 @@ class RegistrationRestControllerTest {
 
         ResponseEntity<String> result = controller.deleteById(1L);
 
-        assertEquals("Deleted Registration",result.getBody());
+        assertEquals("Deleted Registration", result.getBody());
     }
 }

@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AuditMapperTest {
+
     Audit ENTITY = Audit.builder()
             .id(1L)
             .entityType("type")
@@ -35,6 +36,7 @@ class AuditMapperTest {
             .build();
 
     AuditMapper mapper = new AuditMapperImpl();
+
     @Test
     void toEntity() {
         Audit result = mapper.toEntity(DTO);

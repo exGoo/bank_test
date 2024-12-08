@@ -70,6 +70,43 @@ class ProfileServiceImplTest {
     @InjectMocks
     static ProfileServiceImpl service;
 
+    static Stream<Arguments> provideInvalidDataForUpdate() {
+        return Stream.of(
+                Arguments.of(
+                        1L,
+                        ProfileDto.builder().build(),
+                        "profile not found with ID: 1",
+                        (Runnable) () -> when(repository.findById(any(Long.class))).thenReturn(Optional.empty())
+                ),
+                Arguments.of(
+                        1L,
+                        ProfileDto.builder()
+                                .id(1L)
+                                .passportId(2L)
+                                .build(),
+                        "Passport not found with ID: 2",
+                        (Runnable) () -> {
+                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
+                            when(passportRepository.findById(2L)).thenReturn(Optional.empty());
+                        }
+                ),
+                Arguments.of(
+                        1L,
+                        ProfileDto.builder()
+                                .id(1L)
+                                .passportId(2L)
+                                .actualRegistrationId(3L)
+                                .build(),
+                        "ActualRegistration not found with ID: 3",
+                        (Runnable) () -> {
+                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
+                            when(passportRepository.findById(any(Long.class))).thenReturn(Optional.of(PASSPORT));
+                            when(actualRegistrationRepository.findById(3L)).thenReturn(Optional.empty());
+                        }
+                )
+        );
+    }
+
     @Test
     void save() {
         when(mapper.toEntity(DTO)).thenReturn(ENTITY);
@@ -157,43 +194,6 @@ class ProfileServiceImplTest {
         );
 
         assertEquals(exceptionMessage, exception.getMessage());
-    }
-
-    static Stream<Arguments> provideInvalidDataForUpdate() {
-        return Stream.of(
-                Arguments.of(
-                        1L,
-                        ProfileDto.builder().build(),
-                        "profile not found with ID: 1",
-                        (Runnable) () -> when(repository.findById(any(Long.class))).thenReturn(Optional.empty())
-                ),
-                Arguments.of(
-                        1L,
-                        ProfileDto.builder()
-                                .id(1L)
-                                .passportId(2L)
-                                .build(),
-                        "Passport not found with ID: 2",
-                        (Runnable) () -> {
-                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
-                            when(passportRepository.findById(2L)).thenReturn(Optional.empty());
-                        }
-                ),
-                Arguments.of(
-                        1L,
-                        ProfileDto.builder()
-                                .id(1L)
-                                .passportId(2L)
-                                .actualRegistrationId(3L)
-                                .build(),
-                        "ActualRegistration not found with ID: 3",
-                        (Runnable) () -> {
-                            when(repository.findById(any(Long.class))).thenReturn(Optional.of(ENTITY));
-                            when(passportRepository.findById(any(Long.class))).thenReturn(Optional.of(PASSPORT));
-                            when(actualRegistrationRepository.findById(3L)).thenReturn(Optional.empty());
-                        }
-                )
-        );
     }
 
     @Test

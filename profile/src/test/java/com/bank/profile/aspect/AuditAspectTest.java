@@ -30,6 +30,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuditAspectTest {
+
     @Mock
     AuditRepository repository;
     @Mock
@@ -74,7 +75,8 @@ class AuditAspectTest {
         AuditSave annotation = mock(AuditSave.class);
         when(annotation.entityType()).thenReturn("testEntity");
 
-        when(objectMapper.writeValueAsString(result)).thenThrow(new JsonProcessingException("Serialization error") {});
+        when(objectMapper.writeValueAsString(result)).thenThrow(new JsonProcessingException("Serialization error") {
+        });
 
         // Вызов метода и проверка исключения
         RuntimeException exception = assertThrows(RuntimeException.class, () ->
@@ -130,6 +132,7 @@ class AuditAspectTest {
     @Data
     @AllArgsConstructor
     private class TestEntity implements Identifiable {
+
         private Long id;
         private String name;
     }

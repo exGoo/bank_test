@@ -62,8 +62,8 @@ class PassportServiceImplTest {
 
     @Test
     void givenInvalidData_whenSave_thenThrowException() {
-      when(mapper.toEntity(DTO)).thenReturn(ENTITY);
-      when(registrationRepository.findById(1L)).thenReturn(Optional.empty());
+        when(mapper.toEntity(DTO)).thenReturn(ENTITY);
+        when(registrationRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException result = assertThrows(
                 EntityNotFoundException.class
                 , () -> service.save(DTO)
@@ -129,7 +129,7 @@ class PassportServiceImplTest {
 
         PassportDto result = service.update(1L, DTO);
 
-       assertEquals(DTO, result);
+        assertEquals(DTO, result);
     }
 
     @Test
