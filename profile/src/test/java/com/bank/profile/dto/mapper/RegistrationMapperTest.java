@@ -45,7 +45,6 @@ class RegistrationMapperTest {
         Registration result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
-
     }
 
     @Test
@@ -70,6 +69,5 @@ class RegistrationMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
-
     }
 }

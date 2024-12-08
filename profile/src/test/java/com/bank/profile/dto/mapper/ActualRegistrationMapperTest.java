@@ -46,7 +46,6 @@ class ActualRegistrationMapperTest {
 
         assertNotNull(result);
         assertEquals(ENTITY, result);
-
     }
 
     @Test

@@ -27,6 +27,7 @@ class PassportMapperTest {
             .divisionCode(1)
             .expirationDate(LocalDate.MIN)
             .build();
+
     PassportDto DTO = PassportDto.builder()
             .id(1L)
             .series(1234)
@@ -50,7 +51,6 @@ class PassportMapperTest {
         Passport result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
-
     }
 
     @Test
@@ -75,6 +75,5 @@ class PassportMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
-
     }
 }

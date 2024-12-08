@@ -36,7 +36,6 @@ class ProfileMapperTest {
         Profile result = mapper.toEntity(DTO);
         assertNotNull(result);
         assertEquals(ENTITY, result);
-
     }
 
     @Test
@@ -61,6 +60,5 @@ class ProfileMapperTest {
 
         assertNotNull(result);
         assertEquals(List.of(DTO), result);
-
     }
 }
