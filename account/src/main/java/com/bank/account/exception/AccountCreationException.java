@@ -11,4 +11,5 @@ public class AccountCreationException extends ResponseStatusException {
         super(HttpStatus.BAD_REQUEST, message);
         log.error("AccountCreationException: Выброшено исключение при создании аккаунта - {}", message);
     }
+
 }

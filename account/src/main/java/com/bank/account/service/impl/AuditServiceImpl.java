@@ -26,4 +26,5 @@ public class AuditServiceImpl implements AuditService {
     public Audit findLastAuditByUser(String createdBy) {
         return auditDao.findLastAuditByUser(createdBy);
     }
+
 }

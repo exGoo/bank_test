@@ -9,4 +9,5 @@ public interface AuditDao {
     void save(Audit audit);
 
     Audit findLastAuditByUser(String createdBy);
+
 }

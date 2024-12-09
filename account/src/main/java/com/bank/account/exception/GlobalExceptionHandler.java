@@ -36,4 +36,5 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleAccountCreationException(AccountCreationException e) {
         return new ResponseEntity<>(e.getReason(), HttpStatus.BAD_REQUEST);
     }
+
 }

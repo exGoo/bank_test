@@ -36,4 +36,5 @@ public class AccountDto {
 
     @NotNull(message = "Поле 'profileId' не должно быть равно null")
     private Long profileId;
+
 }

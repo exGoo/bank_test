@@ -11,5 +11,6 @@ public class AccountNotFoundException extends ResponseStatusException {
         super(HttpStatus.NOT_FOUND, "Аккаунт cо следующим ID не найден: " + id);
         log.warn("AccountNotFoundException: Был запрошен несуществующий аккаунт (ID: {})", id);
     }
+
 }
 

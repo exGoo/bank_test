@@ -73,4 +73,5 @@ public class AccountDaoImpl implements AccountDao {
     public List<Account> findAll() {
         return entityManager.createQuery("from Account", Account.class).getResultList();
     }
+
 }

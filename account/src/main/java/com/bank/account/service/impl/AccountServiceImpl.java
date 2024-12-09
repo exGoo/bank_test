@@ -7,11 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-/**
- * Класс AccountServiceImpl является реализацией
- * интерфейса AccountService и отвечает за предоставление
- * сервисного слоя для работы с объектами типа Account.
- * */
 @Service
 @Transactional
 public class AccountServiceImpl implements AccountService {
@@ -45,4 +40,5 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> findAll() {
         return accountDao.findAll();
     }
+
 }
