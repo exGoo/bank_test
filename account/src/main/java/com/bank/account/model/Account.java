@@ -45,5 +45,4 @@ public class Account {
 
     @Column
     private Long profileId;
-
 }

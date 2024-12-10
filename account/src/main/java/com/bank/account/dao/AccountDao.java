@@ -16,5 +16,4 @@ public interface AccountDao {
     Account findById(Long id);
 
     List<Account> findAll();
-
 }

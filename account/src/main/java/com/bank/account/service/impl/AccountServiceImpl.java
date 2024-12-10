@@ -40,5 +40,4 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> findAll() {
         return accountDao.findAll();
     }
-
 }

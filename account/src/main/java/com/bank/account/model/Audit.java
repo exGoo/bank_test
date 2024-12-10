@@ -42,5 +42,4 @@ public class Audit {
     private String entityJson;
 
     private String newEntityJson;
-
 }

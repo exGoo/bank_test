@@ -169,5 +169,4 @@ public class AccountController {
         log.info("AccountController: Запрос на обновление аккаунта с ID {} удовлетворен, отправлен ответ.", id);
         return new ResponseEntity<>(accountMapper.toDto(account), HttpStatus.OK);
     }
-
 }

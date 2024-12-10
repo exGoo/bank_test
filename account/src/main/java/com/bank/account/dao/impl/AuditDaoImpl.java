@@ -33,5 +33,4 @@ public class AuditDaoImpl implements AuditDao {
 
         return results.isEmpty() ? null : results.get(0);
     }
-
 }
