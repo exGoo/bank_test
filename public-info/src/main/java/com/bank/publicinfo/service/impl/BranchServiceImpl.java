@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
-
 @Service
 @Slf4j
 public class BranchServiceImpl implements BranchService {
@@ -37,7 +36,7 @@ public class BranchServiceImpl implements BranchService {
         log.info("Попытка получения отделения по id: {}", id);
         Branch branch = branchRepository.findById(id).orElseThrow(() -> {
             log.error("Отделение с id: {} не найдено", id);
-            return new EntityNotFoundException("ATM not found with id " + id);
+            return new EntityNotFoundException("Branch not found with id " + id);
         });
         return branchMapper.toDto(branch);
     }

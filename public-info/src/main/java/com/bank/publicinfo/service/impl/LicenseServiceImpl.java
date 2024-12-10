@@ -109,7 +109,5 @@ public class LicenseServiceImpl implements LicenseService {
             log.error("Ошибка при удалении лицензии");
             throw new EntityNotFoundException("License not found with id: " + id);
         }
-
     }
-
 }

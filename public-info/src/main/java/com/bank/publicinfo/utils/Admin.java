@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class Admin {
+
     private final String username = "admin";
 
     private final String password = "54321";

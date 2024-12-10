@@ -14,5 +14,4 @@ public interface CertificateMapper {
     @Mapping(target = "bankDetails.id", source = "bankDetailsId")
     @Mapping(target = "id", ignore = true)
     Certificate toModel(CertificateDto certificateDTO);
-
 }

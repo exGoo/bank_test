@@ -13,5 +13,4 @@ public interface ATMMapper {
 
     @Mapping(target = "id", ignore = true)
     ATM toModel(ATMDto atmDto);
-
 }

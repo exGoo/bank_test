@@ -58,7 +58,7 @@ public class ATMServiceImpl implements ATMService {
         try {
             log.info("Попытка добавления нового банкомата со следующими данными: {}", atm);
             ATM newAtm = atmMapper.toModel(atm);
-            ATM saveAtm = atmRepository.saveAndFlush(newAtm);
+            ATM saveAtm = atmRepository.save(newAtm);
             ATMDto savedDto = atmMapper.toDto(saveAtm);
             log.info("Банкомат успешно добавлен");
             return savedDto;

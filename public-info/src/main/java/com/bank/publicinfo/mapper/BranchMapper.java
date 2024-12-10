@@ -25,6 +25,4 @@ public interface BranchMapper {
                 .map(ATM::getId)
                 .collect(Collectors.toSet());
     }
-
-
 }

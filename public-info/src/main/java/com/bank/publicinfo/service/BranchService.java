@@ -16,6 +16,4 @@ public interface BranchService {
     void deleteBranchById(Long id);
 
     BranchDto updateBranch(Long id, BranchDto branch);
-
-
 }

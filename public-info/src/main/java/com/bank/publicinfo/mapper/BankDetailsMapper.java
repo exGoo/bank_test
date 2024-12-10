@@ -12,29 +12,28 @@ import java.util.stream.Collectors;
 
 
 @Mapper(componentModel = "spring")
-    public interface BankDetailsMapper {
+public interface BankDetailsMapper {
 
-        @Mapping(target = "licenseIds", source = "licenses", qualifiedByName = "mapLicenseIds")
-        @Mapping(target = "certificateIds", source = "certificates", qualifiedByName = "mapCertificateIds")
-        BankDetailsDto toDto(BankDetails bankDetails);
+    @Mapping(target = "licenseIds", source = "licenses", qualifiedByName = "mapLicenseIds")
+    @Mapping(target = "certificateIds", source = "certificates", qualifiedByName = "mapCertificateIds")
+    BankDetailsDto toDto(BankDetails bankDetails);
 
-        @Mapping(target = "licenses", ignore = true)
-        @Mapping(target = "certificates", ignore = true)
-        @Mapping(target = "id", ignore = true)
-        BankDetails toModel(BankDetailsDto bankDetailsDto);
+    @Mapping(target = "licenses", ignore = true)
+    @Mapping(target = "certificates", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    BankDetails toModel(BankDetailsDto bankDetailsDto);
 
-        @Named("mapLicenseIds")
-        default Set<Long> mapLicenseIds(Set<License> licenses) {
-            return licenses == null ? null : licenses.stream()
-                    .map(License::getId)
-                    .collect(Collectors.toSet());
-        }
+    @Named("mapLicenseIds")
+    default Set<Long> mapLicenseIds(Set<License> licenses) {
+        return licenses == null ? null : licenses.stream()
+                .map(License::getId)
+                .collect(Collectors.toSet());
+    }
 
-        @Named("mapCertificateIds")
-        default Set<Long> mapCertificateIds(Set<Certificate> certificates) {
-            return certificates == null ? null : certificates.stream()
-                    .map(Certificate::getId)
-                    .collect(Collectors.toSet());
-        }
-
+    @Named("mapCertificateIds")
+    default Set<Long> mapCertificateIds(Set<Certificate> certificates) {
+        return certificates == null ? null : certificates.stream()
+                .map(Certificate::getId)
+                .collect(Collectors.toSet());
+    }
 }

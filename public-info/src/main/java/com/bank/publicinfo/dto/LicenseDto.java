@@ -1,10 +1,13 @@
 package com.bank.publicinfo.dto;
 
+import com.bank.publicinfo.utils.Auditable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -12,7 +15,9 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LicenseDto {
+@ToString
+public class LicenseDto implements Auditable<Long> {
+
     @NotNull
     private Long id;
 
@@ -20,4 +25,16 @@ public class LicenseDto {
 
     @NotNull
     private Long bankDetailsId;
+
+    @JsonIgnore
+    @Override
+    public Long getEntityId() {
+        return id;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getEntityName() {
+        return "License";
+    }
 }

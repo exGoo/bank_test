@@ -76,7 +76,6 @@ public class BankDetailsServiceImpl implements BankDetailsService {
             BankDetails bankDetails = bankDetailsMapper.toModel(bankDetailsDto);
             BankDetails saveBankDetails = bankDetailsRepository.save(bankDetails);
             BankDetailsDto savedDto = bankDetailsMapper.toDto(saveBankDetails);
-
             log.info("Информация о банке успешно добавлена");
             return savedDto;
         } catch (Exception e) {
@@ -106,7 +105,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
                     return new EntityNotFoundException("Bank Details not found with id " + id);
                 });
         try {
-            if(dto.getId()!= null){
+            if (dto.getId() != null) {
                 existingBankDetails.setId(dto.getId());
             }
             if (dto.getBik() != null) {
@@ -140,6 +139,3 @@ public class BankDetailsServiceImpl implements BankDetailsService {
         }
     }
 }
-
-
-
