@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @ToString
 public class AccountDto {
+
     private Long id;
 
     @NotNull(message = "Поле 'passportId' не должно быть равно null")

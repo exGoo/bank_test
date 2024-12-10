@@ -4,7 +4,6 @@ import com.bank.account.dao.AccountDao;
 import com.bank.account.model.Account;
 import com.bank.account.service.AccountService;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountDao accountDao;
+
     public AccountServiceImpl(AccountDao accountDao) { this.accountDao = accountDao; }
 
     @Override

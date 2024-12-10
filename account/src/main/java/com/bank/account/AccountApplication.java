@@ -7,9 +7,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 @SpringBootApplication(scanBasePackages = "com.bank.account")
 @EnableAspectJAutoProxy
 public class AccountApplication {
+
     public static void main(String[] args) {
-
         SpringApplication.run(AccountApplication.class, args);
-
     }
 }

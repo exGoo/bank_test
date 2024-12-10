@@ -3,7 +3,6 @@ package com.bank.account.dao.impl;
 import com.bank.account.dao.AccountDao;
 import com.bank.account.model.Account;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.List;

@@ -7,13 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.net.BindException;
 
 @Slf4j
 @Getter
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
     private static final String VALIDATIONERROR = "Получены некорректные данные.";
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

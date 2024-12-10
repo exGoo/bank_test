@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AuditDao {
+
     void save(Audit audit);
+
     Audit findLastAuditByUser(String createdBy);
 }

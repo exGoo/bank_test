@@ -2,7 +2,6 @@ package com.bank.account.service;
 
 import com.bank.account.model.Account;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

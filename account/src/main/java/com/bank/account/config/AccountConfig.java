@@ -12,5 +12,4 @@ public class AccountConfig {
     public AccountMapper accountMapper() {
         return new AccountMapperImpl();
     }
-
 }
