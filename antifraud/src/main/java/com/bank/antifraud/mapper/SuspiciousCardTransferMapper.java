@@ -1,12 +1,11 @@
 package com.bank.antifraud.mapper;
 
 import com.bank.antifraud.dto.SuspiciousCardTransferDto;
-import com.bank.antifraud.model.SuspiciousCardTransfer;
+import com.bank.antifraud.entity.SuspiciousCardTransfer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.ReportingPolicy;
-
 import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
@@ -22,5 +21,4 @@ public interface SuspiciousCardTransferMapper {
 
     @Mapping(target = "cardTransferId", ignore = true)
     SuspiciousCardTransfer update(SuspiciousCardTransferDto sctDto);
-
 }

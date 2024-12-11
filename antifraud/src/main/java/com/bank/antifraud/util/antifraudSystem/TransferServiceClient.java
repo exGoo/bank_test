@@ -4,13 +4,14 @@ import com.bank.antifraud.util.antifraudSystem.transferDto.AccountTransferDto;
 import com.bank.antifraud.util.antifraudSystem.transferDto.CardTransferDto;
 import com.bank.antifraud.util.antifraudSystem.transferDto.PhoneTransferDto;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @FeignClient(name = "transfer-app")
 public interface TransferServiceClient {
 

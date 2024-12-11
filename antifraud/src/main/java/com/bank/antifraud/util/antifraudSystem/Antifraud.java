@@ -1,8 +1,8 @@
 package com.bank.antifraud.util.antifraudSystem;
 
-public interface Antifraud<M> {
+public interface Antifraud<E> {
 
-    M checkTransaction(M model);
+    E checkTransaction(E entity);
 
     default boolean isMustBlocked(int currentAmount, int averageAmount) {
         final double blockedPercent = 5.0;
@@ -13,5 +13,4 @@ public interface Antifraud<M> {
         final double suspiciousPercent = 2.0;
         return currentAmount > averageAmount * suspiciousPercent ;
     }
-
 }

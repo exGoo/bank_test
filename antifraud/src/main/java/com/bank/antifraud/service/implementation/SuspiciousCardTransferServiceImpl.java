@@ -1,13 +1,12 @@
 package com.bank.antifraud.service.implementation;
 
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
-import com.bank.antifraud.model.SuspiciousCardTransfer;
+import com.bank.antifraud.entity.SuspiciousCardTransfer;
 import com.bank.antifraud.repository.AuditRepository;
 import com.bank.antifraud.repository.SuspiciousCardTransferRepository;
 import com.bank.antifraud.service.SuspiciousCardTransferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -48,5 +47,4 @@ public class SuspiciousCardTransferServiceImpl implements SuspiciousCardTransfer
     public List<SuspiciousCardTransfer> getAll() {
         return sctRepository.findAll();
     }
-
 }

@@ -26,5 +26,4 @@ public class ExceptionsHandlersController {
     public void handleLogException(Exception e) {
         log.error("cause: {}, message: {}", e.getCause(), e.getMessage());
     }
-
 }

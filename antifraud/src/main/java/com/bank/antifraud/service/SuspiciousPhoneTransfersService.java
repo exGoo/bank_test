@@ -1,7 +1,6 @@
 package com.bank.antifraud.service;
 
-import com.bank.antifraud.model.SuspiciousPhoneTransfers;
-
+import com.bank.antifraud.entity.SuspiciousPhoneTransfers;
 import java.util.List;
 
 public interface SuspiciousPhoneTransfersService {
@@ -15,5 +14,4 @@ public interface SuspiciousPhoneTransfersService {
     void remove(Long id);
 
     List<SuspiciousPhoneTransfers> getAll();
-
 }

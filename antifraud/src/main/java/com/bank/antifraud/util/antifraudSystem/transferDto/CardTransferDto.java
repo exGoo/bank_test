@@ -1,9 +1,9 @@
-package com.bank.antifraud.util.antifraudSystem.responseObject;
+package com.bank.antifraud.util.antifraudSystem.transferDto;
 
 import lombok.Data;
 
 @Data
-public class CardTransfer {
+public class CardTransferDto {
 
     Long id;
 
@@ -14,5 +14,4 @@ public class CardTransfer {
     String purpose;
 
     Long accountDetailsId;
-
 }

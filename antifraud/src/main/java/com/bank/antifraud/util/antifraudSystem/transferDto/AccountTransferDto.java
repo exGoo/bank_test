@@ -1,9 +1,9 @@
-package com.bank.antifraud.util.antifraudSystem.responseObject;
+package com.bank.antifraud.util.antifraudSystem.transferDto;
 
 import lombok.Data;
 
 @Data
-public class AccountTransfer {
+public class AccountTransferDto {
 
     Long id;
 

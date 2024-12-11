@@ -1,12 +1,11 @@
 package com.bank.antifraud.service.implementation;
 
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
-import com.bank.antifraud.model.SuspiciousPhoneTransfers;
+import com.bank.antifraud.entity.SuspiciousPhoneTransfers;
 import com.bank.antifraud.repository.SuspiciousPhoneTransfersRepository;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @RequiredArgsConstructor

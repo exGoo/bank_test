@@ -12,5 +12,4 @@ public class Admin {
     private final String password = "12345";
 
     private final String role = "ROLE_ADMIN";
-
 }

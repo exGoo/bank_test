@@ -12,5 +12,4 @@ public class User {
     private final String password = "123321";
 
     private final String role = "ROLE_USER";
-
 }

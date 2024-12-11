@@ -1,8 +1,7 @@
 package com.bank.antifraud.dto;
 
-import com.bank.antifraud.model.SuspiciousCardTransfer;
+import com.bank.antifraud.entity.SuspiciousCardTransfer;
 import lombok.Value;
-
 import javax.validation.constraints.NotNull;
 
 /**
@@ -11,7 +10,6 @@ import javax.validation.constraints.NotNull;
 @Value
 public class SuspiciousCardTransferDto {
 
-    @NotNull
     Long id;
 
     @NotNull
@@ -27,5 +25,4 @@ public class SuspiciousCardTransferDto {
 
     @NotNull
     String suspiciousReason;
-
 }

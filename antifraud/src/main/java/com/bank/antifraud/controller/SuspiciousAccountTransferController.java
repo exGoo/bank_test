@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 @Slf4j
@@ -99,5 +98,4 @@ public class SuspiciousAccountTransferController {
         log.info("invoked method delete success");
         return ResponseEntity.ok("Delete success. Suspicious account transfer with id " + id + " was deleted.");
     }
-
 }
