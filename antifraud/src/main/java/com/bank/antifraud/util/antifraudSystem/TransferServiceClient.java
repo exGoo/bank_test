@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface TransferServiceClient {
 
     @GetMapping("/api/transfer/accountTransfer/{id}")
-    Optional<AccountTransferDto> getAccountTransfer(@PathVariable Long id);
+    AccountTransferDto getAccountTransfer(@PathVariable Long id);
 
     @GetMapping("/api/transfer/accountTransfer")
     List<AccountTransferDto> getAccountTransferByAccountNumberAndAccountDetailsId(
@@ -25,7 +25,7 @@ public interface TransferServiceClient {
     );
 
     @GetMapping("/api/transfer/cardTransfer/{id}")
-    Optional<CardTransferDto> getCardTransfer(@PathVariable Long id);
+    CardTransferDto getCardTransfer(@PathVariable Long id);
 
     @GetMapping("/api/transfer/cardTransfer")
     List<CardTransferDto> getCardTransferByCardNumberAndAccountDetailsId(
@@ -34,7 +34,7 @@ public interface TransferServiceClient {
     );
 
     @GetMapping("api/transfer/phoneTransfer/{id}")
-    Optional<PhoneTransferDto> getPhoneTransfer(@PathVariable Long id);
+    PhoneTransferDto getPhoneTransfer(@PathVariable Long id);
 
     @GetMapping("/api/transfer/phoneTransfer")
     List<PhoneTransferDto> getPhoneTransferByPhoneNumberAndAccountDetailsId(

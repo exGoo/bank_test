@@ -4,24 +4,43 @@ import com.bank.antifraud.entity.SuspiciousAccountTransfers;
 import com.bank.antifraud.util.antifraudSystem.Antifraud;
 import com.bank.antifraud.util.antifraudSystem.TransferServiceClient;
 import com.bank.antifraud.util.antifraudSystem.transferDto.AccountTransferDto;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.webjars.NotFoundException;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class AccountAntifraud implements Antifraud<SuspiciousAccountTransfers> {
+public class AccountTransferAntifraud implements Antifraud<SuspiciousAccountTransfers> {
 
     private final TransferServiceClient transferService;
 
     @Override
     public SuspiciousAccountTransfers checkTransaction(SuspiciousAccountTransfers entity) {
-        final AccountTransferDto transfer = getTransferById(entity.getAccountTransferId());
-        final int averageAmount = getAverageAmountsByAccountIdAndReceiverId(transfer.getAccountNumber(),
-                transfer.getAccountDetailsId());
-        final int currentAmount = transfer.getAmount();
-        if (isSuspicious(currentAmount, averageAmount)) {
+        final AccountTransferDto transfer;
+        int averageAmount = 0;
+        final int currentAmount;
+        try {
+            transfer = getTransferById(entity.getAccountTransferId());
+            final long accountNumber = transfer.getAccountNumber();
+            final long accountDetailsId = transfer.getAccountDetailsId();
+            try {
+                averageAmount = getAverageAmountsByAccountIdAndReceiverId(accountNumber,accountDetailsId);
+            } catch (FeignException.NotFound ignore) {
+                log.info("Transactions with account number {} and account details id {} are not available",
+                        accountNumber, accountDetailsId );
+            }
+        } catch (FeignException e) {
+            log.error("An exception was thrown during check transaction with cause {}, message {}",
+                    e.getCause(), e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+        currentAmount = transfer.getAmount();
+        if (isSuspicious(currentAmount, averageAmount) && averageAmount != 0) {
             entity.setIsSuspicious(true);
             entity.setSuspiciousReason("Suspicious amount of transaction");
             if (isMustBlocked(currentAmount, averageAmount)) {
@@ -32,12 +51,11 @@ public class AccountAntifraud implements Antifraud<SuspiciousAccountTransfers> {
         return entity;
     }
 
-    private AccountTransferDto getTransferById(Long id) {
-        return transferService.getAccountTransfer(id)
-                .orElseThrow(() -> new NotFoundException("AccountTransfer not found with id: " + id));
+    private AccountTransferDto getTransferById(Long id) throws FeignException {
+        return transferService.getAccountTransfer(id);
     }
 
-    private int getAverageAmountsByAccountIdAndReceiverId(Long accountNumber, Long accountDetailsId) {
+    private int getAverageAmountsByAccountIdAndReceiverId(Long accountNumber, Long accountDetailsId) throws FeignException {
         final List<AccountTransferDto> accountTransfers = transferService
                 .getAccountTransferByAccountNumberAndAccountDetailsId(accountNumber, accountDetailsId);
         if (accountTransfers.isEmpty()) {
