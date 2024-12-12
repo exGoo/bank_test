@@ -6,6 +6,8 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Aspect
 @Component
@@ -22,15 +24,27 @@ public class AuditAspect {
     public void auditSave(Object entity) {
         if (entity instanceof Auditable) {
             Auditable<?> auditableEnity = (Auditable<?>) entity;
-            auditService.saveNewAudit(auditableEnity);
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+
+                @Override
+                public void afterCommit() {
+                    auditService.saveNewAudit(auditableEnity);
+                }
+            });
         }
     }
 
     @AfterReturning(value = "execution(public * com.bank.publicinfo.service.*Service.update*(*, *))", returning = "entity")
     public void auditUpdate(Object entity) {
-        if(entity instanceof Auditable) {
+        if (entity instanceof Auditable) {
             Auditable<?> auditableEnity = (Auditable<?>) entity;
-            auditService.refreshAudit(auditableEnity);
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+
+                @Override
+                public void afterCommit() {
+                    auditService.refreshAudit(auditableEnity);
+                }
+            });
         }
     }
 }
