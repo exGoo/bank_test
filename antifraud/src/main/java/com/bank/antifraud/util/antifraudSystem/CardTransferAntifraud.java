@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface CardTransferAntifraud extends TransferChecker {
 
-    SuspiciousCardTransfer checkTransfer(SuspiciousCardTransfer sct);
+    SuspiciousCardTransfer checkCardTransfer(SuspiciousCardTransfer sct);
 
-    CardTransferDto getTransferById(Long id);
+    CardTransferDto getCardTransferById(Long id);
 
-    List<CardTransferDto> getTransfersByCardNumberAndAccountDetailsId(Long cardNumber,
+    List<CardTransferDto> getCardTransfersByCardNumberAndAccountDetailsId(Long cardNumber,
                                                                       Long accountDetailsId);
 }

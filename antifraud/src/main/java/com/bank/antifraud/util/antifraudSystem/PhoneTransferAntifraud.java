@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PhoneTransferAntifraud extends TransferChecker {
 
-    SuspiciousPhoneTransfers checkTransfer(SuspiciousPhoneTransfers spt);
+    SuspiciousPhoneTransfers checkPhoneTransfer(SuspiciousPhoneTransfers spt);
 
     PhoneTransferDto getPhoneTransferById(Long id);
 

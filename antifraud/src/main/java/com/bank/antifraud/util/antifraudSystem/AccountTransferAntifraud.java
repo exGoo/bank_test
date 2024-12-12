@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface AccountTransferAntifraud extends TransferChecker {
 
-    SuspiciousAccountTransfers checkTransfer(SuspiciousAccountTransfers sat);
+    SuspiciousAccountTransfers checkAccountTransfer(SuspiciousAccountTransfers sat);
 
-    AccountTransferDto getTransferById(Long id);
+    AccountTransferDto getAccountTransferById(Long id);
 
-    List<AccountTransferDto> getTransfersByAccountNumberAndAccountDetailsId(Long accountNumber,
-                                                                            Long accountDetailsId);
+    List<AccountTransferDto> getAccountTransfersByAccountNumberAndAccountDetailsId(Long accountNumber,
+                                                                                   Long accountDetailsId);
 }

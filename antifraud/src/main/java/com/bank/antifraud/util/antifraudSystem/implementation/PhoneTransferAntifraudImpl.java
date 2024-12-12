@@ -19,8 +19,10 @@ public class PhoneTransferAntifraudImpl implements PhoneTransferAntifraud {
     private final TransferServiceClient transferService;
 
     @Override
-    public SuspiciousPhoneTransfers checkTransfer(SuspiciousPhoneTransfers spt) {
-        final PhoneTransferDto transfer = getPhoneTransferById(spt.getPhoneTransferId());
+    public SuspiciousPhoneTransfers checkPhoneTransfer(SuspiciousPhoneTransfers spt) {
+        log.info("Invoke checkPhoneTransfer method with SuspiciousPhoneTransfers: {}", spt);
+        final long phoneTransferId = spt.getPhoneTransferId();
+        final PhoneTransferDto transfer = getPhoneTransferById(phoneTransferId);
         final List<PhoneTransferDto> transfers = getPhoneTransfersByCardNumberAndAccountDetailsId(
                 transfer.getPhoneNumber(),
                 transfer.getAccountDetailsId()
@@ -31,9 +33,11 @@ public class PhoneTransferAntifraudImpl implements PhoneTransferAntifraud {
                 BigDecimal.valueOf(transfers.size())
         );
         if (isSuspicious(currentAmount, averageAmount) && averageAmount.compareTo(BigDecimal.ZERO) > 0) {
+            log.info("PhoneTransfer with id: {} is suspicious", phoneTransferId);
             spt.setIsSuspicious(true);
             spt.setSuspiciousReason("Suspicious amount of transaction");
             if (isMustBlocked(currentAmount, averageAmount)) {
+                log.info("PhoneTransfer with id: {} blocked", phoneTransferId);
                 spt.setIsBlocked(true);
                 spt.setBlockedReason("Suspicion of theft of personal funds");
             }

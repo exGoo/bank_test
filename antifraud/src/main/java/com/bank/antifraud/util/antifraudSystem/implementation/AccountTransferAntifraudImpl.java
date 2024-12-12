@@ -19,9 +19,11 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
     private final TransferServiceClient transferService;
 
     @Override
-    public SuspiciousAccountTransfers checkTransfer(SuspiciousAccountTransfers sat) {
-        final AccountTransferDto transfer = getTransferById(sat.getAccountTransferId());
-        final List<AccountTransferDto> transfers = getTransfersByAccountNumberAndAccountDetailsId(
+    public SuspiciousAccountTransfers checkAccountTransfer(SuspiciousAccountTransfers sat) {
+        log.info("Invoke checkAccountTransfer method with SuspiciousAccountTransfers: {}", sat);
+        final long accountTransferId = sat.getAccountTransferId();
+        final AccountTransferDto transfer = getAccountTransferById(sat.getAccountTransferId());
+        final List<AccountTransferDto> transfers = getAccountTransfersByAccountNumberAndAccountDetailsId(
                 transfer.getAccountNumber(),
                 transfer.getAccountDetailsId()
         );
@@ -31,9 +33,11 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
                         BigDecimal.valueOf(transfers.size())
         );
         if (isSuspicious(currentAmount, averageAmount) && averageAmount.compareTo(BigDecimal.ZERO) > 0) {
+            log.info("AccountTransfer with id: {} is suspicious", accountTransferId);
             sat.setIsSuspicious(true);
             sat.setSuspiciousReason("Suspicious amount of transaction");
             if (isMustBlocked(currentAmount, averageAmount)) {
+                log.info("AccountTransfer with id: {} blocked", accountTransferId);
                 sat.setIsBlocked(true);
                 sat.setBlockedReason("Suspicion of theft of personal funds");
             }
@@ -42,7 +46,7 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
     }
 
     @Override
-    public AccountTransferDto getTransferById(Long id) {
+    public AccountTransferDto getAccountTransferById(Long id) {
         log.info("Invoke getAccountTransferById method with id: {}", id);
         try {
             return transferService.getAccountTransferById(id);
@@ -54,9 +58,9 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
     }
 
     @Override
-    public List<AccountTransferDto> getTransfersByAccountNumberAndAccountDetailsId(Long accountNumber,
-                                                                                   Long accountDetailsId) {
-        log.info("Invoke getTransfersByAccountNumberAndAccountDetailsId method " +
+    public List<AccountTransferDto> getAccountTransfersByAccountNumberAndAccountDetailsId(Long accountNumber,
+                                                                                          Long accountDetailsId) {
+        log.info("Invoke getAccountTransfersByAccountNumberAndAccountDetailsId method " +
                 "with accountNumber: {} and accountDetailsId: {}", accountNumber, accountDetailsId);
         List<AccountTransferDto> transfers = List.of();
         try {
@@ -66,7 +70,7 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
             log.info("AccountTransfers not found with account number: {} and account details id: {}",
                     accountNumber, accountDetailsId);
         } catch (FeignException e) {
-            log.error("getTransfersByAccountNumberAndAccountDetailsId method " +
+            log.error("getAccountTransfersByAccountNumberAndAccountDetailsId method " +
                     "with accountNumber: {} and accountDetailsId: {}" +
                     "throw FeignException with cause {}, message {}",
                     accountNumber, accountDetailsId, e.getCause(), e.getMessage());
