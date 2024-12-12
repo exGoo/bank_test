@@ -1,0 +1,77 @@
+package com.bank.antifraud.util.antifraudSystem.implementation;
+
+import com.bank.antifraud.entity.SuspiciousAccountTransfers;
+import com.bank.antifraud.util.antifraudSystem.AccountTransferAntifraud;
+import com.bank.antifraud.util.antifraudSystem.TransferServiceClient;
+import com.bank.antifraud.util.antifraudSystem.transferDto.AccountTransferDto;
+import feign.FeignException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+import java.math.BigDecimal;
+import java.util.List;
+
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
+
+    private final TransferServiceClient transferService;
+
+    @Override
+    public SuspiciousAccountTransfers checkTransfer(SuspiciousAccountTransfers sat) {
+        final AccountTransferDto transfer = getTransferById(sat.getAccountTransferId());
+        final List<AccountTransferDto> transfers = getTransfersByAccountNumberAndAccountDetailsId(
+                transfer.getAccountNumber(),
+                transfer.getAccountDetailsId()
+        );
+        final BigDecimal currentAmount = transfer.getAmount();
+        final BigDecimal averageAmount = getAverageAmountOfTransfers(
+                        transfers.stream().map(AccountTransferDto::getAmount),
+                        BigDecimal.valueOf(transfers.size())
+        );
+        if (isSuspicious(currentAmount, averageAmount) && averageAmount.compareTo(BigDecimal.ZERO) > 0) {
+            sat.setIsSuspicious(true);
+            sat.setSuspiciousReason("Suspicious amount of transaction");
+            if (isMustBlocked(currentAmount, averageAmount)) {
+                sat.setIsBlocked(true);
+                sat.setBlockedReason("Suspicion of theft of personal funds");
+            }
+        }
+        return sat;
+    }
+
+    @Override
+    public AccountTransferDto getTransferById(Long id) {
+        log.info("Invoke getAccountTransferById method with id: {}", id);
+        try {
+            return transferService.getAccountTransferById(id);
+        } catch (FeignException e) {
+            log.error("getAccountTransferById method with id: {} throw FeignException with cause {}, message {}",
+                    id, e.getCause(), e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<AccountTransferDto> getTransfersByAccountNumberAndAccountDetailsId(Long accountNumber,
+                                                                                   Long accountDetailsId) {
+        log.info("Invoke getTransfersByAccountNumberAndAccountDetailsId method " +
+                "with accountNumber: {} and accountDetailsId: {}", accountNumber, accountDetailsId);
+        List<AccountTransferDto> transfers = List.of();
+        try {
+            transfers = transferService.getAccountTransferByAccountNumberAndAccountDetailsId(accountNumber,
+                    accountDetailsId);
+        } catch (FeignException.NotFound ignore) {
+            log.info("AccountTransfers not found with account number: {} and account details id: {}",
+                    accountNumber, accountDetailsId);
+        } catch (FeignException e) {
+            log.error("getTransfersByAccountNumberAndAccountDetailsId method " +
+                    "with accountNumber: {} and accountDetailsId: {}" +
+                    "throw FeignException with cause {}, message {}",
+                    accountNumber, accountDetailsId, e.getCause(), e.getMessage());
+            throw new RuntimeException(e);
+        }
+        return transfers;
+    }
+}

@@ -2,6 +2,8 @@ package com.bank.antifraud.util.antifraudSystem.transferDto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class CardTransferDto {
 
@@ -9,7 +11,7 @@ public class CardTransferDto {
 
     Long cardNumber;
 
-    Integer amount;
+    BigDecimal amount;
 
     String purpose;
 

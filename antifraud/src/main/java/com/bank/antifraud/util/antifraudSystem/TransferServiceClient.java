@@ -15,7 +15,7 @@ import java.util.List;
 public interface TransferServiceClient {
 
     @GetMapping("/api/transfer/accountTransfer/{id}")
-    AccountTransferDto getAccountTransfer(@PathVariable Long id);
+    AccountTransferDto getAccountTransferById(@PathVariable Long id);
 
     @GetMapping("/api/transfer/accountTransfer")
     List<AccountTransferDto> getAccountTransferByAccountNumberAndAccountDetailsId(
@@ -24,7 +24,7 @@ public interface TransferServiceClient {
     );
 
     @GetMapping("/api/transfer/cardTransfer/{id}")
-    CardTransferDto getCardTransfer(@PathVariable Long id);
+    CardTransferDto getCardTransferById(@PathVariable Long id);
 
     @GetMapping("/api/transfer/cardTransfer")
     List<CardTransferDto> getCardTransferByCardNumberAndAccountDetailsId(
@@ -33,11 +33,11 @@ public interface TransferServiceClient {
     );
 
     @GetMapping("api/transfer/phoneTransfer/{id}")
-    PhoneTransferDto getPhoneTransfer(@PathVariable Long id);
+    PhoneTransferDto getPhoneTransferById(@PathVariable Long id);
 
     @GetMapping("/api/transfer/phoneTransfer")
     List<PhoneTransferDto> getPhoneTransferByPhoneNumberAndAccountDetailsId(
-            @RequestParam String phoneNumber,
+            @RequestParam Long phoneNumber,
             @RequestParam Long accountDetailsId
     );
 }
