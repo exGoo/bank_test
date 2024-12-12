@@ -1,6 +1,8 @@
-package com.bank.antifraud.service.implementation;
+ package com.bank.antifraud.service.implementation;
 
+import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
+import com.bank.antifraud.mapper.SuspiciousAccountTransfersMapper;
 import com.bank.antifraud.entity.SuspiciousAccountTransfers;
 import com.bank.antifraud.repository.SuspiciousAccountTransfersRepository;
 import com.bank.antifraud.service.SuspiciousAccountTransfersService;
@@ -20,45 +22,44 @@ import java.util.List;
 public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountTransfersService {
 
     private final SuspiciousAccountTransfersRepository satRepository;
+    private final SuspiciousAccountTransfersMapper satMapper;
 
     /**
      * Добавляет новую запись о подозрительном переводе.
      *
-     * @param sat объект {@link SuspiciousAccountTransfers}, представляющий подозрительный перевод.
+     * @param satDto объект {@link SuspiciousAccountTransfersDto}, представляющий подозрительный перевод.
      */
     @Override
-    public void add(SuspiciousAccountTransfers sat) {
-        satRepository.save(sat);
+    public void add(SuspiciousAccountTransfersDto satDto) {
+        satRepository.save(satMapper.toEntity(satDto));
     }
 
     /**
      * Возвращает запись о подозрительном переводе по его идентификатору.
      *
      * @param id идентификатор подозрительного перевода.
-     * @return объект {@link SuspiciousAccountTransfers}, представляющий подозрительный перевод.
+     * @return объект {@link SuspiciousAccountTransfersDto}, представляющий подозрительный перевод.
      * @throws NotFoundSuspiciousAccountTransfersException если запись с указанным идентификатором не найдена.
      */
     @Override
     @Transactional(readOnly = true)
-    public SuspiciousAccountTransfers get(Long id) {
-        return satRepository.findById(id)
-                .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id));
+    public SuspiciousAccountTransfersDto get(Long id) {
+        return satMapper.toDto(satRepository.findById(id)
+                .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id)));
     }
 
     /**
      * Обновляет существующую запись о подозрительном переводе.
      *
      * @param id  идентификатор обновляемой записи.
-     * @param sat объект {@link SuspiciousAccountTransfers}, содержащий обновленные данные.
+     * @param satDto объект {@link SuspiciousAccountTransfersDto}, содержащий обновленные данные.
      */
     @Override
-    public void update(Long id, SuspiciousAccountTransfers sat) {
-        final SuspiciousAccountTransfers currentSat = get(id);
-        currentSat.setIsBlocked(sat.getIsBlocked());
-        currentSat.setIsSuspicious(sat.getIsSuspicious());
-        currentSat.setBlockedReason(sat.getBlockedReason());
-        currentSat.setSuspiciousReason(sat.getSuspiciousReason());
-        satRepository.save(currentSat);
+    public void update(Long id, SuspiciousAccountTransfersDto satDto) {
+        get(id);
+        SuspiciousAccountTransfers sat = satMapper.update(satDto);
+        sat.setId(id);
+        satRepository.save(sat);
     }
 
     /**
@@ -68,17 +69,18 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      */
     @Override
     public void remove(Long id) {
+        get(id);
         satRepository.deleteById(id);
     }
 
     /**
      * Возвращает список всех записей о подозрительных переводах.
      *
-     * @return список объектов {@link SuspiciousAccountTransfers}, представляющих все подозрительные переводы.
+     * @return список объектов {@link SuspiciousAccountTransfersDto}, представляющих все подозрительные переводы.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<SuspiciousAccountTransfers> getAll() {
-        return satRepository.findAll();
+    public List<SuspiciousAccountTransfersDto> getAll() {
+        return satMapper.toDtoList(satRepository.findAll());
     }
 }

@@ -19,6 +19,7 @@ public interface SuspiciousAccountTransfersMapper {
 
     List<SuspiciousAccountTransfersDto> toDtoList(List<SuspiciousAccountTransfers> satList);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "accountTransferId", ignore = true)
     SuspiciousAccountTransfers update(SuspiciousAccountTransfersDto satDto);
 }

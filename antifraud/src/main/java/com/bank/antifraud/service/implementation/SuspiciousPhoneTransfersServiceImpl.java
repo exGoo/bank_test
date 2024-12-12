@@ -1,7 +1,9 @@
 package com.bank.antifraud.service.implementation;
 
+import com.bank.antifraud.dto.SuspiciousPhoneTransfersDto;
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
 import com.bank.antifraud.entity.SuspiciousPhoneTransfers;
+import com.bank.antifraud.mapper.SuspiciousPhoneTransfersMapper;
 import com.bank.antifraud.repository.SuspiciousPhoneTransfersRepository;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
 import lombok.RequiredArgsConstructor;
@@ -13,35 +15,35 @@ import java.util.List;
 public class SuspiciousPhoneTransfersServiceImpl implements SuspiciousPhoneTransfersService {
 
     private final SuspiciousPhoneTransfersRepository sptRepository;
+    private final SuspiciousPhoneTransfersMapper sptMapper;
 
     @Override
-    public void add(SuspiciousPhoneTransfers sat) {
-        sptRepository.save(sat);
+    public void add(SuspiciousPhoneTransfersDto spt) {
+        sptRepository.save(sptMapper.toEntity(spt));
     }
 
     @Override
-    public SuspiciousPhoneTransfers get(Long id) {
-        return sptRepository.findById(id)
-                .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id));
+    public SuspiciousPhoneTransfersDto get(Long id) {
+        return sptMapper.toDto(sptRepository.findById(id)
+                .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id)));
     }
 
     @Override
-    public void update(Long id, SuspiciousPhoneTransfers sat) {
-        final SuspiciousPhoneTransfers currentSat = get(id);
-        currentSat.setIsBlocked(sat.getIsBlocked());
-        currentSat.setIsSuspicious(sat.getIsSuspicious());
-        currentSat.setBlockedReason(sat.getBlockedReason());
-        currentSat.setSuspiciousReason(sat.getSuspiciousReason());
+    public void update(Long id, SuspiciousPhoneTransfersDto spt) {
+        get(id);
+        final SuspiciousPhoneTransfers currentSat = sptMapper.update(spt);
+        currentSat.setId(id);
         sptRepository.save(currentSat);
     }
 
     @Override
     public void remove(Long id) {
+        get(id);
         sptRepository.deleteById(id);
     }
 
     @Override
-    public List<SuspiciousPhoneTransfers> getAll() {
-        return sptRepository.findAll();
+    public List<SuspiciousPhoneTransfersDto> getAll() {
+        return sptMapper.toDtoList(sptRepository.findAll());
     }
 }

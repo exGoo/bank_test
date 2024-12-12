@@ -1,6 +1,8 @@
 package com.bank.antifraud.mapper;
 
+import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
 import com.bank.antifraud.dto.SuspiciousCardTransferDto;
+import com.bank.antifraud.entity.SuspiciousAccountTransfers;
 import com.bank.antifraud.entity.SuspiciousCardTransfer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,6 +21,7 @@ public interface SuspiciousCardTransferMapper {
 
     List<SuspiciousCardTransferDto> toDtoList(List<SuspiciousCardTransfer> sctList);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "cardTransferId", ignore = true)
-    SuspiciousCardTransfer update(SuspiciousCardTransferDto sctDto);
+    SuspiciousCardTransfer update(SuspiciousCardTransferDto satDto);
 }

@@ -1,17 +1,18 @@
 package com.bank.antifraud.service;
 
-import com.bank.antifraud.entity.SuspiciousAccountTransfers;
+import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
+
 import java.util.List;
 
 public interface SuspiciousAccountTransfersService {
 
-    void add(SuspiciousAccountTransfers sat);
+    void add(SuspiciousAccountTransfersDto sat);
 
-    SuspiciousAccountTransfers get(Long id);
+    SuspiciousAccountTransfersDto get(Long id);
 
-    void update(Long id, SuspiciousAccountTransfers sat);
+    void update(Long id, SuspiciousAccountTransfersDto sat);
 
     void remove(Long id);
 
-    List<SuspiciousAccountTransfers> getAll();
+    List<SuspiciousAccountTransfersDto> getAll();
 }
