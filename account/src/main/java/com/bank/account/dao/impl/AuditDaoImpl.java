@@ -4,7 +4,6 @@ import com.bank.account.dao.AuditDao;
 import com.bank.account.model.Audit;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 

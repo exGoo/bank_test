@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
-
 /**
  * Класс AccountServiceImpl является реализацией интерфейса AccountService
  * и отвечает за предоставление сервисного слоя для работы с объектами типа Account

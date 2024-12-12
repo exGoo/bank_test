@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,19 +23,26 @@ import java.math.BigDecimal;
 @ToString
 @Builder(toBuilder = true)
 public class Account {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column
     private Long passportId;
+
     @Column(unique = true)
     private Long accountNumber;
+
     @Column(unique = true)
     private Long bankDetailsId;
+
     @Column
     private BigDecimal money;
+
     @Column
     private Boolean negativeBalance;
+
     @Column
     private Long profileId;
 }
