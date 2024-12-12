@@ -1,5 +1,6 @@
 package com.bank.account.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -9,9 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccountTest {
 
-    @Test
-    void builderTest() {
-        Account account = Account.builder()
+    private Account account;
+
+    @BeforeEach
+    void setUp() {
+        account = Account.builder()
                 .id(1L)
                 .passportId(2L)
                 .accountNumber(3L)
@@ -20,7 +23,10 @@ class AccountTest {
                 .negativeBalance(false)
                 .profileId(3323L)
                 .build();
+    }
 
+    @Test
+    void builderTest() {
         assertNotNull(account);
         assertEquals(1L, account.getId());
         assertEquals(2L, account.getPassportId());
@@ -34,16 +40,6 @@ class AccountTest {
 
     @Test
     void GetterAndSetterTest() {
-        Account account = new Account();
-
-        account.setId(1L);
-        account.setPassportId(2L);
-        account.setAccountNumber(3L);
-        account.setBankDetailsId(4L);
-        account.setMoney(new BigDecimal(5));
-        account.setNegativeBalance(false);
-        account.setProfileId(3323L);
-
         assertNotNull(account);
         assertEquals(1L, account.getId());
         assertEquals(2L, account.getPassportId());

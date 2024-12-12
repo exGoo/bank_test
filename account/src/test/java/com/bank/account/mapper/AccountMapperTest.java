@@ -2,6 +2,7 @@ package com.bank.account.mapper;
 
 import com.bank.account.dto.AccountDto;
 import com.bank.account.model.Account;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -22,9 +23,13 @@ class AccountMapperTest {
 
     private static final AccountMapper MAPPER = Mappers.getMapper(AccountMapper.class);
 
-    @Test
-    void toDto() {
-        Account account = Account.builder()
+    private Account account;
+    private Account accountTwo;
+    private AccountDto accountDto;
+
+    @BeforeEach
+    void setUp() {
+        account = Account.builder()
                 .id(ID)
                 .passportId(PASSPORT_ID)
                 .accountNumber(ACCOUNT_NUMBER)
@@ -34,65 +39,57 @@ class AccountMapperTest {
                 .profileId(PROFILE_ID)
                 .build();
 
-        AccountDto accountDto = MAPPER.toDto(account);
+        accountTwo = Account.builder()
+                .id(ID)
+                .passportId(PASSPORT_ID)
+                .accountNumber(ACCOUNT_NUMBER)
+                .bankDetailsId(BANK_DETAILS_ID)
+                .money(MONEY)
+                .negativeBalance(NEGATIVE_BALANCE)
+                .profileId(PROFILE_ID)
+                .build();
 
-        assertNotNull(accountDto);
-        assertEquals(ID, accountDto.getId());
-        assertEquals(PASSPORT_ID, accountDto.getPassportId());
-        assertEquals(ACCOUNT_NUMBER, accountDto.getAccountNumber());
-        assertEquals(BANK_DETAILS_ID, accountDto.getBankDetailsId());
-        assertEquals(MONEY, accountDto.getMoney());
-        assertEquals(NEGATIVE_BALANCE, accountDto.getNegativeBalance());
-        assertEquals(PROFILE_ID, accountDto.getProfileId());
+        accountDto = AccountDto.builder()
+                .id(ID)
+                .passportId(PASSPORT_ID)
+                .accountNumber(ACCOUNT_NUMBER)
+                .bankDetailsId(BANK_DETAILS_ID)
+                .money(MONEY)
+                .negativeBalance(NEGATIVE_BALANCE)
+                .profileId(PROFILE_ID)
+                .build();
+    }
+
+    @Test
+    void toDto() {
+        AccountDto accountToDto = MAPPER.toDto(account);
+
+        assertNotNull(accountToDto);
+        assertEquals(ID, accountToDto.getId());
+        assertEquals(PASSPORT_ID, accountToDto.getPassportId());
+        assertEquals(ACCOUNT_NUMBER, accountToDto.getAccountNumber());
+        assertEquals(BANK_DETAILS_ID, accountToDto.getBankDetailsId());
+        assertEquals(MONEY, accountToDto.getMoney());
+        assertEquals(NEGATIVE_BALANCE, accountToDto.getNegativeBalance());
+        assertEquals(PROFILE_ID, accountToDto.getProfileId());
     }
 
     @Test
     void toEntity() {
-        AccountDto accountDto = AccountDto.builder()
-                .id(ID)
-                .passportId(PASSPORT_ID)
-                .accountNumber(ACCOUNT_NUMBER)
-                .bankDetailsId(BANK_DETAILS_ID)
-                .money(MONEY)
-                .negativeBalance(NEGATIVE_BALANCE)
-                .profileId(PROFILE_ID)
-                .build();
+        Account accountDtoToEntity = MAPPER.toEntity(accountDto);
 
-        Account account = MAPPER.toEntity(accountDto);
-
-        assertNotNull(account);
-        assertEquals(ID, account.getId());
-        assertEquals(PASSPORT_ID, account.getPassportId());
-        assertEquals(ACCOUNT_NUMBER, account.getAccountNumber());
-        assertEquals(BANK_DETAILS_ID, account.getBankDetailsId());
-        assertEquals(MONEY, account.getMoney());
-        assertEquals(NEGATIVE_BALANCE, account.getNegativeBalance());
-        assertEquals(PROFILE_ID, account.getProfileId());
+        assertNotNull(accountDtoToEntity);
+        assertEquals(ID, accountDtoToEntity.getId());
+        assertEquals(PASSPORT_ID, accountDtoToEntity.getPassportId());
+        assertEquals(ACCOUNT_NUMBER, accountDtoToEntity.getAccountNumber());
+        assertEquals(BANK_DETAILS_ID, accountDtoToEntity.getBankDetailsId());
+        assertEquals(MONEY, accountDtoToEntity.getMoney());
+        assertEquals(NEGATIVE_BALANCE, accountDtoToEntity.getNegativeBalance());
+        assertEquals(PROFILE_ID, accountDtoToEntity.getProfileId());
     }
 
     @Test
     void accountsToDto() {
-
-        Account account = Account.builder()
-                .id(ID)
-                .passportId(PASSPORT_ID)
-                .accountNumber(ACCOUNT_NUMBER)
-                .bankDetailsId(BANK_DETAILS_ID)
-                .money(MONEY)
-                .negativeBalance(NEGATIVE_BALANCE)
-                .profileId(PROFILE_ID)
-                .build();
-
-        Account accountTwo = Account.builder()
-                .id(ID)
-                .passportId(PASSPORT_ID)
-                .accountNumber(ACCOUNT_NUMBER)
-                .bankDetailsId(BANK_DETAILS_ID)
-                .money(MONEY)
-                .negativeBalance(NEGATIVE_BALANCE)
-                .profileId(PROFILE_ID)
-                .build();
-
         List<Account> accountList = List.of(account, accountTwo);
         List<AccountDto> accountDtoList = MAPPER.accountsToDto(accountList);
 

@@ -2,6 +2,7 @@ package com.bank.account.service.impl;
 
 import com.bank.account.dao.AuditDao;
 import com.bank.account.model.Audit;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,9 +27,12 @@ class AuditServiceImplTest {
     @Mock
     private AuditDao auditDao;
 
-    @Test
-    void save() {
-        Audit audit = Audit.builder()
+    private Audit audit;
+    private Audit auditTwo;
+
+    @BeforeEach
+    void setUp() {
+        audit = Audit.builder()
                 .id(1L)
                 .entityType("Test")
                 .operationType("TestOperation")
@@ -60,45 +64,7 @@ class AuditServiceImplTest {
                         """)
                 .build();
 
-        auditService.save(audit);
-        verify(auditDao, times(1)).save(audit);
-    }
-
-    @Test
-    void findLastAuditByUser() {
-        Audit audit = Audit.builder()
-                .id(1L)
-                .entityType("Test")
-                .operationType("TestOperation")
-                .createdAt(NOW)
-                .createdBy("Test")
-                .modifiedAt(NOW)
-                .modifiedBy("Test")
-                .newEntityJson("""
-                            {
-                            "id":72,
-                            "passportId":43999945,
-                            "accountNumber":324344235,
-                            "bankDetailsId":545454233,
-                            "money":53.00,
-                            "negativeBalance":false,
-                            "profileId":340934
-                        }
-                        """)
-                .entityJson("""
-                        {
-                            "id":72,
-                            "passportId":4324234245,
-                            "accountNumber":32234234235,
-                            "bankDetailsId":545454233,
-                            "money":53.00,
-                            "negativeBalance":false,
-                            "profileId":34534
-                        }
-                        """)
-                .build();
-
-        Audit auditTwo = Audit.builder()
+        auditTwo = Audit.builder()
                 .id(2L)
                 .entityType("TestTwo")
                 .operationType("TestOperation")
@@ -129,7 +95,16 @@ class AuditServiceImplTest {
                         }
                         """)
                 .build();
+    }
 
+    @Test
+    void save() {
+        auditService.save(audit);
+        verify(auditDao, times(1)).save(audit);
+    }
+
+    @Test
+    void findLastAuditByUser() {
         when(auditDao.findLastAuditByUser(auditTwo.getCreatedBy())).thenReturn(auditTwo);
         Audit auditResult = auditService.findLastAuditByUser(auditTwo.getCreatedBy());
 
