@@ -23,5 +23,4 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse("Incorrect data", ex.getErrorMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
-
 }

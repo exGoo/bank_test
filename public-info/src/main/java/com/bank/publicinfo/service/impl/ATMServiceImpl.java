@@ -28,7 +28,6 @@ public class ATMServiceImpl implements ATMService {
         this.atmMapper = atmMapper;
     }
 
-
     @Override
     @Transactional(readOnly = true)
     public ATMDto findById(Long id) {

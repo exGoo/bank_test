@@ -14,5 +14,4 @@ public interface LicenseMapper {
     @Mapping(target = "bankDetails.id", source = "bankDetailsId")
     @Mapping(target = "id", ignore = true)
     License toModel(LicenseDto licenseDTO);
-
 }
