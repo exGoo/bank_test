@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,14 +24,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/certificates")
 @Tag(name = "Certificates", description = "API для управления сертификатами банка")
+@RequiredArgsConstructor
 public class CertificateController {
 
-    private CertificateService certificateService;
-
-    @Autowired
-    public void setCertificateService(CertificateService certificateService) {
-        this.certificateService = certificateService;
-    }
+    private final CertificateService certificateService;
 
     @Operation(summary = "Получить сертификат по ID")
     @ApiResponses(value = {

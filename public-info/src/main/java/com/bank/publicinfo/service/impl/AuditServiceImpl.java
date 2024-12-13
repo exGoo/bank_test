@@ -8,8 +8,8 @@ import com.bank.publicinfo.utils.Admin;
 import com.bank.publicinfo.utils.Auditable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webjars.NotFoundException;
@@ -19,28 +19,14 @@ import java.time.LocalDateTime;
 @Service
 @Slf4j
 @Transactional
+@RequiredArgsConstructor
 public class AuditServiceImpl implements AuditService {
 
-    private AuditRepository auditRepository;
+    private final AuditRepository auditRepository;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    private Admin admin;
-
-    @Autowired
-    public void setAuditRepository(AuditRepository auditRepository) {
-        this.auditRepository = auditRepository;
-    }
-
-    @Autowired
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
-    @Autowired
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
+    private final Admin admin;
 
     @Override
     public void saveNewAudit(Auditable<?> entity) {

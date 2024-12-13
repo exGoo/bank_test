@@ -6,8 +6,8 @@ import com.bank.publicinfo.exception.DataValidationException;
 import com.bank.publicinfo.mapper.BankDetailsMapper;
 import com.bank.publicinfo.repository.BankDetailsRepository;
 import com.bank.publicinfo.service.BankDetailsService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
@@ -15,20 +15,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BankDetailsServiceImpl implements BankDetailsService {
 
-    private BankDetailsRepository bankDetailsRepository;
-    private BankDetailsMapper bankDetailsMapper;
+    private final BankDetailsRepository bankDetailsRepository;
 
-    @Autowired
-    public void setBankDetailsRepository(BankDetailsRepository bankDetailsRepository) {
-        this.bankDetailsRepository = bankDetailsRepository;
-    }
-
-    @Autowired
-    public void setBankDetailsMapper(BankDetailsMapper bankDetailsMapper) {
-        this.bankDetailsMapper = bankDetailsMapper;
-    }
+    private final BankDetailsMapper bankDetailsMapper;
 
     @Override
     @Transactional(readOnly = true)

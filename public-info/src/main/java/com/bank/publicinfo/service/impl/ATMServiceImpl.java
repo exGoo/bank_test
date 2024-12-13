@@ -6,8 +6,8 @@ import com.bank.publicinfo.exception.DataValidationException;
 import com.bank.publicinfo.mapper.ATMMapper;
 import com.bank.publicinfo.repository.ATMRepository;
 import com.bank.publicinfo.service.ATMService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
@@ -15,20 +15,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ATMServiceImpl implements ATMService {
 
-    private ATMRepository atmRepository;
-    private ATMMapper atmMapper;
+    private final ATMRepository atmRepository;
 
-    @Autowired
-    public void setAtmRepository(ATMRepository atmRepository) {
-        this.atmRepository = atmRepository;
-    }
-
-    @Autowired
-    public void setAtmMapper(ATMMapper atmMapper) {
-        this.atmMapper = atmMapper;
-    }
+    private final ATMMapper atmMapper;
 
     @Override
     @Transactional(readOnly = true)
@@ -40,7 +32,6 @@ public class ATMServiceImpl implements ATMService {
         });
         return atmMapper.toDto(atm);
     }
-
 
     @Override
     @Transactional(readOnly = true)

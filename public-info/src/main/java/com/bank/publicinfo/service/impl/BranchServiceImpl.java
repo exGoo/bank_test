@@ -6,8 +6,8 @@ import com.bank.publicinfo.exception.DataValidationException;
 import com.bank.publicinfo.mapper.BranchMapper;
 import com.bank.publicinfo.repository.BranchRepository;
 import com.bank.publicinfo.service.BranchService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
@@ -15,20 +15,12 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class BranchServiceImpl implements BranchService {
 
-    private BranchRepository branchRepository;
-    private BranchMapper branchMapper;
+    private final BranchRepository branchRepository;
 
-    @Autowired
-    public void setBranchRepository(BranchRepository branchRepository) {
-        this.branchRepository = branchRepository;
-    }
-
-    @Autowired
-    public void setBranchMapper(BranchMapper branchMapper) {
-        this.branchMapper = branchMapper;
-    }
+    private final BranchMapper branchMapper;
 
     @Override
     @Transactional(readOnly = true)

@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,14 +24,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/licenses")
 @Tag(name = "Licenses", description = "API для управления лицензиями банка")
+@RequiredArgsConstructor
 public class LicenseController {
 
-    private LicenseService licenseService;
-
-    @Autowired
-    public void setLicenseService(LicenseService licenseService) {
-        this.licenseService = licenseService;
-    }
+    private final LicenseService licenseService;
 
     @Operation(summary = "Получить лицензию по ID")
     @ApiResponses(value = {

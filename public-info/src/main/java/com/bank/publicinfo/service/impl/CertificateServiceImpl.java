@@ -8,8 +8,8 @@ import com.bank.publicinfo.mapper.CertificateMapper;
 import com.bank.publicinfo.repository.BankDetailsRepository;
 import com.bank.publicinfo.repository.CertificateRepository;
 import com.bank.publicinfo.service.CertificateService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
@@ -34,41 +34,14 @@ import java.util.List;
  */
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CertificateServiceImpl implements CertificateService {
 
-    private CertificateRepository certificateRepository;
-    private CertificateMapper certificateMapper;
-    private BankDetailsRepository bankDetailsRepository;
+    private final CertificateRepository certificateRepository;
 
-    /**
-     * Устанавливает репозиторий для работы с сертификатами.
-     *
-     * @param certificateRepository репозиторий сертификатов
-     */
-    @Autowired
-    public void setCertificateRepository(CertificateRepository certificateRepository) {
-        this.certificateRepository = certificateRepository;
-    }
+    private final CertificateMapper certificateMapper;
 
-    /**
-     * Устанавливает маппер для преобразования сертификатов.
-     *
-     * @param certificateMapper маппер сертификатов
-     */
-    @Autowired
-    public void setCertificateMapper(CertificateMapper certificateMapper) {
-        this.certificateMapper = certificateMapper;
-    }
-
-    /**
-     * Устанавливает репозиторий для работы с банковской информацией.
-     *
-     * @param bankDetailsRepository репозиторий банковских реквизитов
-     */
-    @Autowired
-    public void setBankDetailsRepository(BankDetailsRepository bankDetailsRepository) {
-        this.bankDetailsRepository = bankDetailsRepository;
-    }
+    private final BankDetailsRepository bankDetailsRepository;
 
     /**
      * Находит сертификат по ID.

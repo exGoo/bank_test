@@ -8,8 +8,8 @@ import com.bank.publicinfo.mapper.LicenseMapper;
 import com.bank.publicinfo.repository.BankDetailsRepository;
 import com.bank.publicinfo.repository.LicenseRepository;
 import com.bank.publicinfo.service.LicenseService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
@@ -17,26 +17,14 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class LicenseServiceImpl implements LicenseService {
 
-    private LicenseRepository licenseRepository;
-    private LicenseMapper licenseMapper;
-    private BankDetailsRepository bankDetailsRepository;
+    private final LicenseRepository licenseRepository;
 
-    @Autowired
-    public void setLicenseRepository(LicenseRepository licenseRepository) {
-        this.licenseRepository = licenseRepository;
-    }
+    private final LicenseMapper licenseMapper;
 
-    @Autowired
-    public void setLicenseMapper(LicenseMapper licenseMapper) {
-        this.licenseMapper = licenseMapper;
-    }
-
-    @Autowired
-    public void setBankDetailsRepository(BankDetailsRepository bankDetailsRepository) {
-        this.bankDetailsRepository = bankDetailsRepository;
-    }
+    private final BankDetailsRepository bankDetailsRepository;
 
     @Override
     @Transactional(readOnly = true)
