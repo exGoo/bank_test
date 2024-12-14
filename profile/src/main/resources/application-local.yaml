@@ -5,13 +5,14 @@ server:
 management:
   server:
     port: 8189
-  endpoint:
-    shutdown:
-      enabled: true
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: 'prometheus, health'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
