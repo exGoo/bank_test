@@ -1,4 +1,4 @@
- package com.bank.antifraud.service.implementation;
+package com.bank.antifraud.service.implementation;
 
 import com.bank.antifraud.annotation.Auditable;
 import com.bank.antifraud.annotation.Auditable.Action;

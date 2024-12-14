@@ -51,14 +51,15 @@ public class CardTransferAntifraudImpl implements CardTransferAntifraud {
         try {
             return transferService.getCardTransferById(id);
         } catch (FeignException e) {
-            log.error("getCardTransferById method with id: {} throw FeignException with cause {}, message {}",
+            log.error("getCardTransferById method with id: {} throw FeignException with cause: {}, message: {}",
                     id, e.getCause(), e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<CardTransferDto> getCardTransfersByCardNumberAndAccountDetailsId(Long cardNumber, Long accountDetailsId) {
+    public List<CardTransferDto> getCardTransfersByCardNumberAndAccountDetailsId(Long cardNumber,
+                                                                                 Long accountDetailsId) {
         log.info("Invoke getCardTransfersByCardNumberAndAccountDetailsId method " +
                 "with accountNumber: {} and accountDetailsId: {}", cardNumber, accountDetailsId);
         List<CardTransferDto> transfers = List.of();
@@ -69,9 +70,8 @@ public class CardTransferAntifraudImpl implements CardTransferAntifraud {
             log.info("CardTransfers not found with accountId: {} and accountNumber: {}",
                     cardNumber, accountDetailsId);
         } catch (FeignException e) {
-            log.error("getCardTransfersByAccountNumberAndAccountDetailsId method " +
-                            "with accountNumber: {} and accountDetailsId: {}" +
-                            "throw FeignException with cause {}, message {}",
+            log.error("getCardTransfersByAccountNumberAndAccountDetailsId method with accountNumber: {} " +
+                            "and accountDetailsId: {} throw FeignException with cause: {}, message: {}",
                     cardNumber, accountDetailsId, e.getCause(), e.getMessage());
             throw new RuntimeException(e);
         }

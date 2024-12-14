@@ -51,14 +51,15 @@ public class PhoneTransferAntifraudImpl implements PhoneTransferAntifraud {
         try {
             return transferService.getPhoneTransferById(id);
         } catch (FeignException e) {
-            log.error("getPhoneTransferById method with id: {} throw FeignException with cause {}, message {}",
+            log.error("getPhoneTransferById method with id: {} throw FeignException with cause: {}, message: {}",
                     id, e.getCause(), e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<PhoneTransferDto> getPhoneTransfersByCardNumberAndAccountDetailsId(Long phoneNumber, Long accountDetailsId) {
+    public List<PhoneTransferDto> getPhoneTransfersByCardNumberAndAccountDetailsId(Long phoneNumber,
+                                                                                   Long accountDetailsId) {
         log.info("Invoke getPhoneTransfersByCardNumberAndAccountDetailsId method " +
                 "with accountNumber: {} and accountDetailsId: {}", phoneNumber, accountDetailsId);
         List<PhoneTransferDto> transfers = List.of();
@@ -69,9 +70,8 @@ public class PhoneTransferAntifraudImpl implements PhoneTransferAntifraud {
             log.info("PhoneTransfers not found with accountId: {} and accountNumber: {}",
                     phoneNumber, accountDetailsId);
         } catch (FeignException e) {
-            log.error("getPhoneTransfersByAccountNumberAndAccountDetailsId method " +
-                            "with accountNumber: {} and accountDetailsId: {}" +
-                            "throw FeignException with cause {}, message {}",
+            log.error("getPhoneTransfersByAccountNumberAndAccountDetailsId method with accountNumber: {} " +
+                            "and accountDetailsId: {} throw FeignException with cause: {}, message: {}",
                     phoneNumber, accountDetailsId, e.getCause(), e.getMessage());
             throw new RuntimeException(e);
         }

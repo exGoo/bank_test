@@ -5,6 +5,7 @@ import com.bank.antifraud.entity.Audit;
 import com.bank.antifraud.service.AuditService;
 import com.bank.antifraud.util.users.Admin;
 import com.bank.antifraud.util.users.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,52 +24,61 @@ public class AuditAspect {
 
     private final AuditService auditService;
     private final ObjectMapper objectMapper;
+    private final OffsetDateTime timeStamp = OffsetDateTime.now();
     private final User user;
     private final Admin admin;
+    private Audit audit;
 
     @Around("@annotation(auditable)")
     public Object auditing(ProceedingJoinPoint joinPoint, Auditable auditable) throws Throwable {
         log.info("Invoke auditing method during execution: {}", joinPoint.getSignature().getName());
-        Object result = null;
         final Action action = auditable.action();
-        final String entityType = auditable.entityType().getStringEntityType();
-        final Audit audit;
-        final OffsetDateTime timeStamp = OffsetDateTime.now();
+        Object result = null;
         try {
             result = joinPoint.proceed();
-            log.info("Method was be executed");
-        } catch (Exception e) {
+            log.info("JoinPoint method was be executed");
+            if (action.equals(Action.CREATE)) {
+                auditService.save(ifCreate(auditable.entityType().getStringEntityType(), action, result));
+                log.info("Audit was created: {}", audit);
+            } else if (action.equals(Action.UPDATE)) {
+                final Audit oldAudit = auditService.getFirstAudit(auditable.entityType().getStringEntityType(),
+                        action.getStringAction(),
+                        (Long) joinPoint.getArgs()[0]);
+                auditService.save(ifUpdate(oldAudit, result));
+                log.info("Audit: {} was updated with new entry: {}", oldAudit, audit);
+            }
+        } catch (JsonProcessingException e) {
+            log.error("Error during serialization of object: {}, error message {}", result, e.getMessage());
+            throw new RuntimeException(e);
+        } catch (Throwable e) {
             log.error("During execution of method {} an error occurred: {}",
                     joinPoint.getSignature().getName(),
                     e.getMessage());
-        }
-        if (action.equals(Action.CREATE)) {
-            audit = Audit.builder()
-                    .entityType(entityType)
-                    .operationType(action.getStringAction())
-                    .createdBy(admin.getUsername())
-                    .createdAt(timeStamp)
-                    .entityJson(objectMapper.writeValueAsString(result))
-                    .build();
-            auditService.save(audit);
-            log.info("Audit was created: {}", audit);
-        } else if (action.equals(Action.UPDATE)) {
-            audit = auditService.getFirstAudit(entityType,
-                    action.getStringAction(),
-                    (Long) joinPoint.getArgs()[0]);
-            final Audit newAudit = Audit.builder()
-                    .entityType(entityType)
-                    .operationType(action.getStringAction())
-                    .createdBy(audit.getCreatedBy())
-                    .createdAt(audit.getCreatedAt())
-                    .modifiedBy(user.getUsername())
-                    .modifiedAt(timeStamp)
-                    .newEntityJson(objectMapper.writeValueAsString(result))
-                    .entityJson(audit.getEntityJson())
-                    .build();
-            auditService.save(newAudit);
-            log.info("Audit: {} was updated with new entry: {}", audit, newAudit);
+            throw new RuntimeException(e);
         }
         return result;
+    }
+
+    private Audit ifCreate(String entityType, Action action, Object result) throws JsonProcessingException {
+        return audit = Audit.builder()
+                .entityType(entityType)
+                .operationType(action.getStringAction())
+                .createdBy(admin.getUsername())
+                .createdAt(timeStamp)
+                .entityJson(objectMapper.writeValueAsString(result))
+                .build();
+    }
+
+    private Audit ifUpdate(Audit oldAudit, Object result) throws JsonProcessingException {
+        return audit = Audit.builder()
+                .entityType(oldAudit.getEntityType())
+                .operationType(Action.UPDATE.getStringAction())
+                .createdBy(oldAudit.getCreatedBy())
+                .createdAt(oldAudit.getCreatedAt())
+                .modifiedBy(user.getUsername())
+                .modifiedAt(timeStamp)
+                .newEntityJson(objectMapper.writeValueAsString(result))
+                .entityJson(oldAudit.getEntityJson())
+                .build();
     }
 }

@@ -51,7 +51,7 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
         try {
             return transferService.getAccountTransferById(id);
         } catch (FeignException e) {
-            log.error("getAccountTransferById method with id: {} throw FeignException with cause {}, message {}",
+            log.error("getAccountTransferById method with id: {} throw FeignException with cause: {}, message: {}",
                     id, e.getCause(), e.getMessage());
             throw new RuntimeException(e);
         }
@@ -70,9 +70,8 @@ public class AccountTransferAntifraudImpl implements AccountTransferAntifraud {
             log.info("AccountTransfers not found with account number: {} and account details id: {}",
                     accountNumber, accountDetailsId);
         } catch (FeignException e) {
-            log.error("getAccountTransfersByAccountNumberAndAccountDetailsId method " +
-                    "with accountNumber: {} and accountDetailsId: {}" +
-                    "throw FeignException with cause {}, message {}",
+            log.error("getAccountTransfersByAccountNumberAndAccountDetailsId method with accountNumber: {} " +
+                            "and accountDetailsId: {} throw FeignException with cause: {}, message: {}",
                     accountNumber, accountDetailsId, e.getCause(), e.getMessage());
             throw new RuntimeException(e);
         }
