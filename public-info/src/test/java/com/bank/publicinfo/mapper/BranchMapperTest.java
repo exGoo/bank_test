@@ -1,43 +1,62 @@
 package com.bank.publicinfo.mapper;
 
 import com.bank.publicinfo.dto.BranchDto;
+import com.bank.publicinfo.entity.ATM;
 import com.bank.publicinfo.entity.Branch;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import java.util.HashSet;
 import java.util.Set;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_ATM_SET;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_BRANCH;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_BRANCH_DTO;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_CITY_1;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_2;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 class BranchMapperTest {
 
     private final BranchMapper mapper = Mappers.getMapper(BranchMapper.class);
 
+    private final Branch branch = Branch.builder()
+            .id(1L)
+            .city("Moscow")
+            .build();
+
+    private final BranchDto branchDto = BranchDto.builder()
+            .id(1L)
+            .city("Minsk")
+            .build();
+
+    private final ATM atm1 = ATM.builder()
+            .id(2L)
+            .address("MyStreet")
+            .build();
+
+    private final ATM atm2 = ATM.builder()
+            .id(3L)
+            .address("YourStreet")
+            .build();
+
+    private final Set<ATM> atms = new HashSet<>(Set.of(atm1, atm2));
+
     @Test
     void toDto() {
-        BranchDto dto = mapper.toDto(TEST_BRANCH);
+        branch.setAtms(atms);
+        BranchDto dto = mapper.toDto(branch);
         assertThat(dto).isNotNull();
-        assertThat(dto.getId()).isEqualTo(TEST_ID_1);
-        assertThat(dto.getCity()).isEqualTo(TEST_CITY_1);
-        assertThat(dto.getAtmsIds()).containsExactlyInAnyOrder(TEST_ID_1);
+        assertThat(dto.getId()).isEqualTo(1L);
+        assertThat(dto.getCity()).isEqualTo("Moscow");
+        assertThat(dto.getAtmsIds()).containsExactlyInAnyOrder(2L, 3L);
     }
 
     @Test
     void toModel() {
-        Branch branch = mapper.toModel(TEST_BRANCH_DTO);
+        Branch branch = mapper.toModel(branchDto);
         assertThat(branch).isNotNull();
         assertThat(branch.getId()).isNull();
-        assertThat(branch.getCity()).isEqualTo(TEST_CITY_1);
+        assertThat(branch.getCity()).isEqualTo("Minsk");
         assertThat(branch.getAtms()).isNull();
     }
 
     @Test
     void mapAtmsIds() {
-        Set<Long> atmsIds = mapper.mapAtmsIds(TEST_ATM_SET);
-        assertThat(atmsIds).containsExactlyInAnyOrder(TEST_ID_1, TEST_ID_2);
+        Set<Long> atmsIds = mapper.mapAtmsIds(atms);
+        assertThat(atmsIds).containsExactlyInAnyOrder(2L, 3L);
     }
 }

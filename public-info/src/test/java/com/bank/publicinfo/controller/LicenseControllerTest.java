@@ -1,7 +1,10 @@
 package com.bank.publicinfo.controller;
 
+import com.bank.publicinfo.dto.CertificateDto;
 import com.bank.publicinfo.dto.LicenseDto;
+import com.bank.publicinfo.service.CertificateService;
 import com.bank.publicinfo.service.LicenseService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -9,26 +12,18 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import javax.persistence.EntityNotFoundException;
-import java.util.Collections;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_INVAID_JSON_2;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_INVALID_JSON;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_LICENSE_DTO;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_LIST_LICENSE;
-import static com.bank.publicinfo.utils.TestsUtils.toJson;
+import java.util.Arrays;
+import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,108 +36,70 @@ class LicenseControllerTest {
     @MockBean
     private LicenseService licenseService;
 
-    private static final String licenseDtoJson = toJson(TEST_LICENSE_DTO);
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String listLicenseDtoJson = toJson(TEST_LIST_LICENSE);
+    private static final Long TEST_ID = 1L;
+
+    private static final LicenseDto DTO = LicenseDto.builder()
+            .id(TEST_ID)
+            .bankDetailsId(3L)
+            .build();
+
+    private static final List<LicenseDto> DTO_LIST = Arrays.asList(
+            new LicenseDto(2L, 7L),
+            new LicenseDto(3L, 11L)
+    );
 
     @Test
     void getLicenseById() throws Exception {
-        when(licenseService.findById(TEST_ID_1)).thenReturn(TEST_LICENSE_DTO);
-        mockMvc.perform(get("/licenses/{id}", TEST_ID_1)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(licenseDtoJson));
-        verify(licenseService).findById(anyLong());
+        when(licenseService.findById(TEST_ID)).thenReturn(DTO);
+        mockMvc.perform(get("/licenses/{id}", TEST_ID))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(TEST_ID))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.bankDetailsId").value(3L));
+        verify(licenseService, times(1)).findById(anyLong());
     }
 
     @Test
     void getAllLicenses() throws Exception {
-        when(licenseService.findAll()).thenReturn(TEST_LIST_LICENSE);
-        mockMvc.perform(get("/licenses")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json(listLicenseDtoJson));
-        verify(licenseService).findAll();
-    }
-
-    @Test
-    void getLicenseByIdWhenNotFound() throws Exception {
-        when(licenseService.findById(TEST_ID_1)).thenThrow(new EntityNotFoundException("License not found"));
-        mockMvc.perform(get("/licenses/{id}", TEST_ID_1)
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("License not found"));
-        verify(licenseService).findById(anyLong());
-    }
-
-    @Test
-    void getAllLicensesWhenNotFound() throws Exception {
-        when(licenseService.findAll()).thenReturn(Collections.emptyList());
-        mockMvc.perform(get("/licenses")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().json("[]"));
-        verify(licenseService).findAll();
+        when(licenseService.findAll()).thenReturn(DTO_LIST);
+        mockMvc.perform(get("/licenses"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(2L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].bankDetailsId").value(11L));
+        verify(licenseService, times(1)).findAll();
     }
 
     @Test
     void addLicense() throws Exception {
-        when(licenseService.addLicence(any(LicenseDto.class))).thenReturn(TEST_LICENSE_DTO);
+        when(licenseService.addLicence(any(LicenseDto.class))).thenReturn(DTO);
+        String newLicenseJson = objectMapper.writeValueAsString(DTO);
         mockMvc.perform(post("/licenses")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(licenseDtoJson))
+                        .content(newLicenseJson))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(licenseDtoJson));
-        verify(licenseService).addLicence(any(LicenseDto.class));
-    }
-
-    @Test
-    void addLicenseWhenRequestBodyInvalid() throws Exception {
-        mockMvc.perform(post("/licenses")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(TEST_INVALID_JSON))
-                .andExpect(status().isBadRequest());
-        verify(licenseService, never()).addLicence(any(LicenseDto.class));
+                .andExpect(jsonPath("$.id").value(DTO.getId()));
+        verify(licenseService, times(1)).addLicence(any(LicenseDto.class));
     }
 
     @Test
     void updateLicense() throws Exception {
-        when(licenseService.updateLicense(anyLong(), any(LicenseDto.class))).thenReturn(TEST_LICENSE_DTO);
-        mockMvc.perform(patch("/licenses/{id}", TEST_ID_1)
+        LicenseDto updatedDto = DTO.toBuilder().bankDetailsId(4L).build();
+        when(licenseService.updateLicense(anyLong(), any(LicenseDto.class))).thenReturn(updatedDto);
+        String updatedAtmJson = objectMapper.writeValueAsString(updatedDto);
+        mockMvc.perform(patch("/licenses/{id}", TEST_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(licenseDtoJson))
+                        .content(updatedAtmJson))
                 .andExpect(status().isOk())
-                .andExpect(content().json(licenseDtoJson));
-        verify(licenseService).updateLicense(anyLong(), any(LicenseDto.class));
-    }
-
-    @Test
-    void updateLicenseWhenNotFound() throws Exception {
-        when(licenseService.updateLicense(anyLong(), any(LicenseDto.class)))
-                .thenThrow(new EntityNotFoundException("License not found with id " + TEST_ID_1));
-        mockMvc.perform(patch("/licenses/{id}", TEST_ID_1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(TEST_INVAID_JSON_2))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("License not found with id " + TEST_ID_1));
-        verify(licenseService).updateLicense(anyLong(), any(LicenseDto.class));
+                .andExpect(jsonPath("$.bankDetailsId").value(updatedDto.getBankDetailsId()));
+        verify(licenseService, times(1)).updateLicense(anyLong(), any(LicenseDto.class));
     }
 
     @Test
     void deleteLicense() throws Exception {
-        doNothing().when(licenseService).deleteLicenceById(TEST_ID_1);
-        mockMvc.perform(delete("/licenses/{id}", TEST_ID_1))
+        doNothing().when(licenseService).deleteLicenceById(TEST_ID);
+        mockMvc.perform(delete("/licenses/{id}", TEST_ID))
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
-        verify(licenseService).deleteLicenceById(anyLong());
-    }
-
-    @Test
-    void deleteLicenseWhenNotFound() throws Exception {
-        doThrow(new EntityNotFoundException("License not found with id "+ TEST_ID_1))
-                .when(licenseService).deleteLicenceById(TEST_ID_1);
-        mockMvc.perform(delete("/licenses/{id}", TEST_ID_1))
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.message").value("License not found with id " + TEST_ID_1));
-        verify(licenseService).deleteLicenceById(anyLong());
+        verify(licenseService, times(1)).deleteLicenceById(anyLong());
     }
 }

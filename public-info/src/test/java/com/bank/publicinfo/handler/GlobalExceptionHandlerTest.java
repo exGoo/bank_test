@@ -5,7 +5,9 @@ import com.bank.publicinfo.utils.ErrorResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import javax.persistence.EntityNotFoundException;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class GlobalExceptionHandlerTest {
