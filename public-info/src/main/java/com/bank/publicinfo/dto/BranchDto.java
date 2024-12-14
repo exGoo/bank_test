@@ -1,20 +1,24 @@
 package com.bank.publicinfo.dto;
 
+import com.bank.publicinfo.utils.Auditable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 import java.util.Set;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class BranchDto {
+@ToString
+public class BranchDto implements Auditable<Long> {
 
     private Long id;
 
@@ -34,4 +38,21 @@ public class BranchDto {
     private LocalTime endOfWork;
 
     private Set<Long> atmsIds;
+
+    public BranchDto(Long id, String city) {
+        this.id = id;
+        this.city = city;
+    }
+
+    @JsonIgnore
+    @Override
+    public Long getEntityId() {
+        return id;
+    }
+
+    @JsonIgnore
+    @Override
+    public String getEntityName() {
+        return "Branch";
+    }
 }
