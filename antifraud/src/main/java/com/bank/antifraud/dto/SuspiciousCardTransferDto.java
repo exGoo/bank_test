@@ -21,7 +21,7 @@ public class SuspiciousCardTransferDto {
     @NotNull
     Boolean isSuspicious;
 
-    String blockerReason;
+    String blockedReason;
 
     @NotNull
     String suspiciousReason;

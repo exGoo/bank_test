@@ -23,6 +23,7 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
 
     private final SuspiciousAccountTransfersRepository satRepository;
     private final SuspiciousAccountTransfersMapper satMapper;
+    private SuspiciousAccountTransfers sat;
 
     /**
      * Добавляет новую запись о подозрительном переводе.
@@ -30,8 +31,10 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      * @param satDto объект {@link SuspiciousAccountTransfersDto}, представляющий подозрительный перевод.
      */
     @Override
-    public void add(SuspiciousAccountTransfersDto satDto) {
-        satRepository.save(satMapper.toEntity(satDto));
+    public SuspiciousAccountTransfersDto add(SuspiciousAccountTransfersDto satDto) {
+        sat = satMapper.toEntity(satDto);
+        satRepository.save(sat);
+        return satMapper.toDto(sat);
     }
 
     /**
@@ -56,9 +59,8 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      */
     @Override
     public void update(Long id, SuspiciousAccountTransfersDto satDto) {
-        get(id);
-        SuspiciousAccountTransfers sat = satMapper.update(satDto);
-        sat.setId(id);
+        sat = satRepository.findById(id).orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id));
+        satMapper.updateExisting(sat, satDto);
         satRepository.save(sat);
     }
 
@@ -69,7 +71,9 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      */
     @Override
     public void remove(Long id) {
-        get(id);
+        if (!satRepository.existsById(id)) {
+            throw new NotFoundSuspiciousAccountTransfersException(id);
+        }
         satRepository.deleteById(id);
     }
 

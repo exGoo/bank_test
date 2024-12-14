@@ -1,12 +1,13 @@
 package com.bank.antifraud.mapper;
 
-import com.bank.antifraud.dto.SuspiciousCardTransferDto;
 import com.bank.antifraud.dto.SuspiciousPhoneTransfersDto;
-import com.bank.antifraud.entity.SuspiciousCardTransfer;
 import com.bank.antifraud.entity.SuspiciousPhoneTransfers;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import java.util.List;
 
@@ -22,6 +23,6 @@ public interface SuspiciousPhoneTransfersMapper {
     List<SuspiciousPhoneTransfersDto> toDtoList(List<SuspiciousPhoneTransfers> sptList);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "phoneTransferId", ignore = true)
-    SuspiciousPhoneTransfers update(SuspiciousPhoneTransfersDto satDto);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateExisting(@MappingTarget SuspiciousPhoneTransfers entity, SuspiciousPhoneTransfersDto sptDto);
 }

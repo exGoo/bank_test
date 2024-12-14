@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface SuspiciousPhoneTransfersService {
 
-    void add(SuspiciousPhoneTransfersDto sat);
+    SuspiciousPhoneTransfersDto add(SuspiciousPhoneTransfersDto sat);
 
     SuspiciousPhoneTransfersDto get(Long id);
 

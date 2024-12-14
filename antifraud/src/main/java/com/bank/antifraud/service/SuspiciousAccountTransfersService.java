@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SuspiciousAccountTransfersService {
 
-    void add(SuspiciousAccountTransfersDto sat);
+    SuspiciousAccountTransfersDto add(SuspiciousAccountTransfersDto sat);
 
     SuspiciousAccountTransfersDto get(Long id);
 

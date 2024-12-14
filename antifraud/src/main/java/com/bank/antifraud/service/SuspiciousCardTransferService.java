@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface SuspiciousCardTransferService {
 
-    void add(SuspiciousCardTransferDto sct);
+    SuspiciousCardTransferDto add(SuspiciousCardTransferDto sct);
 
     SuspiciousCardTransferDto get(Long id);
 

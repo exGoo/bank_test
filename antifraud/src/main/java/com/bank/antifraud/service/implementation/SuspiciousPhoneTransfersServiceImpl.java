@@ -1,8 +1,8 @@
 package com.bank.antifraud.service.implementation;
 
 import com.bank.antifraud.dto.SuspiciousPhoneTransfersDto;
-import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
 import com.bank.antifraud.entity.SuspiciousPhoneTransfers;
+import com.bank.antifraud.exception.NotFoundSuspiciousPhoneTransfersException;
 import com.bank.antifraud.mapper.SuspiciousPhoneTransfersMapper;
 import com.bank.antifraud.repository.SuspiciousPhoneTransfersRepository;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
@@ -16,29 +16,34 @@ public class SuspiciousPhoneTransfersServiceImpl implements SuspiciousPhoneTrans
 
     private final SuspiciousPhoneTransfersRepository sptRepository;
     private final SuspiciousPhoneTransfersMapper sptMapper;
+    private SuspiciousPhoneTransfers spt;
 
     @Override
-    public void add(SuspiciousPhoneTransfersDto spt) {
-        sptRepository.save(sptMapper.toEntity(spt));
+    public SuspiciousPhoneTransfersDto add(SuspiciousPhoneTransfersDto sptDto) {
+        spt = sptMapper.toEntity(sptDto);
+        sptRepository.save(spt);
+        return sptMapper.toDto(spt);
     }
 
     @Override
     public SuspiciousPhoneTransfersDto get(Long id) {
         return sptMapper.toDto(sptRepository.findById(id)
-                .orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id)));
+                .orElseThrow(() -> new NotFoundSuspiciousPhoneTransfersException(id)));
     }
 
     @Override
-    public void update(Long id, SuspiciousPhoneTransfersDto spt) {
-        get(id);
-        final SuspiciousPhoneTransfers currentSat = sptMapper.update(spt);
-        currentSat.setId(id);
-        sptRepository.save(currentSat);
+    public void update(Long id, SuspiciousPhoneTransfersDto sptDto) {
+        spt = sptRepository.findById(id)
+                .orElseThrow(() -> new NotFoundSuspiciousPhoneTransfersException(id));
+        sptMapper.updateExisting(spt, sptDto);
+        sptRepository.save(spt);
     }
 
     @Override
     public void remove(Long id) {
-        get(id);
+        if (!sptRepository.existsById(id)) {
+            throw new NotFoundSuspiciousPhoneTransfersException(id);
+        }
         sptRepository.deleteById(id);
     }
 
