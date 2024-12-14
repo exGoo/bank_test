@@ -7,6 +7,8 @@ import com.bank.antifraud.mapper.SuspiciousCardTransferMapper;
 import com.bank.antifraud.repository.SuspiciousCardTransferRepository;
 import com.bank.antifraud.service.SuspiciousCardTransferService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -49,8 +51,9 @@ public class SuspiciousCardTransferServiceImpl implements SuspiciousCardTransfer
     }
 
     @Override
-    public List<SuspiciousCardTransferDto> getAll() {
-        return sctMapper.toDtoList(sctRepository.findAll());
+    public Page<SuspiciousCardTransferDto> getAll(Pageable pageable) {
+        return sctRepository.findAll(pageable)
+                .map(sctMapper::toDto);
     }
 
 }

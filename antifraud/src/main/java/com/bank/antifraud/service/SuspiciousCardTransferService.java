@@ -1,8 +1,8 @@
 package com.bank.antifraud.service;
 
 import com.bank.antifraud.dto.SuspiciousCardTransferDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface SuspiciousCardTransferService {
 
@@ -14,5 +14,5 @@ public interface SuspiciousCardTransferService {
 
     void remove(Long id);
 
-    List<SuspiciousCardTransferDto> getAll();
+    Page<SuspiciousCardTransferDto> getAll(Pageable pageable);
 }

@@ -1,7 +1,6 @@
 package com.bank.antifraud.controller;
 
 import com.bank.antifraud.dto.SuspiciousPhoneTransfersDto;
-import com.bank.antifraud.mapper.SuspiciousPhoneTransfersMapper;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,7 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -31,7 +31,6 @@ import java.util.List;
 public class SuspiciousPhoneTransfersController {
 
     private final SuspiciousPhoneTransfersService sptService;
-    private final SuspiciousPhoneTransfersMapper sptMapper;
 
     @Operation(summary = "Получить все подозрительные переводы на телефон")
     @ApiResponses(value = {
@@ -40,9 +39,11 @@ public class SuspiciousPhoneTransfersController {
                             schema = @Schema(implementation = SuspiciousPhoneTransfersDto.class)))
     })
     @GetMapping
-    public ResponseEntity<List<SuspiciousPhoneTransfersDto>> getAll() {
+    public ResponseEntity<Page<SuspiciousPhoneTransfersDto>> getAll(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("invoke method getAll");
-        return ResponseEntity.ok(sptMapper.toDtoList(sptService.getAll()));
+        return ResponseEntity.ok(sptService.getAll(PageRequest.of(page, size)));
     }
 
     @Operation(summary = "Получить подозрительный перевод на телефон по ID")
@@ -55,20 +56,20 @@ public class SuspiciousPhoneTransfersController {
     @GetMapping("/{id}")
     public ResponseEntity<SuspiciousPhoneTransfersDto> get(@PathVariable("id") Long id) {
         log.info("invoke method get with id {}", id);
-        return ResponseEntity.ok(sptMapper.toDto(sptService.get(id)));
+        return ResponseEntity.ok(sptService.get(id));
     }
 
     @Operation(summary = "Сохранить новый подозрительный перевод на телефон")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Успешное создание"),
+            @ApiResponse(responseCode = "200", description = "Успешное создание"),
             @ApiResponse(responseCode = "400", description = "Некорректный запрос")
     })
     @PostMapping
-    public ResponseEntity<HttpStatus> add(@RequestBody SuspiciousPhoneTransfersDto sptDto) {
+    public ResponseEntity<SuspiciousPhoneTransfersDto> add(@RequestBody SuspiciousPhoneTransfersDto sptDto) {
         log.info("invoke method save with arg({})", sptDto);
-        sptService.add(sptMapper.toEntity(sptDto));
+        final SuspiciousPhoneTransfersDto saved = sptService.add(sptDto);
         log.info("invoked method save success");
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.ok(saved);
     }
 
     @Operation(summary = "Обновить подозрительный перевод на телефон по ID")
@@ -80,7 +81,7 @@ public class SuspiciousPhoneTransfersController {
     @PatchMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable Long id, @RequestBody SuspiciousPhoneTransfersDto sptDto) {
         log.info("invoke method update with args(id: {}, dto: {})", id, sptDto);
-        sptService.update(id, sptMapper.update(sptDto));
+        sptService.update(id, sptDto);
         log.info("invoked method update success");
         return ResponseEntity.ok("Update success. Suspicious phone transfer with id " + id + " was updated.");
     }

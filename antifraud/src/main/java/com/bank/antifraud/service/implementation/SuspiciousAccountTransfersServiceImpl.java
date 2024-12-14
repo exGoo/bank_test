@@ -7,9 +7,10 @@ import com.bank.antifraud.entity.SuspiciousAccountTransfers;
 import com.bank.antifraud.repository.SuspiciousAccountTransfersRepository;
 import com.bank.antifraud.service.SuspiciousAccountTransfersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Реализация сервиса для управления подозрительными банковскими переводами.
@@ -84,7 +85,8 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      */
     @Override
     @Transactional(readOnly = true)
-    public List<SuspiciousAccountTransfersDto> getAll() {
-        return satMapper.toDtoList(satRepository.findAll());
+    public Page<SuspiciousAccountTransfersDto> getAll(Pageable pageable) {
+        return satRepository.findAll(pageable)
+                .map(satMapper::toDto);
     }
 }

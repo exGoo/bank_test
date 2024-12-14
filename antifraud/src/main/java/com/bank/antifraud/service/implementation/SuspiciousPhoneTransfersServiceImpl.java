@@ -7,6 +7,8 @@ import com.bank.antifraud.mapper.SuspiciousPhoneTransfersMapper;
 import com.bank.antifraud.repository.SuspiciousPhoneTransfersRepository;
 import com.bank.antifraud.service.SuspiciousPhoneTransfersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -48,7 +50,8 @@ public class SuspiciousPhoneTransfersServiceImpl implements SuspiciousPhoneTrans
     }
 
     @Override
-    public List<SuspiciousPhoneTransfersDto> getAll() {
-        return sptMapper.toDtoList(sptRepository.findAll());
+    public Page<SuspiciousPhoneTransfersDto> getAll(Pageable pageable) {
+        return sptRepository.findAll(pageable)
+                .map(sptMapper::toDto);
     }
 }
