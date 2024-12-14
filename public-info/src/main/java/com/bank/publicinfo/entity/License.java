@@ -54,6 +54,7 @@ public class License {
 
     @Override
     public final int hashCode() {
-        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+        return this instanceof HibernateProxy proxy ? proxy.getHibernateLazyInitializer()
+                .getPersistentClass().hashCode() : getClass().hashCode();
     }
 }
