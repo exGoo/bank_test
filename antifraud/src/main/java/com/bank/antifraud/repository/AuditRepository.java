@@ -8,7 +8,7 @@ import java.util.Optional;
 @Repository
 public interface AuditRepository extends JpaRepository<Audit, Long> {
 
-    Optional<Audit> findTopByNewEntityJson(String entityJson);
-
-    Optional<Audit> findByEntityJson(String entityJson);
+    Optional<Audit> findAuditByEntityTypeAndOperationTypeAndEntityJsonContaining(String entityType,
+                                                                                 String operationType,
+                                                                                 String entityJson);
 }

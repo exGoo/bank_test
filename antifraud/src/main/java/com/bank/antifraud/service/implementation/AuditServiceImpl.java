@@ -18,4 +18,13 @@ public class AuditServiceImpl implements AuditService {
     public void save(Audit audit) {
         auditRepository.save(audit);
     }
+
+    @Override
+    public Audit getFirstAudit(String entityType, String operationType, Long id) {
+        return auditRepository.findAuditByEntityTypeAndOperationTypeAndEntityJsonContaining(
+                entityType,
+                operationType,
+                String.format("id:%s", id))
+                    .orElseThrow();
+    }
 }

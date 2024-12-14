@@ -10,7 +10,7 @@ public interface SuspiciousCardTransferService {
 
     SuspiciousCardTransferDto get(Long id);
 
-    void update(Long id, SuspiciousCardTransferDto sct);
+    SuspiciousCardTransferDto update(Long id, SuspiciousCardTransferDto sct);
 
     void remove(Long id);
 

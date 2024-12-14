@@ -10,7 +10,7 @@ public interface SuspiciousPhoneTransfersService {
 
     SuspiciousPhoneTransfersDto get(Long id);
 
-    void update(Long id, SuspiciousPhoneTransfersDto sat);
+    SuspiciousPhoneTransfersDto update(Long id, SuspiciousPhoneTransfersDto sat);
 
     void remove(Long id);
 

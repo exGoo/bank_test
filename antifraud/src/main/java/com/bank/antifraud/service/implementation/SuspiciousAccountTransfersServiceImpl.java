@@ -1,5 +1,7 @@
  package com.bank.antifraud.service.implementation;
 
+import com.bank.antifraud.annotation.Auditable;
+import com.bank.antifraud.annotation.Auditable.Action;
 import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
 import com.bank.antifraud.mapper.SuspiciousAccountTransfersMapper;
@@ -11,8 +13,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Pageable;
+import static com.bank.antifraud.annotation.Auditable.EntityType.SUSPICIOUS_ACCOUNT_TRANSFERS;
 
-/**
+ /**
  * Реализация сервиса для управления подозрительными банковскими переводами.
  * Этот класс предоставляет методы для добавления, получения, обновления и удаления записей
  * о подозрительных переводах, а также для получения всех записей.
@@ -32,6 +35,7 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      * @param satDto объект {@link SuspiciousAccountTransfersDto}, представляющий подозрительный перевод.
      */
     @Override
+    @Auditable(action = Action.CREATE, entityType = SUSPICIOUS_ACCOUNT_TRANSFERS)
     public SuspiciousAccountTransfersDto add(SuspiciousAccountTransfersDto satDto) {
         sat = satMapper.toEntity(satDto);
         satRepository.save(sat);
@@ -59,10 +63,12 @@ public class SuspiciousAccountTransfersServiceImpl implements SuspiciousAccountT
      * @param satDto объект {@link SuspiciousAccountTransfersDto}, содержащий обновленные данные.
      */
     @Override
-    public void update(Long id, SuspiciousAccountTransfersDto satDto) {
+    @Auditable(action = Action.UPDATE, entityType = SUSPICIOUS_ACCOUNT_TRANSFERS)
+    public SuspiciousAccountTransfersDto update(Long id, SuspiciousAccountTransfersDto satDto) {
         sat = satRepository.findById(id).orElseThrow(() -> new NotFoundSuspiciousAccountTransfersException(id));
         satMapper.updateExisting(sat, satDto);
         satRepository.save(sat);
+        return satMapper.toDto(sat);
     }
 
     /**
