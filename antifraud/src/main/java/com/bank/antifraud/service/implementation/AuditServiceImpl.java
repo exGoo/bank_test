@@ -1,6 +1,7 @@
 package com.bank.antifraud.service.implementation;
 
 import com.bank.antifraud.entity.Audit;
+import com.bank.antifraud.exception.NotFoundAuditException;
 import com.bank.antifraud.repository.AuditRepository;
 import com.bank.antifraud.service.AuditService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,6 @@ public class AuditServiceImpl implements AuditService {
                 entityType,
                 operationType,
                 String.format("id:%s", id))
-                    .orElseThrow();
+                    .orElseThrow(() -> new NotFoundAuditException(entityType, operationType, id));
     }
 }

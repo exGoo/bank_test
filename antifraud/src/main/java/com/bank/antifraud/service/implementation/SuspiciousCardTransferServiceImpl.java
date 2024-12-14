@@ -62,5 +62,4 @@ public class SuspiciousCardTransferServiceImpl implements SuspiciousCardTransfer
         return sctRepository.findAll(pageable)
                 .map(sctMapper::toDto);
     }
-
 }
