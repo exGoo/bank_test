@@ -21,6 +21,7 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Audit getFirstAudit(String entityType, String operationType, Long id) {
         return auditRepository.findAuditByEntityTypeAndOperationTypeAndEntityJsonContaining(
                 entityType,

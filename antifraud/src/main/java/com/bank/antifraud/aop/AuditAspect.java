@@ -30,7 +30,7 @@ public class AuditAspect {
     private Audit audit;
 
     @Around("@annotation(auditable)")
-    public Object auditing(ProceedingJoinPoint joinPoint, Auditable auditable) throws Throwable {
+    public Object auditing(ProceedingJoinPoint joinPoint, Auditable auditable) {
         log.info("Invoke auditing method during execution: {}", joinPoint.getSignature().getName());
         final Action action = auditable.action();
         Object result = null;
