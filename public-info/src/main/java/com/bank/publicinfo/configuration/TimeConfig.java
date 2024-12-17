@@ -8,11 +8,12 @@ import org.springframework.context.annotation.Configuration;
 // конфигурация для корректной сериализации полей LocalTime
 @Configuration
 public class TimeConfig {
+
     @Bean
     public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return mapper;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        return objectMapper;
     }
 }

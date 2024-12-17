@@ -9,7 +9,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class ATMMapperTest {
 
-    private final ATMMapper mapper = Mappers.getMapper(ATMMapper.class);
+    private ATMMapper mapper = Mappers.getMapper(ATMMapper.class);
 
     private final ATM atm = ATM.builder()
             .id(1L)

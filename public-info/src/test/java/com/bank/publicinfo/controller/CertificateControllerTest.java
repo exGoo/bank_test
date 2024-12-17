@@ -2,27 +2,26 @@ package com.bank.publicinfo.controller;
 
 import com.bank.publicinfo.dto.CertificateDto;
 import com.bank.publicinfo.service.CertificateService;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bank.publicinfo.utils.TestsUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import java.util.Arrays;
-import java.util.List;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_CERTIFICATE_DTO;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_LIST_CERTIFICATES;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(CertificateController.class)
@@ -34,70 +33,57 @@ class CertificateControllerTest {
     @MockBean
     private CertificateService certificateService;
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final String certificateDtoJson = TestsUtils.toJson(TEST_CERTIFICATE_DTO);
 
-    private static final Long TEST_ID = 1L;
-
-    private static final CertificateDto DTO = CertificateDto.builder()
-            .id(TEST_ID)
-            .bankDetailsId(3L)
-            .build();
-
-    private static final List<CertificateDto> DTO_LIST = Arrays.asList(
-            new CertificateDto(2L, 7L),
-            new CertificateDto(3L, 11L)
-    );
+    private static final String listCertificatesDtoJson = TestsUtils.toJson(TEST_LIST_CERTIFICATES);
 
     @Test
     void getCertificateById() throws Exception {
-        when(certificateService.findById(TEST_ID)).thenReturn(DTO);
-        mockMvc.perform(get("/certificates/{id}", TEST_ID))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(TEST_ID))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.bankDetailsId").value(3L));
-        verify(certificateService, times(1)).findById(anyLong());
+        when(certificateService.findById(TEST_ID_1)).thenReturn(TEST_CERTIFICATE_DTO);
+        mockMvc.perform(get("/certificates/{id}", TEST_ID_1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(certificateDtoJson));
+        verify(certificateService).findById(anyLong());
     }
 
     @Test
     void getAllCertificates() throws Exception {
-        when(certificateService.findAll()).thenReturn(DTO_LIST);
-        mockMvc.perform(get("/certificates"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(2L))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].bankDetailsId").value(11L));
-        verify(certificateService, times(1)).findAll();
+        when(certificateService.findAll()).thenReturn(TEST_LIST_CERTIFICATES);
+        mockMvc.perform(get("/certificates")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(listCertificatesDtoJson));
+        verify(certificateService).findAll();
     }
 
     @Test
     void addCertificate() throws Exception {
-        when(certificateService.addCertificate(any(CertificateDto.class))).thenReturn(DTO);
-        String newCertificateJson = objectMapper.writeValueAsString(DTO);
+        when(certificateService.addCertificate(any(CertificateDto.class))).thenReturn(TEST_CERTIFICATE_DTO);
         mockMvc.perform(post("/certificates")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newCertificateJson))
+                        .content(certificateDtoJson))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(DTO.getId()));
-        verify(certificateService, times(1)).addCertificate(any(CertificateDto.class));
+                .andExpect(content().json(certificateDtoJson));
+        verify(certificateService).addCertificate(any(CertificateDto.class));
     }
 
     @Test
     void updateCertificate() throws Exception {
-        CertificateDto updatedDto = DTO.toBuilder().bankDetailsId(4L).build();
-        when(certificateService.updateCertificate(anyLong(), any(CertificateDto.class))).thenReturn(updatedDto);
-        String updatedAtmJson = objectMapper.writeValueAsString(updatedDto);
-        mockMvc.perform(patch("/certificates/{id}", TEST_ID)
+        when(certificateService.updateCertificate(anyLong(), any(CertificateDto.class))).thenReturn(TEST_CERTIFICATE_DTO);
+        mockMvc.perform(patch("/certificates/{id}", TEST_ID_1)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(updatedAtmJson))
+                        .content(certificateDtoJson))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.bankDetailsId").value(updatedDto.getBankDetailsId()));
-        verify(certificateService, times(1)).updateCertificate(anyLong(), any(CertificateDto.class));
+                .andExpect(content().json(certificateDtoJson));
+        verify(certificateService).updateCertificate(anyLong(), any(CertificateDto.class));
     }
 
     @Test
     void deleteCertificate() throws Exception {
-        doNothing().when(certificateService).deleteCertificateById(TEST_ID);
-        mockMvc.perform(delete("/certificates/{id}", TEST_ID))
-                .andExpect(MockMvcResultMatchers.status().isNoContent());
-        verify(certificateService, times(1)).deleteCertificateById(anyLong());
+        doNothing().when(certificateService).deleteCertificateById(TEST_ID_1);
+        mockMvc.perform(delete("/certificates/{id}", TEST_ID_1))
+                .andExpect(status().isNoContent());
+        verify(certificateService).deleteCertificateById(anyLong());
     }
 }

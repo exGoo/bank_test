@@ -34,11 +34,6 @@ public class ATMDto implements Auditable<Long> {
 
     private Long branchId;
 
-    public ATMDto(Long id, String address) {
-        this.id = id;
-        this.address = address;
-    }
-
     @JsonIgnore
     @Override
     public Long getEntityId() {

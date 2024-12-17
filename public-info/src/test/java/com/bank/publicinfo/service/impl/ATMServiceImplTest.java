@@ -48,7 +48,7 @@ class ATMServiceImplTest {
     }
 
     @Test
-    void findByIdSucces() {
+    void findByIdSuccess() {
         when(atmRepository.findById(1L)).thenReturn(Optional.of(atm));
         when(atmMapper.toDto(atm)).thenReturn(atmDto);
         ATMDto result = atmService.findById(1L);
