@@ -15,9 +15,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static com.bank.publicinfo.utils.TestsUtils.TEST_BANK_DETAILS;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_CITY_1;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_DETAILS_DTO;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_DETAILS_LIST_2;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_LIST_DETAILS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -52,50 +60,46 @@ class BankDetailsServiceImplTest {
     }
 
     @Test
-    void findByIdSucces() {
-        when(bankDetailsRepository.findById(1L)).thenReturn(Optional.of(bankDetails));
-        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);
-        BankDetailsDto result = bankDetailsService.findById(1L);
+    void findByIdSuccess() {
+        when(bankDetailsRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_BANK_DETAILS));
+        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
+        BankDetailsDto result = bankDetailsService.findById(TEST_ID_1);
         assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(bankDetailsRepository, times(1)).findById(1L);
-        verify(bankDetailsMapper, times(1)).toDto(bankDetails);
+        assertEquals(TEST_DETAILS_DTO,result);
+        verify(bankDetailsRepository).findById(TEST_ID_1);
+        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
     }
 
     @Test
     void findByIdFailure() {
-        Long id = 1L;
-        when(bankDetailsRepository.findById(id)).thenReturn(Optional.empty());
+        when(bankDetailsRepository.findById(TEST_ID_1)).thenReturn(Optional.empty());
         Exception exception = assertThrows(EntityNotFoundException.class, () -> {
-            bankDetailsService.findById(id);
+            bankDetailsService.findById(TEST_ID_1);
         });
-        assertEquals("Bank Details not found with id " + id, exception.getMessage());
-        verify(bankDetailsRepository).findById(id);
+        assertTrue(exception.getMessage().contains("Bank Details not found with id " + TEST_ID_1));
+        verify(bankDetailsRepository).findById(TEST_ID_1);
     }
 
     @Test
     void findAllWithRelations() {
-        List<BankDetails> detailsList = List.of(bankDetails);
-        when(bankDetailsRepository.findAll()).thenReturn(detailsList);
-        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);
+        List<BankDetailsDto> detailsList = List.of(TEST_DETAILS_DTO);
+        when(bankDetailsRepository.findAll()).thenReturn(TEST_DETAILS_LIST_2);
+        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
         List<BankDetailsDto> result = bankDetailsService.findAllWithRelations();
         assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(bankDetailsRepository, times(1)).findAll();
-        verify(bankDetailsMapper, times(1)).toDto(bankDetails);
+        assertEquals(detailsList, result);
+        verify(bankDetailsRepository).findAll();
+        verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
     }
 
     @Test
-    void findByCitySucces() {
-        String city = "Moscow";
-        List<BankDetails> bankDetailsList = Arrays.asList(bankDetails);
-        BankDetailsDto bankDetailsDto = new BankDetailsDto(1L, city);
-        when(bankDetailsRepository.findByCity(city)).thenReturn(bankDetailsList);
-        when(bankDetailsMapper.toDto(bankDetails)).thenReturn(bankDetailsDto);
-        List<BankDetailsDto> result = bankDetailsService.findByCity(city);
+    void findByCitySuccess() {
+        when(bankDetailsRepository.findByCity(TEST_CITY_1)).thenReturn(TEST_DETAILS_LIST_2);
+        when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
+        List<BankDetailsDto> result = bankDetailsService.findByCity(TEST_CITY_1);
         assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(bankDetailsDto, result.get(0));
+        assertEquals(TEST_LIST_DETAILS,result);
+        assertEquals(TEST_DETAILS_DTO, result.get(0));
     }
 
     @Test
@@ -133,7 +137,7 @@ class BankDetailsServiceImplTest {
     }
 
     @Test
-    void deleteBankDetailsByIdSucces() {
+    void deleteBankDetailsByIdSuccess() {
         doNothing().when(bankDetailsRepository).deleteById(1L);
         bankDetailsService.deleteBankDetailsById(1L);
         verify(bankDetailsRepository, times(1)).deleteById(1L);
@@ -147,7 +151,7 @@ class BankDetailsServiceImplTest {
     }
 
     @Test
-    void updateBankDetailsSucces() {
+    void updateBankDetailsSuccess() {
         when(bankDetailsRepository.findById(1L)).thenReturn(Optional.of(bankDetails));
         when(bankDetailsRepository.save(any(BankDetails.class))).thenReturn(bankDetails);
         when(bankDetailsMapper.toDto(bankDetails)).thenReturn(detailsDto);

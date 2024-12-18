@@ -4,7 +4,6 @@ import com.bank.publicinfo.dto.ATMDto;
 import com.bank.publicinfo.entity.ATM;
 import com.bank.publicinfo.mapper.ATMMapper;
 import com.bank.publicinfo.repository.ATMRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,13 +12,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ATM_1;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ATM_DTO;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ATM_LIST;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -35,94 +38,81 @@ class ATMServiceImplTest {
     @Mock
     private ATMMapper atmMapper;
 
-    private ATM atm;
-
-    private ATMDto atmDto;
-
-    @BeforeEach
-    public void setUp() {
-        atm = new ATM();
-        atm.setId(1L);
-        atmDto = new ATMDto();
-        atmDto.setId(1L);
-    }
-
     @Test
     void findByIdSuccess() {
-        when(atmRepository.findById(1L)).thenReturn(Optional.of(atm));
-        when(atmMapper.toDto(atm)).thenReturn(atmDto);
-        ATMDto result = atmService.findById(1L);
+        when(atmRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_ATM_1));
+        when(atmMapper.toDto(TEST_ATM_1)).thenReturn(TEST_ATM_DTO);
+        ATMDto result = atmService.findById(TEST_ID_1);
         assertNotNull(result);
-        assertEquals(1L, result.getId());
-        verify(atmRepository, times(1)).findById(1L);
-        verify(atmMapper, times(1)).toDto(atm);
+        assertEquals(TEST_ATM_DTO,result);
+        verify(atmRepository).findById(TEST_ID_1);
+        verify(atmMapper).toDto(TEST_ATM_1);
     }
 
     @Test
     void findByIdFailure() {
-        Long id = 1L;
-        when(atmRepository.findById(id)).thenReturn(Optional.empty());
+        when(atmRepository.findById(TEST_ID_1)).thenReturn(Optional.empty());
         Exception exception = assertThrows(EntityNotFoundException.class, () -> {
-            atmService.findById(id);
+            atmService.findById(TEST_ID_1);
         });
-        assertEquals("ATM not found with id " + id, exception.getMessage());
-        verify(atmRepository).findById(id);
+        assertTrue(exception.getMessage().contains("ATM not found with id" + TEST_ID_1));
+        verify(atmRepository).findById(TEST_ID_1);
     }
 
     @Test
     void findAll() {
-        List<ATM> atmList = List.of(atm);
-        when(atmRepository.findAll()).thenReturn(atmList);
-        when(atmMapper.toDto(atm)).thenReturn(atmDto);
+        List<ATMDto> expectedDtos = List.of(TEST_ATM_DTO);
+        when(atmRepository.findAll()).thenReturn(TEST_ATM_LIST);
+        when(atmMapper.toDto(TEST_ATM_1)).thenReturn(TEST_ATM_DTO);
         List<ATMDto> result = atmService.findAll();
         assertNotNull(result);
-        assertEquals(1, result.size());
-        verify(atmRepository, times(1)).findAll();
-        verify(atmMapper, times(1)).toDto(atm);
+        assertEquals(expectedDtos, result);
+        verify(atmRepository).findAll();
+        verify(atmMapper).toDto(TEST_ATM_1);
     }
 
     @Test
     void addATM() {
-        when(atmMapper.toModel(atmDto)).thenReturn(atm);
-        when(atmRepository.save(atm)).thenReturn(atm);
-        when(atmMapper.toDto(atm)).thenReturn(atmDto);
-        ATMDto result = atmService.addATM(atmDto);
+        when(atmMapper.toModel(TEST_ATM_DTO)).thenReturn(TEST_ATM_1);
+        when(atmRepository.save(TEST_ATM_1)).thenReturn(TEST_ATM_1);
+        when(atmMapper.toDto(TEST_ATM_1)).thenReturn(TEST_ATM_DTO);
+        ATMDto result = atmService.addATM(TEST_ATM_DTO);
         assertNotNull(result);
-        verify(atmRepository, times(1)).save(atm);
-        verify(atmMapper, times(1)).toModel(atmDto);
-        verify(atmMapper, times(1)).toDto(atm);
+        verify(atmRepository).save(TEST_ATM_1);
+        verify(atmMapper).toModel(TEST_ATM_DTO);
+        verify(atmMapper).toDto(TEST_ATM_1);
     }
 
     @Test
-    void deleteATMByIdSucces() {
-        doNothing().when(atmRepository).deleteById(1L);
-        atmService.deleteATMById(1L);
-        verify(atmRepository, times(1)).deleteById(1L);
+    void deleteATMByIdSuccess() {
+        doNothing().when(atmRepository).deleteById(TEST_ID_1);
+        atmService.deleteATMById(TEST_ID_1);
+        verify(atmRepository).deleteById(TEST_ID_1);
     }
 
     @Test
     void deleteATMByIdFailure() {
-        doThrow(new EntityNotFoundException("ATM not found with id 1")).when(atmRepository).deleteById(1L);
-        assertThrows(EntityNotFoundException.class, () -> atmService.deleteATMById(1L));
-        verify(atmRepository, times(1)).deleteById(1L);
+        doThrow(new EntityNotFoundException("ATM not found with id 1")).when(atmRepository).deleteById(TEST_ID_1);
+        assertThrows(EntityNotFoundException.class, () -> atmService.deleteATMById(TEST_ID_1));
+        verify(atmRepository).deleteById(TEST_ID_1);
     }
 
     @Test
-    void updateATMSucces() {
-        when(atmRepository.findById(1L)).thenReturn(Optional.of(atm));
-        when(atmRepository.save(any(ATM.class))).thenReturn(atm);
-        when(atmMapper.toDto(atm)).thenReturn(atmDto);
-        ATMDto result = atmService.updateATM(1L, atmDto);
+    void updateATMSuccess() {
+        when(atmRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_ATM_1));
+        when(atmRepository.save(any(ATM.class))).thenReturn(TEST_ATM_1);
+        when(atmMapper.toDto(TEST_ATM_1)).thenReturn(TEST_ATM_DTO);
+        ATMDto result = atmService.updateATM(TEST_ID_1, TEST_ATM_DTO);
         assertNotNull(result);
-        verify(atmRepository, times(1)).findById(1L);
-        verify(atmRepository, times(1)).save(any(ATM.class));
-        verify(atmMapper, times(1)).toDto(atm);
+        verify(atmRepository).findById(TEST_ID_1);
+        verify(atmRepository).save(any(ATM.class));
+        verify(atmMapper).toDto(TEST_ATM_1);
     }
 
     @Test
     void updateATMFailure() {
-        when(atmRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(EntityNotFoundException.class, () -> atmService.updateATM(1L, atmDto));
-        verify(atmRepository, times(1)).findById(1L);
+        when(atmRepository.findById(TEST_ID_1)).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> atmService.updateATM(TEST_ID_1, TEST_ATM_DTO));
+        verify(atmRepository).findById(TEST_ID_1);
     }
 }

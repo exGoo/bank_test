@@ -1,7 +1,6 @@
 package com.bank.publicinfo.service.impl;
 
 import com.bank.publicinfo.entity.Audit;
-import com.bank.publicinfo.exception.DataValidationException;
 import com.bank.publicinfo.repository.AuditRepository;
 import com.bank.publicinfo.utils.Admin;
 import com.bank.publicinfo.utils.Auditable;
@@ -17,9 +16,13 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
@@ -43,7 +46,7 @@ class AuditServiceImplTest {
     public void setUp() {
         entity = mock(Auditable.class);
         when(entity.getEntityName()).thenReturn("ATM");
-        when(entity.getEntityId()).thenReturn(1L);
+        when(entity.getEntityId()).thenReturn(TEST_ID_1);
     }
 
     @Test
@@ -51,7 +54,7 @@ class AuditServiceImplTest {
         when(objectMapper.writeValueAsString(any())).thenReturn("{}");
         when(admin.getUsername()).thenReturn("admin");
         auditService.saveNewAudit(entity);
-        verify(auditRepository, times(1)).save(any(Audit.class));
+        verify(auditRepository).save(any(Audit.class));
     }
 
     @Test
@@ -69,7 +72,7 @@ class AuditServiceImplTest {
         when(objectMapper.writeValueAsString(any())).thenReturn("{}");
         when(admin.getUsername()).thenReturn("admin");
         auditService.refreshAudit(entity);
-        verify(auditRepository, times(1)).save(any(Audit.class));
+        verify(auditRepository).save(any(Audit.class));
     }
 
     @Test
