@@ -6,6 +6,7 @@ import com.bank.publicinfo.mapper.BranchMapper;
 import com.bank.publicinfo.repository.BranchRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -41,6 +42,12 @@ class BranchServiceImplTest {
     @Mock
     private BranchMapper branchMapper;
 
+    private static final ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+
+    private static final ArgumentCaptor<Branch> branchArgumentCaptor = ArgumentCaptor.forClass(Branch.class);
+
+    private static final ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
+
     @Test
     void findByIdSuccess() {
         when(branchRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_BRANCH));
@@ -48,7 +55,8 @@ class BranchServiceImplTest {
         BranchDto result = branchService.findById(TEST_ID_1);
         assertNotNull(result);
         assertEquals(TEST_BRANCH_DTO,result);
-        verify(branchRepository).findById(TEST_ID_1);
+        verify(branchRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
         verify(branchMapper).toDto(TEST_BRANCH);
     }
 
@@ -59,7 +67,8 @@ class BranchServiceImplTest {
             branchService.findById(TEST_ID_1);
         });
         assertTrue(exception.getMessage().contains("Branch not found with id " + TEST_ID_1));
-        verify(branchRepository).findById(TEST_ID_1);
+        verify(branchRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -90,7 +99,8 @@ class BranchServiceImplTest {
         List<BranchDto> result = branchService.findByCity(TEST_CITY_1);
         assertNotNull(result);
         assertEquals(TEST_LIST_BRANCHES, result);
-        verify(branchRepository).findByCityWithAtms(TEST_CITY_1);
+        verify(branchRepository).findByCityWithAtms(stringArgumentCaptor.capture());
+        assertEquals(TEST_CITY_1, stringArgumentCaptor.getValue());
         verify(branchMapper).toDto(TEST_BRANCH);
         verify(branchMapper).toDto(TEST_BRANCH_2);
     }
@@ -120,7 +130,8 @@ class BranchServiceImplTest {
         when(branchMapper.toDto(TEST_BRANCH)).thenReturn(TEST_BRANCH_DTO);
         BranchDto result = branchService.addBranch(TEST_BRANCH_DTO);
         assertNotNull(result);
-        verify(branchRepository).save(TEST_BRANCH);
+        verify(branchRepository).save(branchArgumentCaptor.capture());
+        assertEquals(TEST_BRANCH, branchArgumentCaptor.getValue());
         verify(branchMapper).toModel(TEST_BRANCH_DTO);
         verify(branchMapper).toDto(TEST_BRANCH);
     }
@@ -129,7 +140,8 @@ class BranchServiceImplTest {
     void deleteBranchByIdSuccess() {
         doNothing().when(branchRepository).deleteById(TEST_ID_1);
         branchService.deleteBranchById(TEST_ID_1);
-        verify(branchRepository).deleteById(TEST_ID_1);
+        verify(branchRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -139,7 +151,8 @@ class BranchServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> branchService.deleteBranchById(TEST_ID_1));
         assertTrue(exception.getMessage().contains("Branch not found with id " + TEST_ID_1));
-        verify(branchRepository).deleteById(TEST_ID_1);
+        verify(branchRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -149,8 +162,10 @@ class BranchServiceImplTest {
         when(branchMapper.toDto(TEST_BRANCH)).thenReturn(TEST_BRANCH_DTO);
         BranchDto result = branchService.updateBranch(TEST_ID_1, TEST_BRANCH_DTO);
         assertNotNull(result);
-        verify(branchRepository).findById(TEST_ID_1);
-        verify(branchRepository).save(any(Branch.class));
+        verify(branchRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        verify(branchRepository).save(branchArgumentCaptor.capture());
+        assertEquals(TEST_BRANCH, branchArgumentCaptor.getValue());
         verify(branchMapper).toDto(TEST_BRANCH);
     }
 
@@ -160,6 +175,7 @@ class BranchServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> branchService.updateBranch(TEST_ID_1, TEST_BRANCH_DTO));
         assertTrue(exception.getMessage().contains("Branch not found with id " + TEST_ID_1));
-        verify(branchRepository).findById(TEST_ID_1);
+        verify(branchRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 }

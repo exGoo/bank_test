@@ -46,7 +46,11 @@ class BankDetailsServiceImplTest {
     @Mock
     private BankDetailsMapper bankDetailsMapper;
 
-    private static ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+    private static final ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+
+    private static final ArgumentCaptor<BankDetails> detailsArgumentCaptor = ArgumentCaptor.forClass(BankDetails.class);
+
+    private static final ArgumentCaptor<String> stringArgumentCaptor = ArgumentCaptor.forClass(String.class);
 
     @Test
     void findByIdSuccess() {
@@ -55,7 +59,8 @@ class BankDetailsServiceImplTest {
         BankDetailsDto result = bankDetailsService.findById(TEST_ID_1);
         assertNotNull(result);
         assertEquals(TEST_DETAILS_DTO,result);
-        verify(bankDetailsRepository).findById(TEST_ID_1);
+        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
         verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
     }
 
@@ -66,7 +71,8 @@ class BankDetailsServiceImplTest {
             bankDetailsService.findById(TEST_ID_1);
         });
         assertTrue(exception.getMessage().contains("Bank Details not found with id " + TEST_ID_1));
-        verify(bankDetailsRepository).findById(TEST_ID_1);
+        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -96,7 +102,8 @@ class BankDetailsServiceImplTest {
         List<BankDetailsDto> result = bankDetailsService.findByCity(TEST_CITY_1);
         assertNotNull(result);
         assertEquals(TEST_LIST_DETAILS,result);
-        verify(bankDetailsRepository).findByCity(TEST_CITY_1);
+        verify(bankDetailsRepository).findByCity(stringArgumentCaptor.capture());
+        assertEquals(TEST_CITY_1, stringArgumentCaptor.getValue());
         verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
         verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS_2);
     }
@@ -126,7 +133,8 @@ class BankDetailsServiceImplTest {
         when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
         BankDetailsDto result = bankDetailsService.addBankDetails(TEST_DETAILS_DTO);
         assertNotNull(result);
-        verify(bankDetailsRepository).save(TEST_BANK_DETAILS);
+        verify(bankDetailsRepository).save(detailsArgumentCaptor.capture());
+        assertEquals(TEST_BANK_DETAILS, detailsArgumentCaptor.getValue());
         verify(bankDetailsMapper).toModel(TEST_DETAILS_DTO);
         verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
     }
@@ -135,7 +143,8 @@ class BankDetailsServiceImplTest {
     void deleteBankDetailsByIdSuccess() {
         doNothing().when(bankDetailsRepository).deleteById(TEST_ID_1);
         bankDetailsService.deleteBankDetailsById(TEST_ID_1);
-        verify(bankDetailsRepository).deleteById(TEST_ID_1);
+        verify(bankDetailsRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -145,7 +154,8 @@ class BankDetailsServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> bankDetailsService.deleteBankDetailsById(TEST_ID_1));
         assertTrue(exception.getMessage().contains("BankDetails not found with id " + TEST_ID_1));
-        verify(bankDetailsRepository).deleteById(TEST_ID_1);
+        verify(bankDetailsRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -155,8 +165,10 @@ class BankDetailsServiceImplTest {
         when(bankDetailsMapper.toDto(TEST_BANK_DETAILS)).thenReturn(TEST_DETAILS_DTO);
         BankDetailsDto result = bankDetailsService.updateBankDetails(TEST_ID_1, TEST_DETAILS_DTO);
         assertNotNull(result);
-        verify(bankDetailsRepository).findById(TEST_ID_1);
-        verify(bankDetailsRepository).save(any(BankDetails.class));
+        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        verify(bankDetailsRepository).save(detailsArgumentCaptor.capture());
+        assertEquals(TEST_BANK_DETAILS, detailsArgumentCaptor.getValue());
         verify(bankDetailsMapper).toDto(TEST_BANK_DETAILS);
     }
 
@@ -166,6 +178,7 @@ class BankDetailsServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> bankDetailsService.updateBankDetails(TEST_ID_1, TEST_DETAILS_DTO));
         assertTrue(exception.getMessage().contains("Bank Details not found with id " + TEST_ID_1));
-        verify(bankDetailsRepository).findById(TEST_ID_1);
+        verify(bankDetailsRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 }

@@ -7,10 +7,11 @@ import com.bank.publicinfo.repository.BankDetailsRepository;
 import com.bank.publicinfo.repository.CertificateRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import javax.persistence.EntityNotFoundException;;
+import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,10 @@ class  CertificateServiceImplTest {
     @Mock
     private BankDetailsRepository bankDetailsRepository;
 
+    private static final ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+
+    private static final ArgumentCaptor<Certificate> certificateArgumentCaptor = ArgumentCaptor.forClass(Certificate.class);
+
     @Test
     void findByIdSuccess() {
         when(certificateRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_CERTIFICATE_1));
@@ -54,7 +59,8 @@ class  CertificateServiceImplTest {
         CertificateDto result = certificateService.findById(TEST_ID_1);
         assertNotNull(result);
         assertEquals(TEST_CERTIFICATE_DTO, result);
-        verify(certificateRepository).findById(TEST_ID_1);
+        verify(certificateRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
         verify(certificateMapper).toDto(TEST_CERTIFICATE_1);
     }
 
@@ -65,7 +71,8 @@ class  CertificateServiceImplTest {
             certificateService.findById(TEST_ID_2);
         });
         assertTrue(exception.getMessage().contains("Certificate not found with id " + TEST_ID_2));
-        verify(certificateRepository).findById(TEST_ID_2);
+        verify(certificateRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_2, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -95,7 +102,8 @@ class  CertificateServiceImplTest {
         when(certificateMapper.toDto(TEST_CERTIFICATE_1)).thenReturn(TEST_CERTIFICATE_DTO);
         CertificateDto result = certificateService.addCertificate(TEST_CERTIFICATE_DTO);
         assertNotNull(result);
-        verify(certificateRepository).save(TEST_CERTIFICATE_1);
+        verify(certificateRepository).save(certificateArgumentCaptor.capture());
+        assertEquals(TEST_CERTIFICATE_1, certificateArgumentCaptor.getValue());
         verify(certificateMapper).toModel(TEST_CERTIFICATE_DTO);
         verify(certificateMapper).toDto(TEST_CERTIFICATE_1);
     }
@@ -104,7 +112,8 @@ class  CertificateServiceImplTest {
     void deleteCertificateByIdSuccess() {
         doNothing().when(certificateRepository).deleteById(TEST_ID_1);
         certificateService.deleteCertificateById(TEST_ID_1);
-        verify(certificateRepository).deleteById(TEST_ID_1);
+        verify(certificateRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -114,7 +123,8 @@ class  CertificateServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> certificateService.deleteCertificateById(TEST_ID_2));
         assertTrue(exception.getMessage().contains("Certificate not found with id " + TEST_ID_2));
-        verify(certificateRepository).deleteById(TEST_ID_2);
+        verify(certificateRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_2, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -126,8 +136,10 @@ class  CertificateServiceImplTest {
                 .thenReturn(Optional.of(TEST_CERTIFICATE_1.getBankDetails()));
         CertificateDto result = certificateService.updateCertificate(TEST_ID_1, TEST_CERTIFICATE_DTO);
         assertNotNull(result);
-        verify(certificateRepository).findById(TEST_ID_1);
-        verify(certificateRepository).save(any(Certificate.class));
+        verify(certificateRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        verify(certificateRepository).save(certificateArgumentCaptor.capture());
+        assertEquals(TEST_CERTIFICATE_1, certificateArgumentCaptor.getValue());
         verify(certificateMapper).toDto(TEST_CERTIFICATE_1);
         verify(bankDetailsRepository).findById(TEST_CERTIFICATE_DTO.getBankDetailsId());
     }
@@ -138,6 +150,7 @@ class  CertificateServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> certificateService.updateCertificate(TEST_ID_2, TEST_CERTIFICATE_DTO));
         assertTrue(exception.getMessage().contains("Certificate not found with id " + TEST_ID_2));
-        verify(certificateRepository).findById(TEST_ID_2);
+        verify(certificateRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_2, longArgumentCaptor.getValue());
     }
 }

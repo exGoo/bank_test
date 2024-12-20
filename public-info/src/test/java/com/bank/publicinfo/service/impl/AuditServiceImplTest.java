@@ -95,6 +95,5 @@ class AuditServiceImplTest {
         when(objectMapper.writeValueAsString(any())).thenThrow(JsonProcessingException.class);
         RuntimeException exception = assertThrows(RuntimeException.class, () -> auditService.refreshAudit(entity));
         assertTrue(exception.getMessage().contains("Please check the correctness of JSON"));
-
     }
 }

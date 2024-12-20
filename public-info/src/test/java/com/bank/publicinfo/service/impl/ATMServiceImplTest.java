@@ -40,9 +40,9 @@ class ATMServiceImplTest {
     @Mock
     private ATMMapper atmMapper;
 
-    private static ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+    private static final ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
 
-    private static ArgumentCaptor<ATM> atmArgumentCaptor = ArgumentCaptor.forClass(ATM.class);
+    private static final ArgumentCaptor<ATM> atmArgumentCaptor = ArgumentCaptor.forClass(ATM.class);
 
     @Test
     void findByIdSuccess() {
@@ -53,7 +53,6 @@ class ATMServiceImplTest {
         assertEquals(TEST_ATM_DTO,result);
         verify(atmRepository).findById(longArgumentCaptor.capture());
         assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
-        verify(atmRepository).findById(TEST_ID_1);
         verify(atmMapper).toDto(TEST_ATM_1);
     }
 

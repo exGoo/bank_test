@@ -7,11 +7,11 @@ import com.bank.publicinfo.repository.BankDetailsRepository;
 import com.bank.publicinfo.repository.LicenseRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +48,10 @@ class LicenseServiceImplTest {
     @Mock
     private LicenseMapper licenseMapper;
 
+    private static final ArgumentCaptor<Long> longArgumentCaptor = ArgumentCaptor.forClass(Long.class);
+
+    private static final ArgumentCaptor<License> licenseArgumentCaptor = ArgumentCaptor.forClass(License.class);
+
     @Test
     void findByIdSuccess() {
         when(licenseRepository.findById(TEST_ID_1)).thenReturn(Optional.of(TEST_LICENSE_1));
@@ -55,7 +59,8 @@ class LicenseServiceImplTest {
         LicenseDto result = licenseService.findById(TEST_ID_1);
         assertNotNull(result);
         assertEquals(TEST_LICENSE_DTO,result);
-        verify(licenseRepository).findById(TEST_ID_1);
+        verify(licenseRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
         verify(licenseMapper).toDto(TEST_LICENSE_1);
     }
 
@@ -66,7 +71,8 @@ class LicenseServiceImplTest {
             licenseService.findById(TEST_ID_2);
         });
         assertTrue(exception.getMessage().contains("License not found with id " + TEST_ID_2));
-        verify(licenseRepository).findById(TEST_ID_2);
+        verify(licenseRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_2, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -96,7 +102,8 @@ class LicenseServiceImplTest {
         when(licenseMapper.toDto(TEST_LICENSE_1)).thenReturn(TEST_LICENSE_DTO);
         LicenseDto result = licenseService.addLicence(TEST_LICENSE_DTO);
         assertNotNull(result);
-        verify(licenseRepository).save(TEST_LICENSE_1);
+        verify(licenseRepository).save(licenseArgumentCaptor.capture());
+        assertEquals(TEST_LICENSE_1, licenseArgumentCaptor.getValue());
         verify(licenseMapper).toModel(TEST_LICENSE_DTO);
         verify(licenseMapper).toDto(TEST_LICENSE_1);
     }
@@ -105,7 +112,8 @@ class LicenseServiceImplTest {
     void deleteLicenseByIdSuccess() {
         doNothing().when(licenseRepository).deleteById(TEST_ID_1);
         licenseService.deleteLicenceById(TEST_ID_1);
-        verify(licenseRepository).deleteById(TEST_ID_1);
+        verify(licenseRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -114,7 +122,8 @@ class LicenseServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> licenseService.deleteLicenceById(TEST_ID_1));
         assertTrue(exception.getMessage().contains("License not found with id " + TEST_ID_1));
-        verify(licenseRepository).deleteById(TEST_ID_1);
+        verify(licenseRepository).deleteById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 
     @Test
@@ -126,8 +135,10 @@ class LicenseServiceImplTest {
                 .thenReturn(Optional.of(TEST_LICENSE_1.getBankDetails()));
         LicenseDto result = licenseService.updateLicense(TEST_ID_1, TEST_LICENSE_DTO);
         assertNotNull(result);
-        verify(licenseRepository).findById(TEST_ID_1);
-        verify(licenseRepository).save(any(License.class));
+        verify(licenseRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
+        verify(licenseRepository).save(licenseArgumentCaptor.capture());
+        assertEquals(TEST_LICENSE_1, licenseArgumentCaptor.getValue());
         verify(licenseMapper).toDto(TEST_LICENSE_1);
         verify(bankDetailsRepository).findById(TEST_LICENSE_DTO.getBankDetailsId());
     }
@@ -138,6 +149,7 @@ class LicenseServiceImplTest {
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> licenseService.updateLicense(TEST_ID_1, TEST_LICENSE_DTO));
         assertTrue(exception.getMessage().contains("License not found with id " + TEST_ID_1));
-        verify(licenseRepository).findById(TEST_ID_1);
+        verify(licenseRepository).findById(longArgumentCaptor.capture());
+        assertEquals(TEST_ID_1, longArgumentCaptor.getValue());
     }
 }
