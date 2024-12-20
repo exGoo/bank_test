@@ -42,7 +42,7 @@ public class AuditAspect {
                 log.info("Audit was created: {}", audit);
             } else if (action.equals(Action.UPDATE)) {
                 final Audit oldAudit = auditService.getFirstAudit(auditable.entityType().getStringEntityType(),
-                        action.getStringAction(),
+                        Action.CREATE.getStringAction(),
                         (Long) joinPoint.getArgs()[0]);
                 auditService.save(ifUpdate(oldAudit, result));
                 log.info("Audit: {} was updated with new entry: {}", oldAudit, audit);

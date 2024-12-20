@@ -7,6 +7,7 @@ import com.bank.antifraud.service.AuditService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,14 @@ public class AuditServiceImpl implements AuditService {
         return auditRepository.findAuditByEntityTypeAndOperationTypeAndEntityJsonContaining(
                 entityType,
                 operationType,
-                String.format("id:%s", id))
+                String.format("\"id\":%s", id))
                     .orElseThrow(() -> new NotFoundAuditException(entityType, operationType, id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Audit get(Long id) {
+        return auditRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Audit with id: " + id + " not found"));
     }
 }

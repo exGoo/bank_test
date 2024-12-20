@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +21,7 @@ import java.time.OffsetDateTime;
 @Builder
 @Entity
 @Table(name = "audit", schema = "anti_fraud")
+@ToString
 public class Audit {
 
     public static final int MAX_LENGTH_FOR_ENTITY_TYPE = 40;
