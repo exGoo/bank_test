@@ -72,6 +72,7 @@ public class AuditServiceImpl implements AuditService {
             log.info("Попытка создания и сохранения нового аудита для операции update");
             auditRepository.save(updatableAudit);
             log.info("Новый аудит успешно создан и сохранен");
+
         } catch (JsonProcessingException e) {
             log.error("Ошибка при преобразовании JSON");
             throw new RuntimeException("Please check the correctness of JSON");

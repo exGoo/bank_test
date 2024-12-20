@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -25,6 +25,11 @@ public class CertificateDto implements Auditable<Long> {
 
     @NotNull
     private Long bankDetailsId;
+
+    public CertificateDto(Long id, Long bankDetailsId) {
+        this.id = id;
+        this.bankDetailsId = bankDetailsId;
+    }
 
     @JsonIgnore
     @Override

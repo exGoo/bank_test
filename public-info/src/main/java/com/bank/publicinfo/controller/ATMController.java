@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -58,7 +61,7 @@ public class ATMController {
             @ApiResponse(responseCode = "400", description = "Некорректный запрос")
     })
     @PostMapping
-    public ResponseEntity<ATMDto> addATM(@RequestBody ATMDto atmDto) {
+    public ResponseEntity<ATMDto> addATM(@Valid @RequestBody ATMDto atmDto) {
         ATMDto createdAtm = atmService.addATM(atmDto);
         return new ResponseEntity<>(createdAtm, HttpStatus.CREATED);
     }

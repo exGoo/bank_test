@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
@@ -38,6 +38,11 @@ public class BranchDto implements Auditable<Long> {
     private LocalTime endOfWork;
 
     private Set<Long> atmsIds;
+
+    public BranchDto(Long id, String city) {
+        this.id = id;
+        this.city = city;
+    }
 
     @JsonIgnore
     @Override

@@ -37,4 +37,10 @@ springdoc:
     swagger-ui:
         url: /v3/api-docs
         path: /swagger-ui/
-
+eureka:
+  client:
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true

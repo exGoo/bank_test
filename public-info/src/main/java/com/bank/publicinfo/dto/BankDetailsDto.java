@@ -4,6 +4,7 @@ import com.bank.publicinfo.utils.Auditable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,10 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 @ToString
 public class BankDetailsDto implements Auditable<Long> {
 
@@ -46,6 +48,11 @@ public class BankDetailsDto implements Auditable<Long> {
     private Set<Long> licenseIds;
 
     private Set<Long> certificateIds;
+
+    public BankDetailsDto(Long id, String city) {
+        this.id = id;
+        this.city = city;
+    }
 
     @JsonIgnore
     @Override

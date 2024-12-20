@@ -84,7 +84,7 @@ public class BranchServiceImpl implements BranchService {
             branchRepository.deleteById(id);
         } catch (Exception e) {
             log.error("Ошибка при удалении отделения");
-            throw new EntityNotFoundException("Branch not found with id: " + id);
+            throw new EntityNotFoundException("Branch not found with id " + id);
         }
 
     }
@@ -95,7 +95,7 @@ public class BranchServiceImpl implements BranchService {
         Branch existingBranch = branchRepository.findById(id)
                 .orElseThrow(() -> {
                     log.error("Отделение с id: {} не найдено", id);
-                    return new EntityNotFoundException("ATM not found with id " + id);
+                    return new EntityNotFoundException("Branch not found with id " + id);
                 });
         try {
             log.info("Попытка изменения отделения с id:{}", id);
