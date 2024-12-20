@@ -89,7 +89,7 @@ public class LicenseServiceImpl implements LicenseService {
             }
             if (dto.getBankDetailsId() != null) {
                 BankDetails bankDetails = bankDetailsRepository.findById(dto.getBankDetailsId())
-                        .orElseThrow(() -> new EntityNotFoundException("BankDetails not found with id: " + dto.getBankDetailsId()));
+                        .orElseThrow(() -> new EntityNotFoundException("License not found with id " + dto.getBankDetailsId()));
                 existingLicense.setBankDetails(bankDetails);
             }
             License updatedLicense = licenseRepository.save(existingLicense);
@@ -107,7 +107,7 @@ public class LicenseServiceImpl implements LicenseService {
             licenseRepository.deleteById(id);
         } catch (Exception e) {
             log.error("Ошибка при удалении лицензии");
-            throw new EntityNotFoundException("License not found with id: " + id);
+            throw new EntityNotFoundException("License not found with id " + id);
         }
 
     }

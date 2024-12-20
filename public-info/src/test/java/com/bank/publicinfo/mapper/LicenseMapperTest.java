@@ -5,7 +5,6 @@ import com.bank.publicinfo.entity.License;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
-import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_2;
 import static com.bank.publicinfo.utils.TestsUtils.TEST_LICENSE_1;
 import static com.bank.publicinfo.utils.TestsUtils.TEST_LICENSE_DTO;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -28,6 +27,6 @@ class LicenseMapperTest {
         assertThat(license).isNotNull();
         assertThat(license.getId()).isNull();
         assertThat(license.getBankDetails()).isNotNull();
-        assertThat(license.getBankDetails().getId()).isEqualTo(TEST_ID_2);
+        assertThat(license.getBankDetails().getId()).isEqualTo(TEST_ID_1);
     }
 }

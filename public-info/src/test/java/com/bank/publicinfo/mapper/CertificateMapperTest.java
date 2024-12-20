@@ -7,6 +7,7 @@ import org.mapstruct.factory.Mappers;
 import static com.bank.publicinfo.utils.TestsUtils.TEST_CERTIFICATE_1;
 import static com.bank.publicinfo.utils.TestsUtils.TEST_CERTIFICATE_DTO;
 import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_1;
+import static com.bank.publicinfo.utils.TestsUtils.TEST_ID_2;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class CertificateMapperTest {

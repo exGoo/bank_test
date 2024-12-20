@@ -149,7 +149,7 @@ public class CertificateServiceImpl implements CertificateService {
             }
             if (dto.getBankDetailsId() != null) {
                 BankDetails bankDetails = bankDetailsRepository.findById(dto.getBankDetailsId())
-                        .orElseThrow(() -> new EntityNotFoundException("Certificate not found with id: " + dto.getBankDetailsId()));
+                        .orElseThrow(() -> new EntityNotFoundException("Certificate not found with id " + dto.getBankDetailsId()));
                 existingCertificate.setBankDetails(bankDetails);
             }
             Certificate updatedCertificate = certificateRepository.save(existingCertificate);
@@ -174,7 +174,7 @@ public class CertificateServiceImpl implements CertificateService {
             certificateRepository.deleteById(id);
         } catch (Exception e) {
             log.error("Ошибка при удалении сертификата");
-            throw new EntityNotFoundException("Certificate not found with id: " + id);
+            throw new EntityNotFoundException("Certificate not found with id " + id);
         }
     }
 }

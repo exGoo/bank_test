@@ -50,66 +50,97 @@ public final class TestsUtils {
 
     public static final byte[] TEST_BYTE_ARRAY = {1, 2, 3, 4, 5, 6};
 
-    public static final ATMDto TEST_ATM_DTO = new ATMDto(TEST_ID_1, TEST_STREET_1, TEST_START_WORK, TEST_END_WORK, false, TEST_ID_2);
-
-    public static final List<ATMDto> TEST_LIST_ATMS = createList(TEST_ATM_DTO,
-            new ATMDto(TEST_ID_2, TEST_STREET_2, TEST_START_WORK, TEST_END_WORK, false, TEST_ID_1)
-    );
-
-    public static final BankDetailsDto TEST_DETAILS_DTO = new BankDetailsDto(TEST_ID_1, 112L, 113L, 114L, 115, TEST_CITY_1, "JointStock", TEST_NAME,
-            Set.of(TEST_ID_1, TEST_ID_2), Set.of(TEST_ID_2, TEST_ID_1));
-
-    public static final List<BankDetailsDto> TEST_LIST_DETAILS = createList(TEST_DETAILS_DTO,
-            new BankDetailsDto(TEST_ID_2, 113L, 114L, 115L, 116, TEST_CITY_1, "JointStock2", TEST_NAME,
-                    Set.of(TEST_ID_2, TEST_ID_1), Set.of(TEST_ID_1, TEST_ID_2)));
-
-    public static final BranchDto TEST_BRANCH_DTO = new BranchDto(TEST_ID_1, TEST_STREET_1, 12345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
-            Set.of(TEST_ID_1, TEST_ID_2));
-
-    public static final List<BranchDto> TEST_LIST_BRANCHES = createList(TEST_BRANCH_DTO,
-            new BranchDto(TEST_ID_2, TEST_STREET_2, 122345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
-                    Set.of(TEST_ID_2, TEST_ID_1)));
-
-    public static final CertificateDto TEST_CERTIFICATE_DTO = new CertificateDto(TEST_ID_1, TEST_BYTE_ARRAY, TEST_ID_2);
-
-    public static final List<CertificateDto> TEST_LIST_CERTIFICATES = createList(TEST_CERTIFICATE_DTO,
-            new CertificateDto(TEST_ID_2, TEST_BYTE_ARRAY, TEST_ID_1));
-
-    public static final LicenseDto TEST_LICENSE_DTO = new LicenseDto(TEST_ID_1, TEST_BYTE_ARRAY, TEST_ID_2);
-
-    public static final List<LicenseDto> TEST_LIST_LICENSE = createList(TEST_LICENSE_DTO,
-            new LicenseDto(TEST_ID_2, TEST_BYTE_ARRAY, TEST_ID_1));
-
     public static final ATM TEST_ATM_1 = new ATM(TEST_ID_1, TEST_STREET_1, TEST_START_WORK, TEST_END_WORK, false, new Branch(TEST_ID_2, TEST_STREET_1, 12345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
             Set.of(new ATM(TEST_ID_2, TEST_STREET_1, TEST_START_WORK, TEST_END_WORK, false, new Branch()))));
 
     public static final ATM TEST_ATM_2 = new ATM(TEST_ID_2, TEST_STREET_1, TEST_START_WORK, TEST_END_WORK, false, new Branch(TEST_ID_2, TEST_STREET_1, 12345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
             Set.of(new ATM(TEST_ID_1, TEST_STREET_1, TEST_START_WORK, TEST_END_WORK, false, new Branch()))));
 
+    public static final ATMDto TEST_ATM_DTO = new ATMDto(TEST_ID_1, TEST_STREET_1, TEST_START_WORK, TEST_END_WORK, false, TEST_ID_2);
+
+    public static final List<ATMDto> TEST_LIST_ATMS = createList(TEST_ATM_DTO,
+            new ATMDto(TEST_ID_2, TEST_STREET_2, TEST_START_WORK, TEST_END_WORK, false, TEST_ID_1)
+    );
+
+    public static final Set<ATM> TEST_ATM_SET = new HashSet<>(Set.of(TEST_ATM_1,TEST_ATM_2));
+
+    public static final List<ATM> TEST_ATM_LIST = createList(TEST_ATM_1);
+
     public static final BankDetails TEST_BANK_DETAILS = new BankDetails(TEST_ID_1, 112L, 113L, 114L, 115, TEST_CITY_1, "JointStock", TEST_NAME,
-            Set.of(new License(TEST_ID_1, TEST_BYTE_ARRAY, new BankDetails())), Set.of(new Certificate(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails())));
+            Set.of(new License(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails()), new License(TEST_ID_1, TEST_BYTE_ARRAY, new BankDetails())),
+            Set.of(new Certificate(TEST_ID_1, TEST_BYTE_ARRAY, new BankDetails()),new Certificate(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails())));
+
+    public static final BankDetails TEST_BANK_DETAILS_2 = new BankDetails(TEST_ID_2, 113L, 114L, 115L, 116, TEST_CITY_1, "JointStock2", TEST_NAME,
+            Set.of(new License(TEST_ID_1, TEST_BYTE_ARRAY, new BankDetails()), new License(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails())),
+            Set.of(new Certificate(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails()),new Certificate(TEST_ID_1, TEST_BYTE_ARRAY, new BankDetails())));
+
+
+    public static final BankDetailsDto TEST_DETAILS_DTO = new BankDetailsDto(TEST_ID_1, 112L, 113L, 114L, 115, TEST_CITY_1, "JointStock", TEST_NAME,
+            Set.of(TEST_ID_1, TEST_ID_2), Set.of(TEST_ID_2, TEST_ID_1));
+
+    public static final BankDetailsDto TEST_DETAILS_DTO_2 = new BankDetailsDto(TEST_ID_2, 113L, 114L, 115L, 116, TEST_CITY_1, "JointStock2", TEST_NAME,
+            Set.of(TEST_ID_2, TEST_ID_1), Set.of(TEST_ID_1, TEST_ID_2));
+
+    public static final List<BankDetailsDto> TEST_LIST_DETAILS = createList(TEST_DETAILS_DTO, TEST_DETAILS_DTO_2);
+
+    public static final List<BankDetails> TEST_DETAILS_LIST_2 = createList(TEST_BANK_DETAILS);
+
+    public static final List<BankDetails> TEST_DETAILS_LIST_BY_CITY = createList(TEST_BANK_DETAILS,TEST_BANK_DETAILS_2);
+
+    public static final BranchDto TEST_BRANCH_DTO = new BranchDto(TEST_ID_1, TEST_STREET_1, 12345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
+            Set.of(TEST_ID_1, TEST_ID_2));
+
+    public static final BranchDto TEST_BRANCH_DTO_2 = new BranchDto(TEST_ID_2, TEST_STREET_2, 122345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
+            Set.of(TEST_ID_2,TEST_ID_1));
 
     public static final Branch TEST_BRANCH = new Branch(TEST_ID_1, TEST_STREET_1, 12345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
             Set.of(TEST_ATM_1));
 
+    public static final Branch TEST_BRANCH_2 = new Branch(TEST_ID_2, TEST_STREET_2, 122345L, TEST_CITY_1, TEST_START_WORK, TEST_END_WORK,
+                                                              Set.of(TEST_ATM_2,TEST_ATM_1));
+
+    public static final List<BranchDto> TEST_LIST_BRANCHES = createList(TEST_BRANCH_DTO,
+           TEST_BRANCH_DTO_2);
+
+    public static final List<Branch> TEST_LIST_BRANCHES_2 = createList(TEST_BRANCH, TEST_BRANCH_2);
+
     public static final Certificate TEST_CERTIFICATE_1 = new Certificate(TEST_ID_1, TEST_BYTE_ARRAY, TEST_BANK_DETAILS);
 
-    public static final Certificate TEST_CERTIFICATE_2= new Certificate(TEST_ID_2, TEST_BYTE_ARRAY, TEST_BANK_DETAILS);
+    public static final Certificate TEST_CERTIFICATE_2= new Certificate(TEST_ID_2, TEST_BYTE_ARRAY, TEST_BANK_DETAILS_2);
 
-    public static License TEST_LICENSE_1 = new License(TEST_ID_1, TEST_BYTE_ARRAY, TEST_BANK_DETAILS);
+    public static final CertificateDto TEST_CERTIFICATE_DTO = new CertificateDto(TEST_ID_1, TEST_BYTE_ARRAY, TEST_ID_1);
 
-    public static License TEST_LICENSE_2 = new License(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails());
+    public static final CertificateDto TEST_CERTIFICATE_DTO_2 = new CertificateDto(TEST_ID_2, TEST_BYTE_ARRAY, TEST_ID_2);
 
     public static Set<Certificate> TEST_CERETIFICATE_SET = new HashSet(Set.of(TEST_CERTIFICATE_1,TEST_CERTIFICATE_2));
 
-    public static Set<License> TEST_LICENCE_SET = new HashSet<>(Set.of(TEST_LICENSE_1,TEST_LICENSE_2));
+    public static final List<CertificateDto> TEST_LIST_CERTIFICATES = createList(TEST_CERTIFICATE_DTO,
+           TEST_CERTIFICATE_DTO_2);
 
-    public static Set<ATM> TEST_ATM_SET = new HashSet<>(Set.of(TEST_ATM_1,TEST_ATM_2));
+    public static final List<Certificate> TEST_LIST_CERTIFICATE_2 = createList(TEST_CERTIFICATE_1,TEST_CERTIFICATE_2);
 
-    public static List<ATM> TEST_ATM_LIST = createList(TEST_ATM_1);
+    public static final License TEST_LICENSE_1 = new License(TEST_ID_1, TEST_BYTE_ARRAY, TEST_BANK_DETAILS);
 
-    public static List<BankDetails> TEST_DETAILS_LIST_2 = createList(TEST_BANK_DETAILS,new BankDetails(TEST_ID_2, 113L, 114L, 115L, 116, TEST_CITY_1, "JointStock2", TEST_NAME,
-            Set.of(new License(TEST_ID_1, TEST_BYTE_ARRAY, new BankDetails())), Set.of(new Certificate(TEST_ID_2, TEST_BYTE_ARRAY, new BankDetails()))));
+    public static final LicenseDto TEST_LICENSE_DTO = new LicenseDto(TEST_ID_1, TEST_BYTE_ARRAY, TEST_ID_1);
+
+    public static final License TEST_LICENSE_2 = new License(TEST_ID_2, TEST_BYTE_ARRAY, TEST_BANK_DETAILS_2);
+
+    public static final LicenseDto TEST_LICENSE_DTO_2 = new LicenseDto(TEST_ID_2, TEST_BYTE_ARRAY, TEST_ID_2);
+
+    public static final List<LicenseDto> TEST_LIST_LICENSE = createList(TEST_LICENSE_DTO,
+            TEST_LICENSE_DTO_2);
+
+    public static final List<License> TEST_LIST_LICENSE_2 = createList(TEST_LICENSE_1,TEST_LICENSE_2);
+
+    public static final Set<License> TEST_LICENCE_SET = new HashSet<>(Set.of(TEST_LICENSE_1,TEST_LICENSE_2));
+
+    public static final String TEST_INVALID_JSON = " \"{ \\\"name\\\": \\\"\\\", \\\"city\\\": \\\"Москва\\\" }";
+
+    public static final String TEST_INVAID_JSON_2 = "{}";
+
+    public static String TEST_ENTITY_NAME = "ATM";
+
+
 
     public static String toJson(Object object) {
         try {

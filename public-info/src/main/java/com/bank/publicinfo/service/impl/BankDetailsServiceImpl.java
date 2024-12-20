@@ -93,7 +93,7 @@ public class BankDetailsServiceImpl implements BankDetailsService {
             bankDetailsRepository.deleteById(id);
         } catch (Exception e) {
             log.info("Ошибка при удалении информации о банке");
-            throw new EntityNotFoundException("BankDetails not found with id: " + id);
+            throw new EntityNotFoundException("BankDetails not found with id " + id);
         }
     }
 

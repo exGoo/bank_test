@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,19 +20,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
 @RequestMapping("/atms")
 @Tag(name = "ATMs", description = "API для управления банкоматами")
+@RequiredArgsConstructor
 public class ATMController {
 
-    private ATMService atmService;
-
-    @Autowired
-    public void setAtmService(ATMService atmService) {
-        this.atmService = atmService;
-    }
+    private final ATMService atmService;
 
     @Operation(summary = "Получить банкомат по ID")
     @ApiResponses(value = {
@@ -63,7 +61,7 @@ public class ATMController {
             @ApiResponse(responseCode = "400", description = "Некорректный запрос")
     })
     @PostMapping
-    public ResponseEntity<ATMDto> addATM(@RequestBody ATMDto atmDto) {
+    public ResponseEntity<ATMDto> addATM(@Valid @RequestBody ATMDto atmDto) {
         ATMDto createdAtm = atmService.addATM(atmDto);
         return new ResponseEntity<>(createdAtm, HttpStatus.CREATED);
     }

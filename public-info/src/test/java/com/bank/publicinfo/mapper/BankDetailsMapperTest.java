@@ -24,8 +24,8 @@ class BankDetailsMapperTest {
         assertThat(dto).isNotNull();
         assertThat(dto.getId()).isEqualTo(TEST_ID_1);
         assertThat(dto.getName()).isEqualTo(TEST_NAME);
-        assertThat(dto.getLicenseIds()).containsExactlyInAnyOrder(TEST_ID_1);
-        assertThat(dto.getCertificateIds()).containsExactlyInAnyOrder(TEST_ID_2);
+        assertThat(dto.getLicenseIds()).containsExactlyInAnyOrder(TEST_ID_1, TEST_ID_2);
+        assertThat(dto.getCertificateIds()).containsExactlyInAnyOrder(TEST_ID_2, TEST_ID_1);
     }
 
     @Test
