@@ -138,7 +138,7 @@ public final class TestsUtils {
 
     public static final String TEST_INVAID_JSON_2 = "{}";
 
-    public static String TEST_ENTITY_NAME = "ATM";
+    public static final String TEST_ENTITY_NAME = "ATM";
 
     public static String toJson(Object object) {
         try {
