@@ -1,6 +1,5 @@
 package com.bank.publicinfo.utils;
 
-
 import com.bank.publicinfo.dto.ATMDto;
 import com.bank.publicinfo.dto.BankDetailsDto;
 import com.bank.publicinfo.dto.BranchDto;
