@@ -11,7 +11,12 @@ management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: 'health, info, metrics, prometheus'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
@@ -31,12 +36,14 @@ spring:
         default_schema: public_bank_information
   application:
     name: public-info-app
+
 springdoc:
     api-docs:
-        path: /v3/api-docs
+        path: /v1/api-docs
     swagger-ui:
-        url: /v3/api-docs
+        url: /v1/api-docs
         path: /swagger-ui/
+
 eureka:
   client:
     fetch-registry: true
@@ -44,3 +51,7 @@ eureka:
       defaultZone: http://localhost:8761/eureka
   instance:
     prefer-ip-address: true
+
+
+
+
