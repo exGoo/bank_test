@@ -12,4 +12,9 @@ public class NotFoundAuditException extends NotFoundException {
         log.error("Audit with entity: {}, operationType: {}, id of entity: {} not found",
                 entityType, operationType, id);
     }
+
+    public NotFoundAuditException(Long id) {
+        super(String.format("Audit with id: %s not found", id));
+        log.error("Audit with id: {} not found", id);
+    }
 }

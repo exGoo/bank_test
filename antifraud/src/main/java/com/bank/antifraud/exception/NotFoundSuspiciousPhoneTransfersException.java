@@ -7,7 +7,7 @@ import org.webjars.NotFoundException;
 public class NotFoundSuspiciousPhoneTransfersException extends NotFoundException {
 
     public NotFoundSuspiciousPhoneTransfersException(Long id) {
-        super("Suspicious phone transfer with id" + id + " not found");
+        super("Suspicious phone transfers with id " + id + " not found");
         log.error("Suspicious phone transfer with id {} not found", id);
     }
 }

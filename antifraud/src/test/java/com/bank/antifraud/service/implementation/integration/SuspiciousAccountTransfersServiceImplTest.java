@@ -3,141 +3,97 @@ package com.bank.antifraud.service.implementation.integration;
 import com.bank.antifraud.dto.SuspiciousAccountTransfersDto;
 import com.bank.antifraud.exception.NotFoundSuspiciousAccountTransfersException;
 import com.bank.antifraud.service.SuspiciousAccountTransfersService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import static com.bank.antifraud.TestsRecourse.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("test")
 @Transactional
+@ActiveProfiles("test")
 @DisplayName("integration SuspiciousAccountTransfersServiceImpl tests")
 class SuspiciousAccountTransfersServiceImplTest {
 
     @Autowired
     private SuspiciousAccountTransfersService service;
 
-    private SuspiciousAccountTransfersDto dto;
     private SuspiciousAccountTransfersDto saved;
-    private final long WRONG_ID = 500L;
-
-    @BeforeEach
-    void setUp() {
-        dto = SuspiciousAccountTransfersDto.builder()
-                .accountTransferId(12345L)
-                .isSuspicious(false)
-                .isBlocked(false)
-                .suspiciousReason("test")
-                .build();
-    }
+    private static final SuspiciousAccountTransfersDto DTO = Dto.DEFAULT.getSatDto();
+    private static final SuspiciousAccountTransfersDto DTO_FOR_UPDATE = Dto.FOR_UPDATE.getSatDto();
 
     @Test
     void add_ShouldAddSuspiciousAccountTransferDto() {
-        saved = service.add(dto);
+        saved = service.add(DTO);
 
         assertNotNull(saved);
         assertDoesNotThrow(() -> service.get(saved.getId()));
     }
 
-    @Test
-    void getById_ShouldReturnSuspiciousAccountTransferDto() {
-        saved = service.add(dto);
+    @ParameterizedTest
+    @MethodSource("com.bank.antifraud.TestsRecourse#getId")
+    void getById_ShouldReturnSuspiciousAccountTransferDto(Long id) {
+        if (id == WRONG_ID) {
+            assertThrows(NotFoundSuspiciousAccountTransfersException.class, () -> service.get(id));
+        } else {
+            saved = service.add(DTO);
 
-        SuspiciousAccountTransfersDto founded = service.get(saved.getId());
+            SuspiciousAccountTransfersDto founded = service.get(saved.getId());
 
-        assertNotNull(founded);
-        assertEquals(saved.getId(), founded.getId());
-    }
-
-    @Test
-    void get_ShouldThrowException_WhenNotFound() {
-        assertThrows(NotFoundSuspiciousAccountTransfersException.class, () -> service.get(WRONG_ID));
-    }
-
-    @Test
-    void update_ShouldUpdateSuspiciousAccountTransferDto() {
-        saved = service.add(dto);
-        final SuspiciousAccountTransfersDto updateDto = SuspiciousAccountTransfersDto.builder()
-                .isSuspicious(true)
-                .isBlocked(true)
-                .blockedReason("blocked")
-                .build();
-
-        final SuspiciousAccountTransfersDto updated = service.update(saved.getId(), updateDto);
-
-        assertNotNull(updated);
-        assertEquals(saved.getId(), updated.getId());
-        assertEquals(saved.getAccountTransferId(), updated.getAccountTransferId());
-        assertEquals(updateDto.getIsBlocked(), updated.getIsBlocked());
-        assertEquals(updateDto.getIsSuspicious(), updated.getIsSuspicious());
-        assertEquals(updateDto.getBlockedReason(), updated.getBlockedReason());
-        assertEquals(saved.getSuspiciousReason(), updated.getSuspiciousReason());
-    }
-
-    @Test
-    void update_ShouldThrowException_WhenNotFound() {
-        saved = service.add(dto);
-
-        assertThrows(RuntimeException.class,
-                () -> service.update(WRONG_ID, dto),
-                "Suspicious account transfers with id " + WRONG_ID + " not found");
-    }
-
-    @Test
-    void remove_ShouldDeleteSuspiciousAccountTransferDto() {
-        saved = service.add(dto);
-
-        service.remove(saved.getId());
-
-        assertThrows(NotFoundSuspiciousAccountTransfersException.class, () -> service.get(saved.getId()));
-    }
-
-    @Test
-    void remove_ShouldThrowException_WhenNotFound() {
-        assertThrows(NotFoundSuspiciousAccountTransfersException.class, () -> service.remove(WRONG_ID));
+            assertNotNull(founded);
+            assertEquals(saved.getId(), founded.getId());
+        }
     }
 
     @ParameterizedTest
-    @MethodSource("getArgumentsForGetAllTest")
-    void getAll_ParametrizedTest(List<SuspiciousAccountTransfersDto> list) {
-        list.forEach(service::add);
+    @MethodSource("com.bank.antifraud.TestsRecourse#getId")
+    void update_ShouldUpdateSuspiciousAccountTransferDto(Long id) {
+        if (id == WRONG_ID) {
+            Exception exception = assertThrows(RuntimeException.class, () -> service.update(id, DTO_FOR_UPDATE));
+            assertTrue(exception.getMessage().contains("Suspicious account transfers with id " + id + " not found"));
+        } else {
+            saved = service.add(DTO);
 
-        Page<SuspiciousAccountTransfersDto> transfers = service.getAll(PageRequest.of(0, 10));
+            SuspiciousAccountTransfersDto updated = service.update(saved.getId(), DTO_FOR_UPDATE);
 
-        assertEquals(list.size(), transfers.getTotalElements());
+            assertNotNull(updated);
+            assertEquals(saved.getId(), updated.getId());
+            assertEquals(saved.getAccountTransferId(), updated.getAccountTransferId());
+            assertEquals(DTO_FOR_UPDATE.getIsBlocked(), updated.getIsBlocked());
+            assertEquals(saved.getIsSuspicious(), updated.getIsSuspicious());
+            assertEquals(DTO_FOR_UPDATE.getBlockedReason(), updated.getBlockedReason());
+            assertEquals(saved.getSuspiciousReason(), updated.getSuspiciousReason());
+        }
     }
 
-    static Stream<Arguments> getArgumentsForGetAllTest() {
-        long id = 1L;
-        long accountTransferId = 1L;
-        final List<SuspiciousAccountTransfersDto> list = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            list.add(SuspiciousAccountTransfersDto.builder()
-                    .id(id)
-                    .accountTransferId(accountTransferId)
-                    .isBlocked(false)
-                    .isSuspicious(false)
-                    .suspiciousReason("test")
-                    .build()
-            );
-            id++;
-            accountTransferId++;
+    @ParameterizedTest
+    @MethodSource("com.bank.antifraud.TestsRecourse#getId")
+    void remove_ShouldDeleteSuspiciousAccountTransferDto(Long id) {
+        if (id == WRONG_ID) {
+            assertThrows(NotFoundSuspiciousAccountTransfersException.class, () -> service.remove(id));
+        } else {
+            saved = service.add(DTO);
+
+            service.remove(saved.getId());
+
+            assertThrows(NotFoundSuspiciousAccountTransfersException.class, () -> service.get(saved.getId()));
         }
-        return Stream.of(
-                Arguments.of(list),
-                Arguments.of(List.of())
-        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("com.bank.antifraud.TestsRecourse#getListOfSuspiciousAccountTransfersDto")
+    void getAll_ShouldReturnPageWithSuspiciousAccountTransfersDto(List<SuspiciousAccountTransfersDto> list) {
+        list.forEach(service::add);
+
+        Page<SuspiciousAccountTransfersDto> transfers = service.getAll(PAGEABLE);
+
+        assertEquals(list.size(), transfers.getTotalElements());
     }
 }

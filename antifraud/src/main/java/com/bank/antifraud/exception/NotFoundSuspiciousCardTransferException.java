@@ -7,7 +7,7 @@ import org.webjars.NotFoundException;
 public class NotFoundSuspiciousCardTransferException extends NotFoundException {
 
     public NotFoundSuspiciousCardTransferException(Long id) {
-        super("Suspicious card transfer with id " + id + "not found");
+        super("Suspicious card transfer with id " + id + " not found");
         log.error("Suspicious card transfer with id {} not found", id);
     }
 }

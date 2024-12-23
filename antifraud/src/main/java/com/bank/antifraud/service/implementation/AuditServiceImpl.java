@@ -17,8 +17,8 @@ public class AuditServiceImpl implements AuditService {
 
     @Override
     @Transactional
-    public void save(Audit audit) {
-        auditRepository.save(audit);
+    public Audit save(Audit audit) {
+        return auditRepository.save(audit);
     }
 
     @Override
@@ -35,6 +35,6 @@ public class AuditServiceImpl implements AuditService {
     @Transactional(readOnly = true)
     public Audit get(Long id) {
         return auditRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Audit with id: " + id + " not found"));
+                .orElseThrow(() -> new NotFoundAuditException(id));
     }
 }

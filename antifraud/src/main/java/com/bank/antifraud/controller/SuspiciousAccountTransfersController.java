@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/sat")
 @RequiredArgsConstructor
 @Tag(name = "Suspicious Account Transfers", description = "API для управления подозрительными переводами на аккаунты")
-public class SuspiciousAccountTransferController {
+public class SuspiciousAccountTransfersController {
 
     private final SuspiciousAccountTransfersService satService;
 
