@@ -1,10 +1,10 @@
 global:
-  scrape_interval: 5s
-  external_labels: 'codelab-monitor'
+  scrape_interval: 15s
+  scrape_timeout: 10s
 
 scrape_configs:
   - job_name: 'anti-fraud-app'
-    scrape_interval: 5s
+    scrape_interval: 15s
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['host.docker.internal:8585']
+      - targets: ['host.docker.internal:8186']
