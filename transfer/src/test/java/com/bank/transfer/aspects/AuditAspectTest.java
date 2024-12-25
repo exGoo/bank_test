@@ -54,7 +54,4 @@ class AuditAspectTest {
         assertEquals(LocalDateTime.now().getMinute(), capturedAudit.getCreatedAt().getMinute()); // Сравнение по минутам, чтобы учесть точное время
         assertEquals(jsonString, capturedAudit.getEntityJson());
     }
-
-
-
 }

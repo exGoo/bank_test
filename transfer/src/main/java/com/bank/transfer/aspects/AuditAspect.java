@@ -7,6 +7,7 @@ import com.bank.transfer.entity.PhoneTransfer;
 import com.bank.transfer.repository.AuditRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -17,10 +18,11 @@ import java.time.LocalDateTime;
 
 import static com.bank.transfer.aspects.OperationTypes.CREATE;
 
+@Slf4j
 @Component
 @Aspect
 public class AuditAspect {
-    private final AuditRepository auditRepository; // Репозиторий для аудита
+    private final AuditRepository auditRepository;
     private final ObjectMapper objectMapper;
 
     @Autowired
@@ -41,13 +43,13 @@ public class AuditAspect {
 
     @AfterReturning(value = "createMethod()", returning = "result")
     public void runSaveMethods(Object result) {
+        log.info("вызов метода runSaveMethods");
         final Long id = extractId(result);
-        System.out.println(result);
         String jsonString = null;
         try {
             jsonString = objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
-            e.printStackTrace(); // Обработка исключения
+            e.printStackTrace();
         }
 
         final Audit audit = Audit.builder()
@@ -59,21 +61,18 @@ public class AuditAspect {
                 .build();
 
         auditRepository.save(audit);
-        System.out.println("Audit saved: " + audit);
+        log.info("Метод runSaveMethods выполнен!");
     }
 
     @AfterReturning(value = "updateMethod()", returning = "result")
     public void runUpdateMethods(Object result) {
         final String entityType = result.getClass().getSimpleName();
-        System.out.println(result);
-        System.out.println(entityType);
-        System.out.println(result);
         String jsonString = null;
         final Long id = extractId(result);
         try {
             jsonString = objectMapper.writeValueAsString(result);
         } catch (JsonProcessingException e) {
-            e.printStackTrace(); // Обработка исключения
+            e.printStackTrace();
         }
         final String createByString = String.valueOf(id);
         final Audit audit = auditRepository.findByCreatedByAndOperationType(createByString, CREATE.name());
@@ -90,15 +89,18 @@ public class AuditAspect {
                 .build();
 
         auditRepository.save(updateAudit);
-        System.out.println(updateAudit);
+        log.info("Метод runUpdateMethods выполнен!");
     }
 
     private Long extractId(Object result) {
         if (result instanceof AccountTransfer) {
+            log.info("entityType - AccountTransfer");
             return ((AccountTransfer) result).getId();
         } else if (result instanceof PhoneTransfer) {
+            log.info("entityType - PhoneTransfer");
             return ((PhoneTransfer) result).getId();
         } else if (result instanceof CardTransfer) {
+            log.info("entityType - CardTransfer");
             return ((CardTransfer) result).getId();
         }
         return null;

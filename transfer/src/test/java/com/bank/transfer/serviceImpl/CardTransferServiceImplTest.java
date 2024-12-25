@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -110,32 +111,25 @@ class CardTransferServiceImplTest {
         assertEquals(cardTransfer1, savedCardTransfer);
     }
 
-//    @Test
-//    void testUpdateCardTransferById() {
-//
-//        when(cardTransferRepository.findById(2L)).thenReturn(Optional.of(cardTransfer2));
-//        when(cardTransferRepository.save(any(CardTransfer.class))).thenReturn(cardTransfer2);
-//
-//        CardTransfer updatedCardTransfer = cardTransferService.updateCardTransferById(cardTransferDTO2, 2L);
-//
-//        assertNotNull(updatedCardTransfer);
-//        assertEquals(2L, updatedCardTransfer.getCardNumber());
-//        assertEquals(new BigDecimal("34.34"), updatedCardTransfer.getAmount());
-//        assertEquals("purpose2", updatedCardTransfer.getPurpose());
-//        assertEquals(6L, updatedCardTransfer.getCardDetailsId());
-//
-//
-//        verify(cardTransferRepository).findById(1L);
-//        verify(mapper).cardTransferDTOToCardTransfer(cardTransferDTO2);
-//        verify(cardTransferRepository).save(cardTransfer1);
-//    }
-
     @Test
-    void updateCardTransferById_ShouldThrowException_WhenCardTransferDTOIsNull() {
-        // Проверка на null
-        assertThrows(IllegalArgumentException.class, () -> {
-            cardTransferService.updateCardTransferById(null, 1L);
-        });
+    void testUpdateCardTransferById() {
+
+        // Настройка моков
+        when(cardTransferRepository.findById(1L)).thenReturn(Optional.of(cardTransfer1));
+        when(cardTransferRepository.save(any(CardTransfer.class))).thenReturn(cardTransfer1);
+
+        // Вызов метода
+        CardTransfer updatedCardTransfer = cardTransferService.updateCardTransferById(cardTransferDTO2, 1L);
+
+        // Проверки
+        assertNotNull(updatedCardTransfer);
+        assertEquals(2L, updatedCardTransfer.getCardNumber());
+        assertEquals(new BigDecimal("34.34"), updatedCardTransfer.getAmount());
+        assertEquals("purpose2", updatedCardTransfer.getPurpose());
+        assertEquals(6L, updatedCardTransfer.getAccountDetailsId());
+        // Проверка вызовов методов
+        verify(cardTransferRepository).findById(1L);
+        verify(cardTransferRepository).save(cardTransfer1);
     }
 
     @Test

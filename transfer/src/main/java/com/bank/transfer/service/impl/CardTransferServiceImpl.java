@@ -5,6 +5,7 @@ import com.bank.transfer.entity.CardTransfer;
 import com.bank.transfer.mapper.CardTransferMapper;
 import com.bank.transfer.repository.CardTransferRepository;
 import com.bank.transfer.service.CardTransferService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +14,11 @@ import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class CardTransferServiceImpl implements CardTransferService {
+    private final String metodCompl = "метод успешно выполнен";
+
     private final CardTransferRepository cardTransferRepository;
     private final CardTransferMapper mapper;
 
@@ -27,8 +31,10 @@ public class CardTransferServiceImpl implements CardTransferService {
     @Override
     @Transactional(readOnly = true)
     public Optional<CardTransferDTO> getCardTransferById(Long id) {
+        log.info("вызов метода getCardTransferById");
         final Optional<CardTransfer> cardTransfer = cardTransferRepository.findById(id);
-//        return mapper.cardTransferToCardTransferDTO(cardTransfer);
+        log.info(metodCompl);
+        log.info("получение  cardTransfer по ID {}", id);
         return cardTransfer.map(mapper::cardTransferToCardTransferDTO);
 
     }
@@ -37,7 +43,9 @@ public class CardTransferServiceImpl implements CardTransferService {
     @Override
     @Transactional(readOnly = true)
     public List<CardTransferDTO> allCardTransfer() {
+        log.info("вызов метода allCardTransfer");
         final List<CardTransfer> cardTransferList = cardTransferRepository.findAll();
+        log.info(metodCompl);
         return mapper.cardTransferListToDTOList(cardTransferList);
     }
 
@@ -45,6 +53,8 @@ public class CardTransferServiceImpl implements CardTransferService {
     @Override
     @Transactional
     public CardTransfer saveCardTransfer(CardTransferDTO cardTransferDTO) {
+        log.info(metodCompl);
+        log.info("Save cardTransfer");
         return cardTransferRepository
                 .save(mapper.cardTransferDTOToCardTransfer(cardTransferDTO));
     }
@@ -53,27 +63,24 @@ public class CardTransferServiceImpl implements CardTransferService {
     @Override
     @Transactional
     public CardTransfer updateCardTransferById(CardTransferDTO cardTransferDTO, long id) {
-        if (cardTransferDTO == null) {
-            throw new IllegalArgumentException("CardTransferDTO to update cannot be null");
-        }
 
-        final Optional<CardTransferDTO> optionalCardTransferDTO = getCardTransferById(id);
+        final CardTransfer existingCardTransfer = cardTransferRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("CardTransfer not found for id: " + id));
 
-        final CardTransferDTO cardTransferDTO3 = optionalCardTransferDTO.orElseThrow(() ->
-                new EntityNotFoundException("CardTransfer not found for id: " + id));
-
-
-        cardTransferDTO3.setCardNumber(cardTransferDTO.getCardNumber());
-        cardTransferDTO3.setAmount(cardTransferDTO.getAmount());
-        cardTransferDTO3.setPurpose(cardTransferDTO.getPurpose());
-        cardTransferDTO3.setAccountDetailsId(cardTransferDTO.getAccountDetailsId());
-
-        return mapper.cardTransferDTOToCardTransfer(cardTransferDTO3);
+        existingCardTransfer.setCardNumber(cardTransferDTO.getCardNumber());
+        existingCardTransfer.setAmount(cardTransferDTO.getAmount());
+        existingCardTransfer.setPurpose(cardTransferDTO.getPurpose());
+        existingCardTransfer.setAccountDetailsId(cardTransferDTO.getAccountDetailsId());
+        log.info(metodCompl);
+        log.info("Updating cardTransfer with id: {}", id);
+        return cardTransferRepository.save(existingCardTransfer);
     }
 
     @Override
     @Transactional
     public void deleteCardTransfer(Long id) {
+        log.info("Delete CardTransfer  id={}", id);
         cardTransferRepository.deleteById(id);
+        log.info("удаление выполнено");
     }
 }

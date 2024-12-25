@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -110,32 +111,25 @@ class PhoneTransferServiceImplTest {
         assertEquals(phoneTransfer1, savedPhoneTransfer);
     }
 
-//    @Test
-//    void testUpdatePhoneTransferById() {
-//
-//        when(phoneTransferRepository.findById(2L)).thenReturn(Optional.of(phoneTransfer2));
-//        when(phoneTransferRepository.save(any(PhoneTransfer.class))).thenReturn(phoneTransfer2);
-//
-//        PhoneTransfer updatedPhoneTransfer = phoneTransferService.updatePhoneTransferById(phoneTransferDTO2, 2L);
-//
-//        assertNotNull(updatedPhoneTransfer);
-//        assertEquals(2L, updatedPhoneTransfer.getPhoneNumber());
-//        assertEquals(new BigDecimal("34.34"), updatedPhoneTransfer.getAmount());
-//        assertEquals("purpose2", updatedPhoneTransfer.getPurpose());
-//        assertEquals(6L, updatedPhoneTransfer.getPhoneDetailsId());
-//
-//
-//        verify(phoneTransferRepository).findById(1L);
-//        verify(mapper).phoneTransferDTOToPhoneTransfer(phoneTransferDTO2);
-//        verify(phoneTransferRepository).save(phoneTransfer1);
-//    }
-
     @Test
-    void updatePhoneTransferById_ShouldThrowException_WhenPhoneTransferDTOIsNull() {
-        // Проверка на null
-        assertThrows(IllegalArgumentException.class, () -> {
-            phoneTransferService.updatePhoneTransferById(null, 1L);
-        });
+    void testUpdatePhoneTransferById() {
+
+        // Настройка моков
+        when(phoneTransferRepository.findById(1L)).thenReturn(Optional.of(phoneTransfer1));
+        when(phoneTransferRepository.save(any(PhoneTransfer.class))).thenReturn(phoneTransfer1);
+
+        // Вызов метода
+        PhoneTransfer updatedPhoneTransfer = phoneTransferService.updatePhoneTransferById(phoneTransferDTO2, 1L);
+
+        // Проверки
+        assertNotNull(updatedPhoneTransfer);
+        assertEquals(2L, updatedPhoneTransfer.getPhoneNumber());
+        assertEquals(new BigDecimal("34.34"), updatedPhoneTransfer.getAmount());
+        assertEquals("purpose2", updatedPhoneTransfer.getPurpose());
+        assertEquals(6L, updatedPhoneTransfer.getAccountDetailsId());
+        // Проверка вызовов методов
+        verify(phoneTransferRepository).findById(1L);
+        verify(phoneTransferRepository).save(phoneTransfer1);
     }
 
     @Test
