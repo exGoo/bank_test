@@ -11,17 +11,27 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AuditMapperTest {
+    private static final Long HISTORY_ID = 1L;
+    private static final Long HISTORY_ID_TWO = 2L;
+    private static final String ENTITY_TYPE = "history";
+    private static final String OPERATION_TYPE_CREATE = "create";
+    private static final String OPERATION_TYPE_UPDATE = "update";
+    private static final LocalDateTime CREATED_AT =
+            LocalDateTime.of(2024, 12, 12, 12, 12);
+    private static final LocalDateTime MODIFIED_AT = LocalDateTime.now();
+    private static final String CREATE_BY = "1";
+
     private final AuditMapper mapper = Mappers.getMapper(AuditMapper.class);
 
     @Test
     void auditToDtoTest() {
         Audit audit = Audit.builder()
-                .id(1L)
-                .entityType("history")
-                .operationType("create")
+                .id(HISTORY_ID)
+                .entityType(ENTITY_TYPE)
+                .operationType(OPERATION_TYPE_CREATE)
                 .createdBy("1")
                 .modifiedBy(null)
-                .createdAt(LocalDateTime.now().minusDays(1))
+                .createdAt(CREATED_AT)
                 .modifiedAt(null)
                 .entityJson("{\"id\":1,\"transferAuditId\":0,\"profileAuditId\":0,\"accountAuditId\":0,"
                         + "\"antiFraudAuditId\":0,\"publicBankInfoAuditId\":0,\"authorizationAuditId\":0}")
@@ -44,13 +54,13 @@ class AuditMapperTest {
     @Test
     void dtoToAuditTest() {
         AuditDto dto = AuditDto.builder()
-                .id(2L)
-                .entityType("history")
-                .operationType("update")
-                .createdBy("1")
-                .modifiedBy("1")
-                .createdAt(LocalDateTime.now().minusDays(1))
-                .modifiedAt(LocalDateTime.now())
+                .id(HISTORY_ID_TWO)
+                .entityType(ENTITY_TYPE)
+                .operationType(OPERATION_TYPE_UPDATE)
+                .createdBy(CREATE_BY)
+                .modifiedBy(CREATE_BY)
+                .createdAt(CREATED_AT)
+                .modifiedAt(MODIFIED_AT)
                 .entityJson("{\"id\":1,\"transferAuditId\":0,\"profileAuditId\":0,\"accountAuditId\":0,"
                         + "\"antiFraudAuditId\":0,\"publicBankInfoAuditId\":0,\"authorizationAuditId\":0}")
                 .newEntityJson("{\"id\":1,\"transferAuditId\":1,\"profileAuditId\":1,\"accountAuditId\":1,"
@@ -74,25 +84,25 @@ class AuditMapperTest {
     void auditsToDtoListTest() {
         List<Audit> auditList = List.of(
                 Audit.builder()
-                        .id(1L)
-                        .entityType("history")
-                        .operationType("create")
-                        .createdBy("1")
+                        .id(HISTORY_ID)
+                        .entityType(ENTITY_TYPE)
+                        .operationType(OPERATION_TYPE_CREATE)
+                        .createdBy(CREATE_BY)
                         .modifiedBy(null)
-                        .createdAt(LocalDateTime.now().minusDays(1))
+                        .createdAt(CREATED_AT)
                         .modifiedAt(null)
                         .entityJson("{\"id\":1,\"transferAuditId\":0,\"profileAuditId\":0,\"accountAuditId\":0,"
                                 + "\"antiFraudAuditId\":0,\"publicBankInfoAuditId\":0,\"authorizationAuditId\":0}")
                         .newEntityJson(null)
                         .build(),
                 Audit.builder()
-                        .id(2L)
-                        .entityType("history")
-                        .operationType("update")
-                        .createdBy("1")
-                        .modifiedBy("1")
-                        .createdAt(LocalDateTime.now().minusDays(1))
-                        .modifiedAt(LocalDateTime.now())
+                        .id(HISTORY_ID_TWO)
+                        .entityType(ENTITY_TYPE)
+                        .operationType(OPERATION_TYPE_UPDATE)
+                        .createdBy(CREATE_BY)
+                        .modifiedBy(CREATE_BY)
+                        .createdAt(CREATED_AT)
+                        .modifiedAt(MODIFIED_AT)
                         .entityJson("{\"id\":1,\"transferAuditId\":0,\"profileAuditId\":0,\"accountAuditId\":0,"
                                 + "\"antiFraudAuditId\":0,\"publicBankInfoAuditId\":0,\"authorizationAuditId\":0}")
                         .newEntityJson("{\"id\":1,\"transferAuditId\":1,\"profileAuditId\":1,\"accountAuditId\":1,"

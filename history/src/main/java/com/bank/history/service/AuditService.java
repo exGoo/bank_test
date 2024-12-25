@@ -1,12 +1,12 @@
 package com.bank.history.service;
 
 import com.bank.history.dto.AuditDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface AuditService {
 
-    List<AuditDto> getAllAudits();
+    Page<AuditDto> getAllAudits(Pageable pageable);
 
     AuditDto getByCreatedBy(String createdBy);
 

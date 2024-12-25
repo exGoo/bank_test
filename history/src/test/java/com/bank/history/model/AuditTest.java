@@ -8,18 +8,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AuditTest {
-    private static final LocalDateTime TIME = LocalDateTime.now();
+    private static final Long HISTORY_ID = 1L;
+    private static final String ENTITY_TYPE = "history";
+    private static final String OPERATION_TYPE_UPDATE = "update";
+    private static final LocalDateTime CREATED_AT =
+            LocalDateTime.of(2024, 12, 12, 12, 12);
+    private static final LocalDateTime MODIFIED_AT = LocalDateTime.now();
+    private static final String CREATE_BY = "history.id";
+    private static final String MODIFIED_BY = "account.id";
 
     @Test
     void builderTest() {
         Audit audit = Audit.builder()
-                .id(1L)
-                .entityType("history")
-                .operationType("update")
-                .createdBy("history.id")
-                .modifiedBy("account.id")
-                .createdAt(TIME)
-                .modifiedAt(TIME.plusDays(10))
+                .id(HISTORY_ID)
+                .entityType(ENTITY_TYPE)
+                .operationType(OPERATION_TYPE_UPDATE)
+                .createdBy(CREATE_BY)
+                .modifiedBy(MODIFIED_BY)
+                .createdAt(CREATED_AT)
+                .modifiedAt(MODIFIED_AT)
                 .newEntityJson("""
                         {
                             "id":1111,
@@ -45,13 +52,13 @@ class AuditTest {
                 .build();
 
         assertNotNull(audit);
-        assertEquals(1L, audit.getId());
-        assertEquals("history", audit.getEntityType());
-        assertEquals("update", audit.getOperationType());
-        assertEquals("history.id", audit.getCreatedBy());
-        assertEquals("account.id", audit.getModifiedBy());
-        assertEquals(TIME, audit.getCreatedAt());
-        assertEquals(TIME.plusDays(10), audit.getModifiedAt());
+        assertEquals(HISTORY_ID, audit.getId());
+        assertEquals(ENTITY_TYPE, audit.getEntityType());
+        assertEquals(OPERATION_TYPE_UPDATE, audit.getOperationType());
+        assertEquals(CREATE_BY, audit.getCreatedBy());
+        assertEquals(MODIFIED_BY, audit.getModifiedBy());
+        assertEquals(CREATED_AT, audit.getCreatedAt());
+        assertEquals(MODIFIED_AT, audit.getModifiedAt());
         assertEquals("""
                 {
                     "id":1111,
@@ -80,13 +87,13 @@ class AuditTest {
     void settersAndGettersTest() {
         Audit audit = new Audit();
 
-        audit.setId(1L);
-        audit.setEntityType("history");
-        audit.setOperationType("update");
-        audit.setCreatedBy("history.id");
-        audit.setModifiedBy("account.id");
-        audit.setCreatedAt(TIME);
-        audit.setModifiedAt(TIME.plusDays(10));
+        audit.setId(HISTORY_ID);
+        audit.setEntityType(ENTITY_TYPE);
+        audit.setOperationType(OPERATION_TYPE_UPDATE);
+        audit.setCreatedBy(CREATE_BY);
+        audit.setModifiedBy(MODIFIED_BY);
+        audit.setCreatedAt(CREATED_AT);
+        audit.setModifiedAt(MODIFIED_AT.plusDays(10));
         audit.setNewEntityJson("""
                 {
                     "id":1111,
@@ -110,13 +117,13 @@ class AuditTest {
                 }
                 """);
 
-        assertEquals(1L, audit.getId());
-        assertEquals("history", audit.getEntityType());
-        assertEquals("update", audit.getOperationType());
-        assertEquals("history.id", audit.getCreatedBy());
-        assertEquals("account.id", audit.getModifiedBy());
-        assertEquals(TIME, audit.getCreatedAt());
-        assertEquals(TIME.plusDays(10), audit.getModifiedAt());
+        assertEquals(HISTORY_ID, audit.getId());
+        assertEquals(ENTITY_TYPE, audit.getEntityType());
+        assertEquals(OPERATION_TYPE_UPDATE, audit.getOperationType());
+        assertEquals(CREATE_BY, audit.getCreatedBy());
+        assertEquals(MODIFIED_BY, audit.getModifiedBy());
+        assertEquals(CREATED_AT, audit.getCreatedAt());
+        assertEquals(MODIFIED_AT, audit.getModifiedAt());
         assertEquals("""
                 {
                     "id":1111,

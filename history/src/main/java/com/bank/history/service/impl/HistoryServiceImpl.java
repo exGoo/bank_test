@@ -1,12 +1,17 @@
 package com.bank.history.service.impl;
 
 import com.bank.history.dto.HistoryDto;
+import com.bank.history.exception.HistoryCreationException;
+import com.bank.history.exception.HistoryDeletionException;
+import com.bank.history.exception.HistoryListNotFoundException;
 import com.bank.history.exception.HistoryNotFoundException;
+import com.bank.history.exception.HistoryUpdateException;
 import com.bank.history.mapper.HistoryMapper;
 import com.bank.history.model.History;
 import com.bank.history.repository.HistoryRepository;
 import com.bank.history.service.HistoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +28,7 @@ import java.util.List;
  *   <li>{@link Transactional} — управляет транзакциями при работе с базой данных.</li>
  * </ul>
  */
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class HistoryServiceImpl implements HistoryService {
@@ -39,25 +45,36 @@ public class HistoryServiceImpl implements HistoryService {
      * Возвращает список всех историй в виде DTO.
      *
      * @return список DTO всех историй.
+     * @throws HistoryListNotFoundException если не удалось получить список историй.
      */
     @Override
     @Transactional(readOnly = true)
     public List<HistoryDto> getAllHistories() {
-        return mapper.historiesToDtoList(repository.findAll());
+        try {
+            return mapper.historiesToDtoList(repository.findAll());
+        } catch (Exception exception) {
+            log.error("Не удалось получить все истории", exception);
+            throw new HistoryListNotFoundException();
+        }
     }
 
     /**
-     * Возвращает историю по идентификатору в виде DTO.
+     * Возвращает историю по указанному идентификатору в виде DTO.
      *
      * @param id идентификатор истории.
      * @return DTO найденной истории.
-     * @throws HistoryNotFoundException если история не найдена.
+     * @throws HistoryNotFoundException если история с указанным идентификатором не найдена.
      */
     @Override
     @Transactional(readOnly = true)
     public HistoryDto getHistoryById(Long id) {
-        return mapper.historyToDto(repository.findById(id)
-                .orElseThrow(HistoryNotFoundException::new));
+        try {
+            return mapper.historyToDto(repository.findById(id)
+                    .orElseThrow(HistoryNotFoundException::new));
+        } catch (Exception exception) {
+            log.error("История не найдена по id: {}", id, exception);
+            throw new HistoryNotFoundException();
+        }
     }
 
     /**
@@ -65,86 +82,97 @@ public class HistoryServiceImpl implements HistoryService {
      *
      * @param historyDto DTO для создания истории.
      * @return созданная сущность {@link History}.
+     * @throws HistoryCreationException если не удалось создать историю.
+     * @throws NullPointerException     если переданный DTO равен null.
      */
     @Override
     @Transactional
     public History createHistory(HistoryDto historyDto) {
-        return repository.save(mapper.dtoToHistory(historyDto));
+        if (historyDto == null) {
+            throw new IllegalArgumentException("HistoryDto не должно быть null");
+        }
+        try {
+            return repository.save(mapper.dtoToHistory(historyDto));
+        } catch (Exception exception) {
+            log.error("Не удалось создать историю: {}", historyDto, exception);
+            throw new HistoryCreationException();
+        }
     }
 
     /**
-     * Обновляет существующую историю по идентификатору.
+     * Обновляет существующую историю по указанному идентификатору.
      *
      * @param id         идентификатор обновляемой истории.
      * @param historyDto DTO с новыми данными для обновления.
-     * @throws HistoryNotFoundException если история не найдена.
+     * @return обновленная сущность {@link History}.
+     * @throws HistoryNotFoundException если история с указанным идентификатором не найдена.
+     * @throws HistoryUpdateException   если не удалось обновить историю.
      */
     @Override
     @Transactional
     public History updateHistory(Long id, HistoryDto historyDto) {
-        History maybeHistory = repository.findById(id)
-                .orElseThrow(HistoryNotFoundException::new);
-
-        maybeHistory = History.builder()
-                .id(maybeHistory.getId())
-                .transferAuditId(historyDto.getTransferAuditId())
-                .profileAuditId(historyDto.getProfileAuditId())
-                .accountAuditId(historyDto.getAccountAuditId())
-                .antiFraudAuditId(historyDto.getAntiFraudAuditId())
-                .publicBankInfoAuditId(historyDto.getPublicBankInfoAuditId())
-                .authorizationAuditId(historyDto.getAuthorizationAuditId())
-                .build();
-
-        return repository.save(maybeHistory);
+        try {
+            History maybeHistory = repository.findById(id)
+                    .orElseThrow(HistoryNotFoundException::new);
+            mapper.updateEntityFromDto(historyDto, maybeHistory);
+            return repository.save(maybeHistory);
+        } catch (HistoryNotFoundException exception) {
+            log.error("История не найдена по id: {}", id);
+            throw exception;
+        } catch (Exception exception) {
+            log.error("Не удалось обновить историю по id: {}", id, exception);
+            throw new HistoryUpdateException();
+        }
     }
 
     /**
-     * Частично обновляет существующую историю по идентификатору.
+     * Частично обновляет существующую историю по указанному идентификатору.
      *
      * @param id         идентификатор обновляемой истории.
      * @param historyDto DTO с новыми данными для обновления.
-     * @throws HistoryNotFoundException если история не найдена.
+     * @return обновленная сущность {@link History}.
+     * @throws HistoryNotFoundException если история с указанным идентификатором не найдена.
+     * @throws HistoryUpdateException   если не удалось частично обновить историю.
      */
     @Override
     public History editHistory(Long id, HistoryDto historyDto) {
-        History maybeHistory = repository.findById(id)
-                .orElseThrow(HistoryNotFoundException::new);
-
-        if (historyDto.getTransferAuditId() != null) {
-            maybeHistory.setTransferAuditId(historyDto.getTransferAuditId());
+        try {
+            History maybeHistory = repository.findById(id)
+                    .orElseThrow(HistoryNotFoundException::new);
+            mapper.editEntityFromDto(historyDto, maybeHistory);
+            return repository.save(maybeHistory);
+        } catch (HistoryNotFoundException exception) {
+            log.error("История не найдена по id: {}", id, exception);
+            throw exception;
+        } catch (Exception exception) {
+            log.error("Не удалось частично обновить историю по id: {}", id, exception);
+            throw new HistoryUpdateException();
         }
-        if (historyDto.getProfileAuditId() != null) {
-            maybeHistory.setProfileAuditId(historyDto.getProfileAuditId());
-        }
-        if (historyDto.getAccountAuditId() != null) {
-            maybeHistory.setAccountAuditId(historyDto.getAccountAuditId());
-        }
-        if (historyDto.getAntiFraudAuditId() != null) {
-            maybeHistory.setAntiFraudAuditId(historyDto.getAntiFraudAuditId());
-        }
-        if (historyDto.getPublicBankInfoAuditId() != null) {
-            maybeHistory.setPublicBankInfoAuditId(historyDto.getPublicBankInfoAuditId());
-        }
-        if (historyDto.getAuthorizationAuditId() != null) {
-            maybeHistory.setAuthorizationAuditId(historyDto.getAuthorizationAuditId());
-        }
-
-        return repository.save(maybeHistory);
     }
 
     /**
-     * Удаляет историю по идентификатору.
+     * Удаляет историю по указанному идентификатору.
      *
      * @param id идентификатор удаляемой истории.
-     * @throws HistoryNotFoundException если история не найдена.
+     * @throws HistoryNotFoundException если история с указанным идентификатором не найдена.
+     * @throws HistoryDeletionException если не удалось удалить историю.
      */
     @Override
     @Transactional
     public void deleteHistory(Long id) {
-        if (repository.findById(id).isPresent()) {
-            repository.deleteById(id);
-        } else {
-            throw new HistoryNotFoundException();
+        try {
+            if (repository.existsById(id)) {
+                repository.deleteById(id);
+            } else {
+                log.error("История не найдена по id: {}", id);
+                throw new HistoryNotFoundException();
+            }
+        } catch (HistoryNotFoundException exception) {
+            log.error("История не найдена по id: {}", id, exception);
+            throw exception;
+        } catch (Exception exception) {
+            log.error("Не удалось удалить историю по id: {}", id, exception);
+            throw new HistoryDeletionException();
         }
     }
 }

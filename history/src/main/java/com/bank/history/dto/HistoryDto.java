@@ -17,24 +17,24 @@ import lombok.ToString;
 @Schema(description = "Объект истории, содержащий информацию о различных аудиторских данных")
 public class HistoryDto {
 
-    @Schema(description = "Идентификатор истории", example = "")
+    @Schema(description = "Идентификатор истории")
     private Long id;
 
-    @Schema(description = "Идентификатор аудита перевода", example = "")
+    @Schema(description = "Идентификатор аудита перевода")
     private Long transferAuditId;
 
-    @Schema(description = "Идентификатор аудита профиля", example = "")
+    @Schema(description = "Идентификатор аудита профиля")
     private Long profileAuditId;
 
-    @Schema(description = "Идентификатор аудита счета", example = "")
+    @Schema(description = "Идентификатор аудита счета")
     private Long accountAuditId;
 
-    @Schema(description = "Идентификатор аудита системы антифрода", example = "")
+    @Schema(description = "Идентификатор аудита системы антифрода")
     private Long antiFraudAuditId;
 
-    @Schema(description = "Идентификатор аудита публичной банковской информации", example = "")
+    @Schema(description = "Идентификатор аудита публичной банковской информации")
     private Long publicBankInfoAuditId;
 
-    @Schema(description = "Идентификатор аудита авторизации", example = "")
+    @Schema(description = "Идентификатор аудита авторизации")
     private Long authorizationAuditId;
 }

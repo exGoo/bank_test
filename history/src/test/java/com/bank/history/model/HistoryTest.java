@@ -1,50 +1,63 @@
 package com.bank.history.model;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class HistoryTest {
 
-    @Test
-    void builderTest() {
+    @ParameterizedTest
+    @CsvSource({
+            "1000, 1001, 1002, 1003, 1004, 1005, 1006",
+            "2000, 2001, 2002, 2003, 2004, 2005, 2006",
+            "3000, 3001, 3002, 3003, 3004, 3005, 3006"
+    })
+    void builderTest(long id, long transferAuditId, long profileAuditId, long accountAuditId,
+                     long antiFraudAuditId, long publicBankInfoAuditId, long authorizationAuditId) {
         History history = History.builder()
-                .id(1000L)
-                .transferAuditId(1001L)
-                .profileAuditId(1002L)
-                .accountAuditId(1003L)
-                .antiFraudAuditId(1004L)
-                .publicBankInfoAuditId(1005L)
-                .authorizationAuditId(1006L)
+                .id(id)
+                .transferAuditId(transferAuditId)
+                .profileAuditId(profileAuditId)
+                .accountAuditId(accountAuditId)
+                .antiFraudAuditId(antiFraudAuditId)
+                .publicBankInfoAuditId(publicBankInfoAuditId)
+                .authorizationAuditId(authorizationAuditId)
                 .build();
 
         assertNotNull(history);
-        assertEquals(1000L, history.getId());
-        assertEquals(1001L, history.getTransferAuditId());
-        assertEquals(1002L, history.getProfileAuditId());
-        assertEquals(1003L, history.getAccountAuditId());
-        assertEquals(1004L, history.getAntiFraudAuditId());
-        assertEquals(1005L, history.getPublicBankInfoAuditId());
-        assertEquals(1006L, history.getAuthorizationAuditId());
+        assertEquals(id, history.getId());
+        assertEquals(transferAuditId, history.getTransferAuditId());
+        assertEquals(profileAuditId, history.getProfileAuditId());
+        assertEquals(accountAuditId, history.getAccountAuditId());
+        assertEquals(antiFraudAuditId, history.getAntiFraudAuditId());
+        assertEquals(publicBankInfoAuditId, history.getPublicBankInfoAuditId());
+        assertEquals(authorizationAuditId, history.getAuthorizationAuditId());
     }
 
-    @Test
-    void settersAndGettersTest() {
+    @ParameterizedTest
+    @CsvSource({
+            "1001, 1002, 1003, 1004, 1005, 1006",
+            "2001, 2002, 2003, 2004, 2005, 2006",
+            "3001, 3002, 3003, 3004, 3005, 3006"
+    })
+    void settersAndGettersTest(long transferAuditId, long profileAuditId, long accountAuditId,
+                               long antiFraudAuditId, long publicBankInfoAuditId, long authorizationAuditId) {
         History history = new History();
 
-        history.setTransferAuditId(1001L);
-        history.setProfileAuditId(1002L);
-        history.setAccountAuditId(1003L);
-        history.setAntiFraudAuditId(1004L);
-        history.setPublicBankInfoAuditId(1005L);
-        history.setAuthorizationAuditId(1006L);
+        history.setTransferAuditId(transferAuditId);
+        history.setProfileAuditId(profileAuditId);
+        history.setAccountAuditId(accountAuditId);
+        history.setAntiFraudAuditId(antiFraudAuditId);
+        history.setPublicBankInfoAuditId(publicBankInfoAuditId);
+        history.setAuthorizationAuditId(authorizationAuditId);
 
-        assertEquals(1001L, history.getTransferAuditId());
-        assertEquals(1002L, history.getProfileAuditId());
-        assertEquals(1003L, history.getAccountAuditId());
-        assertEquals(1004L, history.getAntiFraudAuditId());
-        assertEquals(1005L, history.getPublicBankInfoAuditId());
-        assertEquals(1006L, history.getAuthorizationAuditId());
+        assertEquals(transferAuditId, history.getTransferAuditId());
+        assertEquals(profileAuditId, history.getProfileAuditId());
+        assertEquals(accountAuditId, history.getAccountAuditId());
+        assertEquals(antiFraudAuditId, history.getAntiFraudAuditId());
+        assertEquals(publicBankInfoAuditId, history.getPublicBankInfoAuditId());
+        assertEquals(authorizationAuditId, history.getAuthorizationAuditId());
     }
 }

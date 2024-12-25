@@ -34,9 +34,7 @@ class AuditServiceTest {
                 .thenReturn(AUDIT);
         when(mapper.dtoToAudit(AUDIT_DTO))
                 .thenReturn(AUDIT);
-
         service.createAudit(AUDIT_DTO);
-
         verify(repository).save(AUDIT);
     }
 }
