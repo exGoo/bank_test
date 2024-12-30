@@ -1,6 +1,5 @@
 package com.bank.transfer.controller;
 
-import com.bank.transfer.aspects.AuditAspect;
 import com.bank.transfer.dto.CardTransferDTO;
 import com.bank.transfer.entity.CardTransfer;
 import com.bank.transfer.service.CardTransferService;
@@ -23,12 +22,10 @@ import java.util.Optional;
 @RequestMapping("/card")
 public class CardRestController {
     private final CardTransferService cardTransferService;
-    private final AuditAspect auditAspect;
 
     @Autowired
-    public CardRestController(CardTransferService cardTransferService, AuditAspect auditAspect) {
+    public CardRestController(CardTransferService cardTransferService) {
         this.cardTransferService = cardTransferService;
-        this.auditAspect = auditAspect;
     }
 
 
@@ -58,7 +55,7 @@ public class CardRestController {
 
     @PutMapping("/{id}")
     public CardTransfer updateCardTransfer(@RequestBody CardTransferDTO cardTransferDTO,
-                                                           @PathVariable("id") long id) {
+                                           @PathVariable("id") long id) {
         final CardTransfer cardTransferUpdate = cardTransferService.updateCardTransferById(cardTransferDTO, id);
         return cardTransferUpdate;
     }

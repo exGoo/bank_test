@@ -1,6 +1,5 @@
 package com.bank.transfer.controller;
 
-import com.bank.transfer.aspects.AuditAspect;
 import com.bank.transfer.dto.PhoneTransferDTO;
 import com.bank.transfer.entity.PhoneTransfer;
 import com.bank.transfer.service.PhoneTransferService;
@@ -23,12 +22,10 @@ import java.util.Optional;
 @RequestMapping("/phone")
 public class PhoneRestController {
     private final PhoneTransferService phoneTransferService;
-    private final AuditAspect auditAspect;
 
     @Autowired
-    public PhoneRestController(PhoneTransferService phoneTransferService, AuditAspect auditAspect) {
+    public PhoneRestController(PhoneTransferService phoneTransferService) {
         this.phoneTransferService = phoneTransferService;
-        this.auditAspect = auditAspect;
     }
 
 
@@ -58,7 +55,7 @@ public class PhoneRestController {
 
     @PutMapping("/{id}")
     public PhoneTransfer updatePhoneTransfer(@RequestBody PhoneTransferDTO phoneTransferDTO,
-                                                             @PathVariable("id") long id) {
+                                             @PathVariable("id") long id) {
         final PhoneTransfer phoneTransferUpdate = phoneTransferService.updatePhoneTransferById(phoneTransferDTO, id);
         return phoneTransferUpdate;
     }

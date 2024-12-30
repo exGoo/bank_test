@@ -5,7 +5,6 @@ import com.bank.transfer.entity.AccountTransfer;
 import com.bank.transfer.mapper.AccountTransferMapper;
 import com.bank.transfer.repository.AccountTransferRepository;
 import com.bank.transfer.service.impl.AccountTransferServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,19 +12,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityNotFoundException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.bank.transfer.ResourcesForTests.ACCOUNT_DETAILS_ID_2;
+import static com.bank.transfer.ResourcesForTests.ACCOUNT_NUMBER_2;
+import static com.bank.transfer.ResourcesForTests.AMOUNT_2;
+import static com.bank.transfer.ResourcesForTests.ID_1;
+import static com.bank.transfer.ResourcesForTests.PURPOSE_2;
+import static com.bank.transfer.ResourcesForTests.accountTransfer1;
+import static com.bank.transfer.ResourcesForTests.accountTransfer2;
+import static com.bank.transfer.ResourcesForTests.accountTransferDTO1;
+import static com.bank.transfer.ResourcesForTests.accountTransferDTO2;
+import static com.bank.transfer.ResourcesForTests.accountTransferListDTO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AccountTransferServiceImplTest {
-    public static final Long ACCOUNT_TRANSFER_ID = 1L;
 
     @Mock
     private AccountTransferRepository accountTransferRepository;
@@ -34,57 +42,11 @@ class AccountTransferServiceImplTest {
     @InjectMocks
     private AccountTransferServiceImpl accountTransferService;
 
-    AccountTransferDTO accountTransferDTO1;
-    AccountTransferDTO accountTransferDTO2;
-    AccountTransfer accountTransfer1;
-    AccountTransfer accountTransfer2;
-    List<AccountTransfer> accountTransferList = new ArrayList<>();
-    List<AccountTransferDTO> accountTransferListDTO = new ArrayList<>();
-
-    @BeforeEach
-    public void setUp() {
-
-        accountTransfer1 = AccountTransfer.builder()
-                .id(1L)
-                .accountNumber(1L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose1")
-                .accountDetailsId(5L)
-                .build();
-        accountTransfer2 = AccountTransfer.builder()
-                .id(2L)
-                .accountNumber(2L)
-                .amount(new BigDecimal("34.34"))
-                .purpose("purpose2")
-                .accountDetailsId(6L)
-                .build();
-        accountTransferDTO1 = AccountTransferDTO.builder()
-                .id(1L)
-                .accountNumber(1L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose1")
-                .accountDetailsId(5L)
-                .build();
-        accountTransferDTO2 = AccountTransferDTO.builder()
-                .id(2L)
-                .accountNumber(2L)
-                .amount(new BigDecimal("34.34"))
-                .purpose("purpose2")
-                .accountDetailsId(6L)
-                .build();
-
-        accountTransferList.add(accountTransfer1);
-        accountTransferList.add(accountTransfer2);
-
-        accountTransferListDTO.add(accountTransferDTO1);
-        accountTransferListDTO.add(accountTransferDTO2);
-    }
-
     @Test
     void getAccountTransferById() {
-        when(accountTransferRepository.findById(1L)).thenReturn(Optional.of(accountTransfer1));
+        when(accountTransferRepository.findById(ID_1)).thenReturn(Optional.of(accountTransfer1));
         when(mapper.accountTransferToAccountTransferDTO(accountTransfer1)).thenReturn(accountTransferDTO1);
-        Optional<AccountTransferDTO> optionalAccountTransferDTO = accountTransferService.getAccountTransferById(1L);
+        Optional<AccountTransferDTO> optionalAccountTransferDTO = accountTransferService.getAccountTransferById(ID_1);
         AccountTransferDTO accountTransferDTO = optionalAccountTransferDTO.get();
         assertNotNull(accountTransferDTO);
         assertEquals(accountTransferDTO1, accountTransferDTO);
@@ -115,36 +77,37 @@ class AccountTransferServiceImplTest {
     void testUpdateAccountTransferById() {
 
         // Настройка моков
-        when(accountTransferRepository.findById(1L)).thenReturn(Optional.of(accountTransfer1));
+        when(accountTransferRepository.findById(ID_1)).thenReturn(Optional.of(accountTransfer1));
         when(accountTransferRepository.save(any(AccountTransfer.class))).thenReturn(accountTransfer1);
 
         // Вызов метода
-        AccountTransfer updatedAccountTransfer = accountTransferService.updateAccountTransferById(accountTransferDTO2, 1L);
+        AccountTransfer updatedAccountTransfer = accountTransferService.updateAccountTransferById(accountTransferDTO2, ID_1);
 
         // Проверки
         assertNotNull(updatedAccountTransfer);
-        assertEquals(2L, updatedAccountTransfer.getAccountNumber());
-        assertEquals(new BigDecimal("34.34"), updatedAccountTransfer.getAmount());
-        assertEquals("purpose2", updatedAccountTransfer.getPurpose());
-        assertEquals(6L, updatedAccountTransfer.getAccountDetailsId());
+        assertEquals(ACCOUNT_NUMBER_2, updatedAccountTransfer.getAccountNumber());
+        assertEquals(AMOUNT_2, updatedAccountTransfer.getAmount());
+        assertEquals(PURPOSE_2, updatedAccountTransfer.getPurpose());
+        assertEquals(ACCOUNT_DETAILS_ID_2, updatedAccountTransfer.getAccountDetailsId());
         // Проверка вызовов методов
-        verify(accountTransferRepository).findById(1L);
+        verify(accountTransferRepository).findById(ID_1);
         verify(accountTransferRepository).save(accountTransfer1);
     }
 
     @Test
     void updateAccountTransferById_ShouldThrowException_WhenAccountTransferNotFound() {
         // Настройка поведения мока
-        when(accountTransferRepository.findById(1L)).thenReturn(Optional.empty());
+        when(accountTransferRepository.findById(ID_1)).thenReturn(Optional.empty());
 
         // Проверка на отсутствие сущности
         assertThrows(EntityNotFoundException.class, () -> {
-            accountTransferService.updateAccountTransferById(accountTransferDTO1, 1L);
+            accountTransferService.updateAccountTransferById(accountTransferDTO1, ID_1);
         });
     }
+
     @Test
     void deleteAccountTransfer() {
-        accountTransferService.deleteAccountTransfer(ACCOUNT_TRANSFER_ID);
-        verify(accountTransferRepository).deleteById(ACCOUNT_TRANSFER_ID);
+        accountTransferService.deleteAccountTransfer(ID_1);
+        verify(accountTransferRepository).deleteById(ID_1);
     }
 }

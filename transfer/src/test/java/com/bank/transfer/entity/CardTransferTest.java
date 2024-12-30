@@ -1,68 +1,64 @@
 package com.bank.transfer.entity;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
-
+import static com.bank.transfer.ResourcesForTests.ACCOUNT_DETAILS_ID_1;
+import static com.bank.transfer.ResourcesForTests.ACCOUNT_DETAILS_ID_2;
+import static com.bank.transfer.ResourcesForTests.AMOUNT_1;
+import static com.bank.transfer.ResourcesForTests.AMOUNT_2;
+import static com.bank.transfer.ResourcesForTests.CARD_NUMBER_1;
+import static com.bank.transfer.ResourcesForTests.CARD_NUMBER_2;
+import static com.bank.transfer.ResourcesForTests.CARD_TO_STRING;
+import static com.bank.transfer.ResourcesForTests.ID_1;
+import static com.bank.transfer.ResourcesForTests.ID_2;
+import static com.bank.transfer.ResourcesForTests.PURPOSE_1;
+import static com.bank.transfer.ResourcesForTests.PURPOSE_2;
+import static com.bank.transfer.ResourcesForTests.accountTransfer1;
+import static com.bank.transfer.ResourcesForTests.cardTransfer;
+import static com.bank.transfer.ResourcesForTests.cardTransfer1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CardTransferTest {
-    private CardTransfer cardTransfer;
-
-    @BeforeEach
-    public void creatNewCardTransfer() {
-        cardTransfer = new CardTransfer();
-    }
-
     @Test
     void testSettersAndGetters() {
-        cardTransfer.setId(100L);
-        assertEquals(100L, cardTransfer.getId());
-        cardTransfer.setCardNumber(123456789L);
-        assertEquals(123456789L, cardTransfer.getCardNumber());
-        cardTransfer.setAmount(new BigDecimal("1000.00"));
-        assertEquals(new BigDecimal("1000.00"), cardTransfer.getAmount());
-        cardTransfer.setPurpose("Test transfer");
-        assertEquals("Test transfer", cardTransfer.getPurpose());
-        cardTransfer.setAccountDetailsId(200L);
-        assertEquals(200L, cardTransfer.getAccountDetailsId());
+        cardTransfer1.setId(ID_2);
+        assertEquals(ID_2, cardTransfer1.getId());
+        cardTransfer1.setCardNumber(CARD_NUMBER_2);
+        assertEquals(CARD_NUMBER_2, cardTransfer1.getCardNumber());
+        cardTransfer1.setAmount(AMOUNT_2);
+        assertEquals(AMOUNT_2, cardTransfer1.getAmount());
+        cardTransfer1.setPurpose(PURPOSE_2);
+        assertEquals(PURPOSE_2, cardTransfer1.getPurpose());
+        accountTransfer1.setAccountDetailsId(ACCOUNT_DETAILS_ID_2);
+        assertEquals(ACCOUNT_DETAILS_ID_2, accountTransfer1.getAccountDetailsId());
     }
 
     @Test
     void testBuilder() {
-        CardTransfer transfer = CardTransfer.builder()
-                .cardNumber(123456789L)
-                .amount(new BigDecimal("500.00"))
-                .purpose("Payment")
-                .accountDetailsId(300L)
-                .build();
-        assertNotNull(transfer);
-        assertEquals(123456789L, transfer.getCardNumber());
-        assertEquals(new BigDecimal("500.00"), transfer.getAmount());
-        assertEquals("Payment", transfer.getPurpose());
-        assertEquals(300L, transfer.getAccountDetailsId());
+        assertNotNull(cardTransfer1);
+        assertEquals(CARD_NUMBER_2, cardTransfer1.getCardNumber());
+        assertEquals(AMOUNT_2, cardTransfer1.getAmount());
+        assertEquals(PURPOSE_2, cardTransfer1.getPurpose());
+        assertEquals(ACCOUNT_DETAILS_ID_1, cardTransfer1.getAccountDetailsId());
     }
 
     @Test
     void testConstructor() {
-        CardTransfer transfer = new CardTransfer(123456789L, new BigDecimal("500.00"), "Payment", 300L);
-        assertNotNull(transfer);
-        assertEquals(123456789L, transfer.getCardNumber());
-        assertEquals(new BigDecimal("500.00"), transfer.getAmount());
-        assertEquals("Payment", transfer.getPurpose());
-        assertEquals(300L, transfer.getAccountDetailsId());
+        assertNotNull(cardTransfer);
+        assertEquals(CARD_NUMBER_1, cardTransfer.getCardNumber());
+        assertEquals(AMOUNT_1, cardTransfer.getAmount());
+        assertEquals(PURPOSE_1, cardTransfer.getPurpose());
+        assertEquals(ACCOUNT_DETAILS_ID_1, cardTransfer.getAccountDetailsId());
     }
 
     @Test
     void testToString() {
-        cardTransfer.setId(100L);
-        cardTransfer.setCardNumber(123456789L);
-        cardTransfer.setAmount(new BigDecimal("1000.00"));
-        cardTransfer.setPurpose("Test transfer");
-        cardTransfer.setAccountDetailsId(200L);
-        String expectedString = "CardTransfer(id=100, cardNumber=123456789, amount=1000.00, purpose=Test transfer, accountDetailsId=200)";
-        assertEquals(expectedString, cardTransfer.toString());
+        cardTransfer1.setId(ID_1);
+        cardTransfer1.setCardNumber(CARD_NUMBER_1);
+        cardTransfer1.setAmount(AMOUNT_1);
+        cardTransfer1.setPurpose(PURPOSE_1);
+        cardTransfer1.setAccountDetailsId(ACCOUNT_DETAILS_ID_1);
+        assertEquals(CARD_TO_STRING, cardTransfer1.toString());
     }
 }

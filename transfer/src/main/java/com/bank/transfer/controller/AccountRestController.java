@@ -1,7 +1,6 @@
 package com.bank.transfer.controller;
 
 
-import com.bank.transfer.aspects.AuditAspect;
 import com.bank.transfer.dto.AccountTransferDTO;
 import com.bank.transfer.entity.AccountTransfer;
 import com.bank.transfer.service.AccountTransferService;
@@ -27,12 +26,10 @@ import java.util.Optional;
 
 public class AccountRestController {
     private final AccountTransferService accountTransferService;
-    private final AuditAspect auditAspect;
 
     @Autowired
-    public AccountRestController(AccountTransferService accountTransferService, AuditAspect auditAspect) {
+    public AccountRestController(AccountTransferService accountTransferService) {
         this.accountTransferService = accountTransferService;
-        this.auditAspect = auditAspect;
     }
 
 
@@ -61,7 +58,7 @@ public class AccountRestController {
 
     @PutMapping("/{id}")
     public AccountTransfer updateAccountTransfer(@RequestBody AccountTransferDTO accountTransferDTO,
-                                                                 @PathVariable("id") long id) {
+                                                 @PathVariable("id") long id) {
         final AccountTransfer accountTransferUpdate =
                 accountTransferService.updateAccountTransferById(accountTransferDTO, id);
         return accountTransferUpdate;

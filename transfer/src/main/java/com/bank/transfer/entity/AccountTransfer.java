@@ -48,4 +48,5 @@ public class AccountTransfer {
         this.purpose = purpose;
         this.accountDetailsId = accountDetailsId;
     }
+
 }

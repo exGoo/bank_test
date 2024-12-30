@@ -5,7 +5,6 @@ import com.bank.transfer.entity.CardTransfer;
 import com.bank.transfer.mapper.CardTransferMapper;
 import com.bank.transfer.repository.CardTransferRepository;
 import com.bank.transfer.service.impl.CardTransferServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,19 +12,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.persistence.EntityNotFoundException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.bank.transfer.ResourcesForTests.ACCOUNT_DETAILS_ID_2;
+import static com.bank.transfer.ResourcesForTests.AMOUNT_2;
+import static com.bank.transfer.ResourcesForTests.CARD_NUMBER_2;
+import static com.bank.transfer.ResourcesForTests.ID_1;
+import static com.bank.transfer.ResourcesForTests.PURPOSE_2;
+import static com.bank.transfer.ResourcesForTests.cardTransfer1;
+import static com.bank.transfer.ResourcesForTests.cardTransfer2;
+import static com.bank.transfer.ResourcesForTests.cardTransferDTO1;
+import static com.bank.transfer.ResourcesForTests.cardTransferDTO2;
+import static com.bank.transfer.ResourcesForTests.cardTransferListDTO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CardTransferServiceImplTest {
-    public static final Long ACCOUNT_TRANSFER_ID = 1L;
 
     @Mock
     private CardTransferRepository cardTransferRepository;
@@ -34,57 +42,11 @@ class CardTransferServiceImplTest {
     @InjectMocks
     private CardTransferServiceImpl cardTransferService;
 
-    CardTransferDTO cardTransferDTO1;
-    CardTransferDTO cardTransferDTO2;
-    CardTransfer cardTransfer1;
-    CardTransfer cardTransfer2;
-    List<CardTransfer> cardTransferList = new ArrayList<>();
-    List<CardTransferDTO> cardTransferListDTO = new ArrayList<>();
-
-    @BeforeEach
-    public void setUp() {
-
-        cardTransfer1 = CardTransfer.builder()
-                .id(1L)
-                .cardNumber(1L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose1")
-                .accountDetailsId(5L)
-                .build();
-        cardTransfer2 = CardTransfer.builder()
-                .id(2L)
-                .cardNumber(2L)
-                .amount(new BigDecimal("34.34"))
-                .purpose("purpose2")
-                .accountDetailsId(6L)
-                .build();
-        cardTransferDTO1 = CardTransferDTO.builder()
-                .id(1L)
-                .cardNumber(1L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose1")
-                .accountDetailsId(5L)
-                .build();
-        cardTransferDTO2 = CardTransferDTO.builder()
-                .id(2L)
-                .cardNumber(2L)
-                .amount(new BigDecimal("34.34"))
-                .purpose("purpose2")
-                .accountDetailsId(6L)
-                .build();
-
-        cardTransferList.add(cardTransfer1);
-        cardTransferList.add(cardTransfer2);
-
-        cardTransferListDTO.add(cardTransferDTO1);
-        cardTransferListDTO.add(cardTransferDTO2);
-    }
-
     @Test
     void getCardTransferById() {
-        when(cardTransferRepository.findById(1L)).thenReturn(Optional.of(cardTransfer1));
+        when(cardTransferRepository.findById(ID_1)).thenReturn(Optional.of(cardTransfer1));
         when(mapper.cardTransferToCardTransferDTO(cardTransfer1)).thenReturn(cardTransferDTO1);
-        Optional<CardTransferDTO> optionalCardTransferDTO = cardTransferService.getCardTransferById(1L);
+        Optional<CardTransferDTO> optionalCardTransferDTO = cardTransferService.getCardTransferById(ID_1);
         CardTransferDTO cardTransferDTO = optionalCardTransferDTO.get();
         assertNotNull(cardTransferDTO);
         assertEquals(cardTransferDTO1, cardTransferDTO);
@@ -115,37 +77,37 @@ class CardTransferServiceImplTest {
     void testUpdateCardTransferById() {
 
         // Настройка моков
-        when(cardTransferRepository.findById(1L)).thenReturn(Optional.of(cardTransfer1));
+        when(cardTransferRepository.findById(ID_1)).thenReturn(Optional.of(cardTransfer1));
         when(cardTransferRepository.save(any(CardTransfer.class))).thenReturn(cardTransfer1);
 
         // Вызов метода
-        CardTransfer updatedCardTransfer = cardTransferService.updateCardTransferById(cardTransferDTO2, 1L);
+        CardTransfer updatedCardTransfer = cardTransferService.updateCardTransferById(cardTransferDTO2, ID_1);
 
         // Проверки
         assertNotNull(updatedCardTransfer);
-        assertEquals(2L, updatedCardTransfer.getCardNumber());
-        assertEquals(new BigDecimal("34.34"), updatedCardTransfer.getAmount());
-        assertEquals("purpose2", updatedCardTransfer.getPurpose());
-        assertEquals(6L, updatedCardTransfer.getAccountDetailsId());
+        assertEquals(CARD_NUMBER_2, updatedCardTransfer.getCardNumber());
+        assertEquals(AMOUNT_2, updatedCardTransfer.getAmount());
+        assertEquals(PURPOSE_2, updatedCardTransfer.getPurpose());
+        assertEquals(ACCOUNT_DETAILS_ID_2, updatedCardTransfer.getAccountDetailsId());
         // Проверка вызовов методов
-        verify(cardTransferRepository).findById(1L);
+        verify(cardTransferRepository).findById(ID_1);
         verify(cardTransferRepository).save(cardTransfer1);
     }
 
     @Test
     void updateCardTransferById_ShouldThrowException_WhenCardTransferNotFound() {
         // Настройка поведения мока
-        when(cardTransferRepository.findById(1L)).thenReturn(Optional.empty());
+        when(cardTransferRepository.findById(ID_1)).thenReturn(Optional.empty());
 
         // Проверка на отсутствие сущности
         assertThrows(EntityNotFoundException.class, () -> {
-            cardTransferService.updateCardTransferById(cardTransferDTO1, 1L);
+            cardTransferService.updateCardTransferById(cardTransferDTO1, ID_1);
         });
     }
 
     @Test
     void deleteCardTransfer() {
-        cardTransferService.deleteCardTransfer(ACCOUNT_TRANSFER_ID);
-        verify(cardTransferRepository).deleteById(ACCOUNT_TRANSFER_ID);
+        cardTransferService.deleteCardTransfer(ID_1);
+        verify(cardTransferRepository).deleteById(ID_1);
     }
 }

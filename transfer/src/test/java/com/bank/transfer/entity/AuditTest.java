@@ -1,108 +1,86 @@
 package com.bank.transfer.entity;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
+import static com.bank.transfer.ResourcesForTests.AUDIT_TO_STRING;
+import static com.bank.transfer.ResourcesForTests.CREATED_AT;
+import static com.bank.transfer.ResourcesForTests.CREATED_BY;
+import static com.bank.transfer.ResourcesForTests.ENTITY_JSON;
+import static com.bank.transfer.ResourcesForTests.ENTITY_TYPE_C_T;
+import static com.bank.transfer.ResourcesForTests.ID_1;
+import static com.bank.transfer.ResourcesForTests.MODIFIED_AT;
+import static com.bank.transfer.ResourcesForTests.MODIFIED_BY;
+import static com.bank.transfer.ResourcesForTests.NEW_ENTITY_JSON;
+import static com.bank.transfer.ResourcesForTests.OPERATION_TYPE_CREATE;
+import static com.bank.transfer.ResourcesForTests.OPERATION_TYPE_UPDATE;
+import static com.bank.transfer.ResourcesForTests.audit1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AuditTest {
-    private Audit audit;
-    private final String entityJSON = "{\"id\":111,\"accountNumber\":311,\"amount\":347574.34,\"purpose\":\"ivan ivanov\",\"accountDetailsId\":5}";
-
-    @BeforeEach
-    public void creatNewAudit() {
-        audit = new Audit();
-    }
-
 
     @Test
     void testSettersAndGetters() {
-        audit.setId(100L);
-        assertEquals(100L, audit.getId());
-        audit.setEntityType("AccountTransfer");
-        assertEquals("AccountTransfer", audit.getEntityType());
-        audit.setOperationType("UPDATE");
-        assertEquals("UPDATE", audit.getOperationType());
-        audit.setCreatedBy("111");
-        assertEquals("111", audit.getCreatedBy());
-        audit.setModifiedBy("111");
-        assertEquals("111", audit.getModifiedBy());
-        audit.setCreatedAt(LocalDateTime.parse("2024-12-22T12:36:46.594599"));
-        assertEquals(LocalDateTime.parse("2024-12-22T12:36:46.594599"), audit.getCreatedAt());
-        audit.setModifiedAt(LocalDateTime.parse("2024-12-22T12:36:46.594599"));
-        assertEquals(LocalDateTime.parse("2024-12-22T12:36:46.594599"), audit.getModifiedAt());
-        audit.setNewEntityJson(entityJSON);
-        assertEquals(entityJSON, audit.getNewEntityJson());
-        audit.setEntityJson(entityJSON);
-        assertEquals(entityJSON, audit.getEntityJson());
+        audit1.setId(ID_1);
+        assertEquals(ID_1, audit1.getId());
+        audit1.setEntityType(ENTITY_TYPE_C_T);
+        assertEquals(ENTITY_TYPE_C_T, audit1.getEntityType());
+        audit1.setOperationType(OPERATION_TYPE_UPDATE);
+        assertEquals(OPERATION_TYPE_UPDATE, audit1.getOperationType());
+        audit1.setCreatedBy(CREATED_BY);
+        assertEquals(CREATED_BY, audit1.getCreatedBy());
+        audit1.setModifiedBy(MODIFIED_BY);
+        assertEquals(MODIFIED_BY, audit1.getModifiedBy());
+        audit1.setCreatedAt(CREATED_AT);
+        assertEquals(CREATED_AT, audit1.getCreatedAt());
+        audit1.setModifiedAt(MODIFIED_AT);
+        assertEquals(MODIFIED_AT, audit1.getModifiedAt());
+        audit1.setNewEntityJson(ENTITY_JSON);
+        assertEquals(ENTITY_JSON, audit1.getEntityJson());
+        audit1.setEntityJson(NEW_ENTITY_JSON);
+        assertEquals(NEW_ENTITY_JSON, audit1.getEntityJson());
     }
 
     @Test
     void testBuilder() {
-
-        Audit audit = Audit.builder()
-                .id(1L)
-                .entityType("AccountTransfer")
-                .operationType("UPDATE")
-                .createdBy("111")
-                .modifiedBy("111")
-                .createdAt(LocalDateTime.parse("2024-12-22T12:36:46.594599"))
-                .modifiedAt(LocalDateTime.parse("2024-12-22T12:40:28.096895"))
-                .newEntityJson(entityJSON)
-                .entityJson(entityJSON)
-                .build();
-
-        assertNotNull(audit);
-        assertEquals(1L, audit.getId());
-        assertEquals("AccountTransfer", audit.getEntityType());
-        assertEquals("UPDATE", audit.getOperationType());
-        assertEquals("111", audit.getCreatedBy());
-        assertEquals("111", audit.getModifiedBy());
-        assertEquals(LocalDateTime.parse("2024-12-22T12:36:46.594599"), audit.getCreatedAt());
-        assertEquals(LocalDateTime.parse("2024-12-22T12:40:28.096895"), audit.getModifiedAt());
-        assertEquals(entityJSON, audit.getEntityJson());
-        assertEquals(entityJSON, audit.getNewEntityJson());
+        assertNotNull(audit1);
+        assertEquals(ID_1, audit1.getId());
+        assertEquals(ENTITY_TYPE_C_T, audit1.getEntityType());
+        assertEquals(OPERATION_TYPE_UPDATE, audit1.getOperationType());
+        assertEquals(CREATED_BY, audit1.getCreatedBy());
+        assertEquals(MODIFIED_BY, audit1.getModifiedBy());
+        assertEquals(CREATED_AT, audit1.getCreatedAt());
+        assertEquals(MODIFIED_AT, audit1.getModifiedAt());
+        assertEquals(ENTITY_JSON, audit1.getEntityJson());
+        assertEquals(NEW_ENTITY_JSON, audit1.getNewEntityJson());
     }
 
     @Test
     void testConstructor() {
-        Audit audit = new Audit(1L, "AccountTransfer", "UPDATE", "111", "111",
-                LocalDateTime.parse("2024-12-22T12:36:46.594599"),
-                LocalDateTime.parse("2024-12-22T12:40:28.096895"), entityJSON, entityJSON);
-
-        assertEquals(1L, audit.getId());
-        assertEquals("AccountTransfer", audit.getEntityType());
-        assertEquals("UPDATE", audit.getOperationType());
-        assertEquals("111", audit.getCreatedBy());
-        assertEquals("111", audit.getModifiedBy());
-        assertEquals(LocalDateTime.parse("2024-12-22T12:36:46.594599"), audit.getCreatedAt());
-        assertEquals(LocalDateTime.parse("2024-12-22T12:40:28.096895"), audit.getModifiedAt());
-        assertEquals(entityJSON, audit.getEntityJson());
-        assertEquals(entityJSON, audit.getNewEntityJson());
+        assertEquals(ID_1, audit1.getId());
+        assertEquals(ENTITY_TYPE_C_T, audit1.getEntityType());
+        assertEquals(OPERATION_TYPE_UPDATE, audit1.getOperationType());
+        assertEquals(CREATED_BY, audit1.getCreatedBy());
+        assertEquals(MODIFIED_BY, audit1.getModifiedBy());
+        assertEquals(CREATED_AT, audit1.getCreatedAt());
+        assertEquals(MODIFIED_AT, audit1.getModifiedAt());
+        assertEquals(ENTITY_JSON, audit1.getEntityJson());
+        assertEquals(NEW_ENTITY_JSON, audit1.getNewEntityJson());
     }
 
     @Test
     void testToString() {
-        audit.setId(1L);
-        audit.setEntityType("AccountTransfer");
-        audit.setOperationType("UPDATE");
-        audit.setCreatedBy("111");
-        audit.setModifiedBy("111");
-        audit.setCreatedAt(LocalDateTime.parse("2024-12-22T12:36:46.594599"));
-        audit.setModifiedAt(LocalDateTime.parse("2024-12-22T12:40:28.096895"));
-        audit.setNewEntityJson(entityJSON);
-        audit.setEntityJson(entityJSON);
+        audit1.setId(ID_1);
+        audit1.setEntityType(ENTITY_TYPE_C_T);
+        audit1.setOperationType(OPERATION_TYPE_CREATE);
+        audit1.setCreatedBy(CREATED_BY);
+        audit1.setModifiedBy(MODIFIED_BY);
+        audit1.setCreatedAt(CREATED_AT);
+        audit1.setModifiedAt(MODIFIED_AT);
+        audit1.setNewEntityJson(ENTITY_JSON);
+        audit1.setEntityJson(NEW_ENTITY_JSON);
 
-        String expectedString = "Audit(id=1, entityType=AccountTransfer, operationType=UPDATE, " +
-                "createdBy=111, modifiedBy=111, createdAt=2024-12-22T12:36:46.594599, modifiedAt=2024-12-22T12:40:28.096895, " +
-                "newEntityJson={\"id\":111,\"accountNumber\":311,\"amount\":347574.34,\"purpose\":\"ivan ivanov\",\"accountDetailsId\":5}, " +
-                "entityJson={\"id\":111,\"accountNumber\":311,\"amount\":347574.34,\"purpose\":\"ivan ivanov\",\"accountDetailsId\":5})";
-
-        // Проверяем, что результат toString() соответствует ожидаемому значению
-        assertEquals(expectedString, audit.toString());
+        assertEquals(AUDIT_TO_STRING, audit1.toString());
     }
 
 }

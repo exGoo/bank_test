@@ -2,54 +2,19 @@ package com.bank.transfer.mapper;
 
 import com.bank.transfer.dto.AccountTransferDTO;
 import com.bank.transfer.entity.AccountTransfer;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.bank.transfer.ResourcesForTests.accountTransfer1;
+import static com.bank.transfer.ResourcesForTests.accountTransfer2;
+import static com.bank.transfer.ResourcesForTests.accountTransferDTO1;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccountTransferMapperTest {
-    AccountTransferDTO accountTransferDTO1;
-    AccountTransferDTO accountTransferDTO2;
-    AccountTransfer accountTransfer1;
-    AccountTransfer accountTransfer2;
     private final AccountTransferMapper mapper = AccountTransferMapper.INSTANCE;
-
-    @BeforeEach
-    void setUp() {
-        accountTransferDTO1 = AccountTransferDTO.builder()
-                .id(1L)
-                .accountNumber(1L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose1")
-                .accountDetailsId(5L)
-                .build();
-        accountTransferDTO2 = AccountTransferDTO.builder()
-                .id(2L)
-                .accountNumber(2L)
-                .amount(new BigDecimal("394.34"))
-                .purpose("purpose2")
-                .accountDetailsId(10L)
-                .build();
-        accountTransfer1 = AccountTransfer.builder()
-                .id(1L)
-                .accountNumber(1L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose1")
-                .accountDetailsId(5L)
-                .build();
-        accountTransfer2 = AccountTransfer.builder()
-                .id(2L)
-                .accountNumber(2L)
-                .amount(new BigDecimal("39654.34"))
-                .purpose("purpose2")
-                .accountDetailsId(5L)
-                .build();
-    }
 
     @Test
     void testAccountTransferDTOToAccountTransfer() {
@@ -73,10 +38,11 @@ class AccountTransferMapperTest {
         assertEquals(accountTransfer1.getPurpose(), accountTransferDTO1.getPurpose());
         assertEquals(accountTransfer1.getAccountDetailsId(), accountTransferDTO1.getAccountDetailsId());
     }
+
     @Test
-    void testAccountTransferListToDTOList(){
+    void testAccountTransferListToDTOList() {
         List<AccountTransfer> accountTransferList =
-                Arrays.asList(accountTransfer1,accountTransfer2);
+                Arrays.asList(accountTransfer1, accountTransfer2);
         List<AccountTransferDTO> accountTransferDTOList =
                 mapper.accountTransferListToDTOList(accountTransferList);
         assertNotNull(accountTransferDTOList);
@@ -97,5 +63,4 @@ class AccountTransferMapperTest {
         assertEquals(accountTransfer2.getPurpose(), dto2.getPurpose());
         assertEquals(accountTransfer2.getAccountDetailsId(), dto2.getAccountDetailsId());
     }
-
 }
