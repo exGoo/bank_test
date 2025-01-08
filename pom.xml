@@ -18,12 +18,7 @@
 	<description>parent</description>
 
 	<modules>
-		<module>account</module>
 		<module>antifraud</module>
-		<module>authorization</module>
-		<module>history</module>
-		<module>profile</module>
-		<module>public-info</module>
 		<module>transfer</module>
 		<module>eureka-service</module>
 	</modules>

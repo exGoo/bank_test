@@ -1,0 +1,105 @@
+version: '3.7'
+
+x-environment: &app_environment
+  SPRING_DATASOURCE_URL: jdbc:postgresql://bank-db:5432/postgres
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: postgres
+  EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+services:
+  bank-db:
+    image: postgres
+    hostname: bank-db
+    ports:
+      - "5433:5432"
+    networks:
+      - bank-network
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./database-init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U user -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  eureka-server:
+    build: ../eureka-service/
+    hostname: eureka-server
+    ports:
+      - "8762:8761"
+    networks:
+      - bank-network
+    depends_on:
+      - bank-db
+
+  anti-fraud-app:
+    build: ../antifraud/
+    hostname: anti-fraud-app
+    ports:
+      - "8187:8186"
+    networks:
+      - bank-network
+    environment:
+      <<: *app_environment
+    depends_on:
+      bank-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+
+  transfer-app:
+    build: ../transfer/
+    hostname: transfer-app
+    ports:
+      - "8192:8191"
+    environment:
+      <<: *app_environment
+    networks:
+      - bank-network
+    depends_on:
+      bank-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_started
+
+  prometheus:
+    image: prom/prometheus
+    hostname: prometheus
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - bank-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9090/-/ready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      anti-fraud-app:
+        condition: service_started
+      transfer-app:
+        condition: service_started
+
+  grafana:
+    image: grafana/grafana
+    hostname: grafana
+    ports:
+    - "3001:3000"
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/etc/grafana/dashboards
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    networks:
+      - bank-network
+
+networks:
+  bank-network:
+    name: bank-network
+    driver: bridge

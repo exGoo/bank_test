@@ -2,16 +2,22 @@ server:
   port: 8086
   servlet:
     context-path: /api/anti-fraud
+
 management:
   server:
     port: 8186
   endpoints:
     web:
       exposure:
-        include: prometheus
+        include: "*"
   endpoint:
     prometheus:
       enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/postgres
@@ -27,6 +33,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
 eureka:
   client:
     service-url:
@@ -36,6 +43,7 @@ eureka:
   instance:
     lease-renewal-interval-in-seconds: 5
     lease-expiration-duration-in-seconds: 10
+
 feign:
   client:
     config:
