@@ -1,46 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROM",
-      "label": "prom",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.0.4"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -58,12 +16,13 @@
   "editable": true,
   "gnetId": 5373,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1522485165592,
+  "id": 5,
+  "iteration": 1615648797248,
   "links": [],
   "panels": [
     {
       "collapsed": false,
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -85,7 +44,13 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "format": "none",
       "gauge": {
         "maxValue": 100,
@@ -168,7 +133,13 @@
     },
     {
       "columns": [],
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fontSize": "100%",
       "gridPos": {
         "h": 8,
@@ -189,12 +160,14 @@
       "styles": [
         {
           "alias": "Time",
+          "align": "auto",
           "dateFormat": "YYYY-MM-DD HH:mm:ss",
           "pattern": "Time",
           "type": "date"
         },
         {
           "alias": "",
+          "align": "auto",
           "colorMode": null,
           "colors": [
             "rgba(245, 54, 54, 0.9)",
@@ -220,7 +193,7 @@
       ],
       "title": "Number Requests that missed 50ms SLA",
       "transform": "table",
-      "type": "table"
+      "type": "table-old"
     },
     {
       "cacheTimeout": null,
@@ -231,8 +204,14 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
       "decimals": 1,
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "format": "s",
       "gauge": {
         "maxValue": 100,
@@ -305,6 +284,7 @@
     },
     {
       "collapsed": false,
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -321,14 +301,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
         "y": 10
       },
+      "hiddenSeries": false,
       "id": 10,
       "legend": {
         "avg": false,
@@ -343,7 +331,11 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "7.4.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -362,6 +354,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Requests per second",
       "tooltip": {
@@ -394,21 +387,33 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 12,
         "y": 10
       },
+      "hiddenSeries": false,
       "id": 12,
       "legend": {
         "avg": false,
@@ -425,7 +430,11 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null as zero",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "7.4.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -445,6 +454,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Mean response time",
       "tooltip": {
@@ -452,7 +462,6 @@
         "sort": 0,
         "value_type": "individual"
       },
-      "transparent": false,
       "type": "graph",
       "xaxis": {
         "buckets": null,
@@ -478,21 +487,33 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 0,
         "y": 19
       },
+      "hiddenSeries": false,
       "id": 14,
       "legend": {
         "avg": false,
@@ -507,7 +528,11 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "7.4.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -548,6 +573,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Response time of 50%, 75%, 90%, 95% of requests",
       "tooltip": {
@@ -580,21 +606,33 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROM}",
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 9,
         "w": 12,
         "x": 12,
         "y": 19
       },
+      "hiddenSeries": false,
       "id": 16,
       "legend": {
         "avg": false,
@@ -609,7 +647,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null as zero",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "7.4.3",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -628,6 +670,7 @@
       ],
       "thresholds": [],
       "timeFrom": null,
+      "timeRegions": [],
       "timeShift": null,
       "title": "Top 10 APIs",
       "tooltip": {
@@ -660,27 +703,43 @@
           "min": null,
           "show": true
         }
-      ]
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
-  "schemaVersion": 16,
+  "schemaVersion": 27,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_PROM}",
+        "current": {
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
+        "datasource": "Prometheus",
+        "definition": "",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Application",
         "multi": false,
         "name": "application",
         "options": [],
-        "query": "label_values(application)",
+        "query": {
+          "query": "label_values(application)",
+          "refId": "Prometheus-application-Variable-Query"
+        },
         "refresh": 2,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
@@ -690,17 +749,28 @@
       },
       {
         "allValue": null,
-        "current": {},
-        "datasource": "${DS_PROM}",
+        "current": {
+          "selected": false,
+          "text": "host.docker.internal:8080",
+          "value": "host.docker.internal:8080"
+        },
+        "datasource": "Prometheus",
+        "definition": "",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "instance",
         "multi": false,
         "name": "instance",
         "options": [],
-        "query": "label_values(up{application=\"$application\"}, instance)",
+        "query": {
+          "query": "label_values(up{application=\"$application\"}, instance)",
+          "refId": "Prometheus-instance-Variable-Query"
+        },
         "refresh": 2,
         "regex": "",
+        "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
         "tags": [],
